@@ -1,0 +1,73 @@
+{
+    "builders": [
+        {
+            "type": "virtualbox-iso",
+            "iso_checksum": "5b5e08c490ad16b59b1d9fab0def883a",
+            "iso_checksum_type": "md5",
+            "iso_url": "http://care.dlservice.microsoft.com/dl/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
+            "floppy_files": [
+                "Autounattend.xml",
+                "winrm.ps1"
+            ],
+            "guest_additions_mode": "attach",
+            "guest_os_type": "Windows2012_64",
+            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "vboxmanage": [
+                [ "modifyvm", "{{.Name}}", "--memory", "2048" ],
+                [ "modifyvm", "{{.Name}}", "--cpus", "2" ],
+                [ "storageattach", "{{.Name}}", "--storagectl", "IDE Controller", "--port", "1", "--device", "1", "--type", "dvddrive", "--medium", "en_sharepoint_server_2013_with_sp1_x64_dvd_3823428.iso" ]
+            ],
+            "communicator": "winrm",
+            "winrm_username": "administrator",
+            "winrm_password": "Fractalsol"
+        },
+        {
+            "type": "hyperv-iso",
+            "iso_checksum": "18a4f00a675b0338f3c7c93c4f131beb",
+            "iso_checksum_type": "md5",
+            "iso_url": "http://care.dlservice.microsoft.com/dl/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
+            "floppy_files": [
+                "Autounattend.xml",
+                "winrm.ps1"
+            ],
+            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "communicator": "winrm",
+            "winrm_username": "administrator",
+            "winrm_password": "Fractalsol"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "powershell",
+            "script": "VirtualBox/installadditions.ps1",
+            "only": ["virtualbox-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "HyperV/integration.ps1",
+            "only": ["hyperv-iso"]
+        },
+        { "type": "powershell", "script": "rdpenable.ps1" },
+        { "type": "powershell", "script": "updatesource.ps1" },
+        { "type": "powershell", "script": "wmf5.ps1",
+            "elevated_user": "administrator", "elevated_password": "Fractalsol"
+        },
+        { "type": "powershell", "script": "PackageManagementProviderResource.ps1", "pause_before": "5m" },
+        { "type": "powershell", "script": "basepsmodules.ps1" },
+        { "type": "powershell", "script": "sppsmodules.ps1" },
+        { "type": "powershell", "script": "devpsmodules.ps1" },
+        { "type": "powershell", "script": "spprebin.ps1" },
+        { "type": "powershell", "script": "spbin.ps1" },
+        { "type": "windows-restart" },
+        { "type": "powershell", "script": "spbin.ps1" },
+        { "type": "windows-restart" },
+        { "type": "powershell", "script": "spbin.ps1" },
+        { "type": "powershell", "script": "devbin.ps1" }
+    ],
+    "post-processors": [
+        {
+          "type": "vagrant",
+          "output": "win2012r2-web-code-{{.Provider}}.box"
+        }
+    ]
+}
