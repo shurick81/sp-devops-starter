@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+  vars:
+    jenkins_version: "2.52"
+    jenkins_http_port: 8080
+    jenkins_admin_username: admin
+    jenkins_admin_password: admin
+  roles:
+    - geerlingguy.nfs
+    - geerlingguy.packer-rhel
+    - geerlingguy.git
+    - geerlingguy.java
+    - geerlingguy.jenkins

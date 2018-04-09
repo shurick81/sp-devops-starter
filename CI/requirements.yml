@@ -1,0 +1,6 @@
+---
+- src: geerlingguy.packer-rhel
+- src: geerlingguy.nfs
+- src: geerlingguy.git
+- src: geerlingguy.java
+- src: geerlingguy.jenkins

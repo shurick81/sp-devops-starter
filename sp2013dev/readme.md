@@ -6,21 +6,22 @@
   * Vagrant
   * Packer
   * Oracle VirtualBox or Hyper-V
-* ~ 30 minutes to run tests
+  * `en_sharepoint_server_2013_with_sp1_x64_dvd_3823428.iso` file in "sp2013dev" directory from MSDN
+* ~ 3 hours to run tests
 
 # Usage
 Create a box (virtual machine image):
 
-`packer build win2012r2-db-web-code.json`
+`packer build sp-win2012r2-db-web-code.json`
 
 
 Add the box to Vagrant:
 
 ```
-vagrant box add win2012r2-web-code-virtualbox.box --force --name win2012r2-web-code
-vagrant box add win2012r2-web-code-hyperv.box --force --name win2012r2-web-code
-vagrant box add win2012r2-db-web-code-virtualbox.box --force --name win2012r2-db-web-code
-vagrant box add win2012r2-db-web-code-hyperv.box --force --name win2012r2-db-web-code
+vagrant box add sp-win2012r2-web-code-virtualbox.box --force --name sp-win2012r2-web-code
+vagrant box add sp-win2012r2-web-code-hyperv.box --force --name sp-win2012r2-web-code
+vagrant box add sp-win2012r2-db-web-code-virtualbox.box --force --name sp-win2012r2-db-web-code
+vagrant box add sp-win2012r2-db-web-code-hyperv.box --force --name sp-win2012r2-db-web-code
 ```
 
 
@@ -41,7 +42,7 @@ exit
 ```
 
 # Cleaning up
-Remove the virtuatl machine:
+Remove the virtual machine:
 
 `vagrant destroy`
 
@@ -49,24 +50,14 @@ Remove the virtuatl machine:
 Remove the box and temp files:
 
 ```
-vagrant box remove win2016-base
-rm win2016-base-virtualbox.box
-rm win2016-base-hyperv.box
+vagrant box remove sp-win2012r2-web-code
+rm sp-win2012r2-web-code-virtualbox.box
+rm sp-win2012r2-web-code-hyperv.box
+vagrant box remove sp-win2012r2-db-web-code
+rm sp-win2012r2-db-web-code-virtualbox.box
+rm sp-win2012r2-db-web-code-hyperv.box
 ```
 
 Consider also removing downloaded ISO files:
 
 `rm packer_cache/*`
-
-
-# Rebuilding
-```
-vagrant destroy --force
-vagrant box remove win2016-base
-rm win2016-base-virtualbox.box
-rm win2016-base-hyperv.box
-packer build win2016-base.json
-vagrant box add win2016-base-virtualbox.box --force --name win2016-base
-vagrant box add win2016-base-hyperv.box --force --name win2016-base
-vagrant up
-```
