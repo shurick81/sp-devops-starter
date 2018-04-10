@@ -3,4 +3,5 @@
 - src: geerlingguy.nfs
 - src: geerlingguy.git
 - src: geerlingguy.java
+- src: geerlingguy.firewall
 - src: geerlingguy.jenkins

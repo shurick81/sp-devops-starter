@@ -7,9 +7,15 @@
     jenkins_http_port: 8080
     jenkins_admin_username: admin
     jenkins_admin_password: admin
+    firewall_allowed_tcp_ports:
+      - "22"
+      - "25"
+      - "80"
+      - "{{ jenkins_http_port }}"
   roles:
     - geerlingguy.nfs
     - geerlingguy.packer-rhel
     - geerlingguy.git
     - geerlingguy.java
+    - geerlingguy.firewall
     - geerlingguy.jenkins

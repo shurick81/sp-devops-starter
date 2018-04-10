@@ -33,5 +33,5 @@ Rerunning:
 del centos7-ci-virtualbox.box && packer build centos7-ci.json
 ```
 ```
-vagrant destroy --force && vagrant up
+vagrant destroy --force && vagrant box remove file://centos7-ci-virtualbox.box --force && vagrant up
 ```
