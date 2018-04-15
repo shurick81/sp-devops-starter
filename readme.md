@@ -1,8 +1,7 @@
 # Installing prerequisites
 
 ## Windows Hyper-V Server 2012 R2
-In command line run `` command.
-In the PowerShell session run the following lines:
+In command line run following lines:
 ```Bat
 powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))

@@ -2,19 +2,33 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Greeting') {
             steps {
-                echo 'Building..'
+                echo 'Hello!'
             }
         }
-        stage('Test') {
+        stage('Infrastructure - Downloads') {
+            agent {
+                label 'hypervisor'
+            }
             steps {
-                echo 'Testing..'
+                echo 'Ensuring downloads are in place...'
             }
         }
-        stage('Deploy') {
+        stage('Infrastructure - Images') {
+            agent {
+                label 'hypervisor'
+            }
             steps {
-                echo 'Deploying....'
+                cd sp2013dev && packer build sp-win2012r2-db-web-code.json
+            }
+        }
+        stage('Infrastructure - VMs') {
+            agent {
+                label 'hypervisor'
+            }
+            steps {
+                echo 'Building a farm....'
             }
         }
     }
