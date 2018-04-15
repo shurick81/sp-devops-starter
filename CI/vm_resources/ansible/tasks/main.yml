@@ -1,0 +1,29 @@
+---
+- name: Create config
+  template: src=../templates/config.xml.j2 dest="~jenkins/config.xml"
+  register: jenkins_config_change
+
+- name: Restart Jenkins if necessary
+  service: name=jenkins state=restarted
+
+- name: Wait for Jenkins to become available
+  wait_for: port=8080
+
+- name: Get Jenkins crumb
+  uri:
+    user: admin
+    password: admin
+    force_basic_auth: yes
+    url: "http://127.0.0.1:8080/crumbIssuer/api/json"
+    return_content: yes
+    status_code: 200, 404
+  register: jenkins_crumb
+  until: jenkins_crumb.status == 200 and jenkins_crumb.content.find('Please wait while Jenkins is getting ready to work') == -1
+  retries: 10
+  delay: 5
+
+- name: Set crumb token
+  set_fact:
+    jenkins_crumb_token: "{{ jenkins_crumb.json.crumbRequestField }}={{ jenkins_crumb.json.crumb }}"
+
+- include_tasks: seed-job.yml

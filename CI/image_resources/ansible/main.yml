@@ -3,19 +3,20 @@
   become: yes
   gather_facts: yes
   vars:
-    jenkins_version: "2.52"
+    jenkins_version: "2.54"
     jenkins_http_port: 8080
     jenkins_admin_username: admin
     jenkins_admin_password: admin
+    jenkins_plugins:
+      - workflow-step-api
     firewall_allowed_tcp_ports:
-      - "22"
-      - "25"
-      - "80"
       - "{{ jenkins_http_port }}"
   roles:
     - geerlingguy.nfs
     - geerlingguy.packer-rhel
     - geerlingguy.git
     - geerlingguy.java
+      java_packages:
+        - java-1.8.0-openjdk
     - geerlingguy.firewall
     - geerlingguy.jenkins
