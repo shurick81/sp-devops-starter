@@ -20,7 +20,7 @@ pipeline {
                 label 'hypervisor'
             }
             steps {
-                cd sp2013dev && packer build sp-win2012r2-db-web-code.json
+                sh "cd sp2013dev && packer build sp-win2012r2-db-web-code.json"     
             }
         }
         stage('Infrastructure - VMs') {
