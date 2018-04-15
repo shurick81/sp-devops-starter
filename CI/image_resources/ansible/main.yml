@@ -10,8 +10,9 @@
     jenkins_admin_username: admin
     jenkins_admin_password: admin
     jenkins_plugins:
-      - workflow-step-api
+      - workflow-aggregator
     firewall_allowed_tcp_ports:
+      - 22
       - "{{ jenkins_http_port }}"
   roles:
     - geerlingguy.nfs
