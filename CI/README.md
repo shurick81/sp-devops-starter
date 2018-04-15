@@ -9,6 +9,7 @@
 * ~ 30 mins to run tests
 
 # Usage
+Go to CI directory. For example, `cd c:\projects\sp-devops-starter\ci`
 Create a box (virtual machine image):
 
 ```

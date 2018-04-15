@@ -3,7 +3,9 @@
   become: yes
   gather_facts: yes
   vars:
-    jenkins_version: "2.54"
+    java_packages:
+      - java-1.8.0-openjdk
+    jenkins_version: "2.63"
     jenkins_http_port: 8080
     jenkins_admin_username: admin
     jenkins_admin_password: admin
@@ -16,7 +18,5 @@
     - geerlingguy.packer-rhel
     - geerlingguy.git
     - geerlingguy.java
-      java_packages:
-        - java-1.8.0-openjdk
     - geerlingguy.firewall
     - geerlingguy.jenkins

@@ -12,3 +12,9 @@ choco install -y packer
 choco install -y vagrant
 ```
 
+Some changes require OS restart so you need to reboot the machine. For example, you can run `shutdown /r`.
+
+Clone the repo locally:
+```
+git clone https://github.com/shurick81/sp-devops-starter c:\projects\sp-devops-starter
+```

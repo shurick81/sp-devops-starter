@@ -75,8 +75,6 @@
       ],
       "boot_wait": "10s",
       "disk_size": 81920,
-      "guest_os_type": "centos-64",
-      "headless": true,
       "http_directory": "image_resources/http",
       "iso_urls": [
         "CentOS-7-x86_64-Minimal-1708.iso",
@@ -87,9 +85,7 @@
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
-      "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
-      "tools_upload_flavor": "linux",
       "vm_name": "packer-centos-ci",
       "ram_size": 1024,
       "cpu": 2
