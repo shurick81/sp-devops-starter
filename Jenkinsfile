@@ -9,25 +9,25 @@ pipeline {
         }
         stage('Infrastructure - Downloads') {
             agent {
-                label 'hypervisor'
+                label 'vbox-win'
             }
             steps {
                 echo 'Ensuring downloads are in place...'
-                sh "echo %CD%"     
+                bat "echo %CD%"     
             }
         }
         stage('Infrastructure - Images') {
             agent {
-                label 'hypervisor'
+                label 'vbox-win'
             }
             steps {
                 echo 'Running packer for building images'
-                sh "cd sp2013dev && packer build sp-win2012r2-db-web-code.json"     
+                bat "cd sp2013dev && packer build sp-win2012r2-db-web-code.json"     
             }
         }
         stage('Infrastructure - VMs') {
             agent {
-                label 'hypervisor'
+                label 'vbox-win'
             }
             steps {
                 echo 'Building a farm....'
