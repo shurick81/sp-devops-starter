@@ -8,7 +8,7 @@ pipeline {
             }
             steps {
                 echo 'Copying Windows Image...'
-                powershell "cd sp2013dev; Copy-Item C:/sp-onprem-files/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso ./packer_cache"
+                powershell "cd sp2013dev; Copy-Item C:/sp-onprem-files/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso ./packer_cache/"
                 powershell "cd sp2013dev; if ( !( Get-Item ./packer_cache/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso -ErrorAction Ignore ) ) { exit 1 }"
             }
         }
