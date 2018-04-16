@@ -13,6 +13,7 @@ pipeline {
             }
             steps {
                 echo 'Ensuring downloads are in place...'
+                sh "echo %CD%"     
             }
         }
         stage('Infrastructure - Images') {
@@ -20,6 +21,7 @@ pipeline {
                 label 'hypervisor'
             }
             steps {
+                echo 'Running packer for building images'
                 sh "cd sp2013dev && packer build sp-win2012r2-db-web-code.json"     
             }
         }
