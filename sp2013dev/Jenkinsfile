@@ -7,27 +7,27 @@ pipeline {
                 echo 'Hello!'
             }
         }
-        stage('Infrastructure - Downloads') {
+        stage('Infrastructure - Downloads2') {
             agent {
-                label 'vbox-win'
+                label 'win'
             }
             steps {
                 echo 'Ensuring downloads are in place...'
                 bat "echo %CD%"     
             }
         }
-        stage('Infrastructure - Images') {
+        stage('Infrastructure - Images2') {
             agent {
-                label 'vbox-win'
+                label 'win'
             }
             steps {
                 echo 'Running packer for building images'
                 bat "cd sp2013dev && packer build sp-win2012r2-db-web-code.json"     
             }
         }
-        stage('Infrastructure - VMs') {
+        stage('Infrastructure - VMs2') {
             agent {
-                label 'vbox-win'
+                label 'win'
             }
             steps {
                 echo 'Building a farm....'

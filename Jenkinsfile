@@ -9,16 +9,16 @@ pipeline {
         }
         stage('Infrastructure - Downloads') {
             agent {
-                label 'vbox-win'
+                label 'win'
             }
             steps {
                 echo 'Ensuring downloads are in place...'
-                bat "echo %CD%"     
+                powershell "Copy-Item C:\sp-devops-starter-files\en_sharepoint_server_2013_with_sp1_x64_dvd_3823428.iso ."
             }
         }
         stage('Infrastructure - Images') {
             agent {
-                label 'vbox-win'
+                label 'win'
             }
             steps {
                 echo 'Running packer for building images'
@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Infrastructure - VMs') {
             agent {
-                label 'vbox-win'
+                label 'win'
             }
             steps {
                 echo 'Building a farm....'
