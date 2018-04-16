@@ -1,7 +1,6 @@
 ---
 - name: Create config
   template: src=../templates/config.xml.j2 dest="~jenkins/config.xml"
-  register: jenkins_config_change
 
 - name: Restart Jenkins if necessary
   service: name=jenkins state=restarted

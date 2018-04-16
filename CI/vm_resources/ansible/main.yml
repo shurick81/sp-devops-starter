@@ -1,5 +1,7 @@
 ---
 - hosts: all
-  sudo: yes
+  become: yes
+  vars:
+    jenkins_slave_port: 8081
   tasks:
     - import_tasks: tasks/main.yml
