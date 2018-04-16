@@ -19,15 +19,6 @@ Configuration $configName
             RequiredVersion     = "8.0.0.0"
         }
 
-        PSModule "PSModule_StorageDsc"
-        {
-            Ensure              = "Present"
-            Name                = "StorageDsc"
-            Repository          = "PSGallery"
-            InstallationPolicy  = "Trusted"
-            RequiredVersion     = "4.0.0.0"
-        }
-
         PSModule "PSModule_xPendingReboot"
         {
             Ensure              = "Present"

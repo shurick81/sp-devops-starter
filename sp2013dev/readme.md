@@ -6,7 +6,7 @@
   * Vagrant
   * Packer
   * Oracle VirtualBox or Hyper-V
-  * `en_sharepoint_server_2013_with_sp1_x64_dvd_3823428.iso` file in "sp2013dev" directory from MSDN
+  * `\\STORAGE2\Volume_1\Install\SP2013wSP1Sw\2013` containing SP installation media.
 * ~ 3 hours to run tests
 
 # Usage
@@ -18,10 +18,7 @@ Create a box (virtual machine image):
 Add the box to Vagrant:
 
 ```
-vagrant box add sp-win2012r2-web-code-virtualbox.box --force --name sp-win2012r2-web-code
-vagrant box add sp-win2012r2-web-code-hyperv.box --force --name sp-win2012r2-web-code
-vagrant box add sp-win2012r2-db-web-code-virtualbox.box --force --name sp-win2012r2-db-web-code
-vagrant box add sp-win2012r2-db-web-code-hyperv.box --force --name sp-win2012r2-db-web-code
+vagrant box add sp-win2012r2-web-code.box --force --name sp-win2012r2-web-code
 ```
 
 

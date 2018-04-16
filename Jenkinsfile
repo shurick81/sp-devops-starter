@@ -7,22 +7,20 @@ pipeline {
                 echo 'Hello!'
             }
         }
-        stage('Infrastructure - Downloads') {
+        stage('Infrastructure - Creating VM images') {
             agent {
                 label 'win'
             }
             steps {
-                echo 'Ensuring downloads are in place...'
-                powershell "Copy-Item C:/sp-devops-starter-files/en_sharepoint_server_2013_with_sp1_x64_dvd_3823428.iso ."
-            }
-        }
-        stage('Infrastructure - Images') {
-            agent {
-                label 'win'
-            }
-            steps {
-                echo 'Running packer for building images'
-                bat "cd sp2013dev && packer build sp-win2012r2-db-web-code.json"     
+                echo 'Running packer for building image'
+                powershell "cd sp2013dev; packer build sp-win2012r2-db-web-code.json"
+                powershell "cd sp2013dev; if ( !( Get-Item sp-win2012r2-web-code.box ) ) { exit 1 }"
+                echo 'Running vagrant for removing old image'
+                powershell "cd sp2013dev; if ( ( vagrant box list | ? { $_ -like "sp-win2012r2-web-code *" } ) ) { vagrant box remove sp-win2012r2-web-code --force" }
+                powershell "cd sp2013dev; if ( ( vagrant box list | ? { $_ -like "sp-win2012r2-web-code *" } ) ) { exit 1 }"
+                echo 'Running vagrant for adding image'
+                powershell "cd sp2013dev; vagrant box add sp-win2012r2-web-code.box --force --name sp-win2012r2-web-code"
+                powershell "cd sp2013dev; if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-web-code *" } ) ) { exit 1 }"
             }
         }
         stage('Infrastructure - VMs') {

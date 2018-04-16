@@ -5,8 +5,6 @@ Configuration $configName
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.0.0.0
-    Import-DscResource -ModuleName StorageDsc -ModuleVersion 4.0.0.0
 
     $SPImageLocation = $systemParameters.SPImageLocation
     $SPInstallationMediaPath = $configParameters.SPInstallationMediaPath
@@ -15,19 +13,12 @@ Configuration $configName
     Node $AllNodes.NodeName
     {
 
-        $SPImageDestinationPath = "C:/Install/SP2013SP1Image/en_sharepoint_server_2013_with_sp1_x64_dvd_3823428.iso"
-
-        MountImage SPServerImageNotMounted
-        {
-            ImagePath   = $SPImageDestinationPath
-            Ensure      = 'Absent'
-        }
-
-        File SPServerImageAbsent {
-            Ensure          = "Absent"
-            DestinationPath = $SPImageDestinationPath
-            Force           = $true
-            DependsOn       = "[MountImage]SPServerImageNotMounted"
+        File SPNoLocalMediaEnsure {
+            DestinationPath = "C:\Install\SPInstall"
+            Recurse = $true
+            Type = "Directory"
+            Ensure = "Absent"
+            Force = $true
         }
 
     }
