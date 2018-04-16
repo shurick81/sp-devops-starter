@@ -13,7 +13,7 @@ pipeline {
             }
             steps {
                 echo 'Ensuring downloads are in place...'
-                powershell "Copy-Item C:\sp-devops-starter-files\en_sharepoint_server_2013_with_sp1_x64_dvd_3823428.iso ."
+                powershell "Copy-Item C:/sp-devops-starter-files/en_sharepoint_server_2013_with_sp1_x64_dvd_3823428.iso ."
             }
         }
         stage('Infrastructure - Images') {
