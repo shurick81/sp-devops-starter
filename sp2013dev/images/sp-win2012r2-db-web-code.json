@@ -68,7 +68,7 @@
     "post-processors": [
         {
           "type": "vagrant",
-          "output": "sp-win2012r2-web-code.box"
+          "output": "sp-win2012r2-db-web-code.box"
         }
     ]
 }

@@ -5,11 +5,17 @@
 * Software
   * Vagrant
   * Packer
-  * Oracle VirtualBox or Hyper-V
+  * Oracle VirtualBox or Hyper-V or VMWare
   * `\\STORAGE2\Volume_1\Install\SP2013wSP1Sw\2013` containing SP installation media.
 * ~ 3 hours to run tests
 
 # Usage
+
+## PowerShell
+`cd` to `images` directory and run `preparevmimages.ps1`
+
+
+
 Create a box (virtual machine image):
 
 `packer build sp-win2012r2-db-web-code.json`

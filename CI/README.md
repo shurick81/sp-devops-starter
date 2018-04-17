@@ -33,25 +33,22 @@ Spin up a virtual machine from the boxes:
 It might be wise to run the following snippet in a separate console in order to continue controlling vagrant.
 ### Windows
 #### VirtualBox
-Run in cmd:
+Run in PowerShell:
 ```
-powershell
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-exit
-java -jar swarm-client-3.5.jar -name %ComputerName% -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "win vbox"
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "win vbox"
 ```
 #### Hyper-V
-Run in cmd:
+Run in PowerShell:
 ```
-powershell
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-exit
-java -jar swarm-client-3.5.jar -name %ComputerName%-disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "win hyperv"
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "win hyperv"
 ```
 
 ## Rerunning
 ```
-del centos7-ci-virtualbox.box && packer build centos7-ci.json
+del centos7-ci-virtualbox.box
+packer build centos7-ci.json
 ```
 ```
 vagrant destroy --force && vagrant box remove file://centos7-ci-virtualbox.box --force && vagrant up
