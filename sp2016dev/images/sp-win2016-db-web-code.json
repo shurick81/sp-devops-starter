@@ -63,7 +63,7 @@
     "post-processors": [
         {
           "type": "vagrant",
-          "output": "sp-win2016-db-web-code-{{.Provider}}.box"
+          "output": "sp-win2016-db-web-code.box"
         }
     ]
 }

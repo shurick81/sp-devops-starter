@@ -2,10 +2,6 @@ $configName = "SPMedia"
 Configuration $configName
 {
     param(
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $MediaShareCredential
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
@@ -14,7 +10,7 @@ Configuration $configName
     {
 
         File SPLocalMediaEnsure {
-            SourcePath = "\\STORAGE2\Volume_1\Install\SP2013wSP1Sw"
+            SourcePath = "\\192.168.0.159\Volume_1\Install\SP2013wSP1"
             DestinationPath = "C:\Install\SPInstall"
             Recurse = $true
             Type = "Directory"
