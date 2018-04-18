@@ -17,7 +17,7 @@ Configuration $configName
         $spImageUrl = "http://care.dlservice.microsoft.com/dl/download/0/0/4/004EE264-7043-45BF-99E3-3F74ECAE13E5/officeserver.img";
         $SPImageUrl -match '[^/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))' | Out-Null
         $SPImageFileName = $matches[0]
-        $SPImageDestinationPath = "C:\Install\SP2013R2Image\$SPImageFileName"
+        $SPImageDestinationPath = "C:\Install\SP2016RTMImage\$SPImageFileName"
 
         xRemoteFile SPServerImageFilePresent
         {

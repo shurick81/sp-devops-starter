@@ -14,7 +14,7 @@
             "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
             "vboxmanage": [
                 [ "modifyvm", "{{.Name}}", "--memory", "2048" ],
-                [ "modifyvm", "{{.Name}}", "--cpus", "2" ]
+                [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
             ],
             "communicator": "winrm",
             "winrm_username": "administrator",
