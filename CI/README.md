@@ -14,7 +14,9 @@
 `Invoke-RestMethod -Uri http://care.dlservice.microsoft.com/dl/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO -OutFile C:\sp-onprem-files\524abd34eb2abcc5e5a12da5b1c97fa3a6a626a831c29b4e74801f4131fb08ed.iso`
 2. Run in PowerShell:
 `Invoke-RestMethod -Uri http://care.dlservice.microsoft.com/dl/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO -OutFile C:\sp-onprem-files\d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso`
-3. `choco install -y jre8`
+3. Run in PowerShell:
+`Invoke-RestMethod -Uri http://mirrors.ocf.berkeley.edu/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso -OutFile C:\sp-onprem-files\bd9af0f74accdd31075599b723f346293dc407f3d69e09f6db74937b2b2d4c99.iso`
+4. `choco install -y jre8`
 
 ## Usage
 Go to CI directory. For example, `cd c:\projects\sp-devops-starter\ci`
