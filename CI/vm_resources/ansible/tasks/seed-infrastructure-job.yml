@@ -13,18 +13,18 @@
 
 - name: Check if seed job exists
   set_fact:
-    jenkins_seed_job_exists: "{{ 'pipeline-seed' in (jenkins_jobs.content|from_json).jobs|map(attribute='name')|list }}"
+    jenkins_seed_job_exists: "{{ 'infrastructure-ci' in (jenkins_jobs.content|from_json).jobs|map(attribute='name')|list }}"
 
 - name: Create seed job
   uri:
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:8080/createItem?name=pipeline-seed&{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:8080/createItem?name=infrastructure-ci&{{ jenkins_crumb_token }}"
     method: POST
     headers:
       Content-Type: "application/xml"
-    body: "{{ lookup('template', '../../templates/seed-config.xml.j2') }}"
+    body: "{{ lookup('template', '../../templates/seed-config-infrastructure.xml.j2') }}"
   register: jenkins_seed_job_created
   when: not jenkins_seed_job_exists
 
@@ -33,11 +33,11 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:8080/job/pipeline-seed/config.xml?{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:8080/job/infrastructure-ci/config.xml?{{ jenkins_crumb_token }}"
     method: POST
     headers:
       Content-Type: "application/xml"
-    body: "{{ lookup('template', '../../templates/seed-config.xml.j2') }}"
+    body: "{{ lookup('template', '../../templates/seed-config-infrastructure.xml.j2') }}"
   register: jenkins_seed_job_updated
   when: jenkins_seed_job_exists
 
@@ -46,7 +46,7 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:8080/job/pipeline-seed/build?{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:8080/job/infrastructure-ci/build?{{ jenkins_crumb_token }}"
     method: POST
     status_code: 302
   register: jenkins_seed_job_started
@@ -57,7 +57,7 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:8080/job/pipeline-seed/lastBuild/buildNumber?{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:8080/job/infrastructure-ci/lastBuild/buildNumber?{{ jenkins_crumb_token }}"
     method: GET
     status_code: 302
   register: jenkins_seed

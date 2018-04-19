@@ -1,13 +1,4 @@
 ---
-- name: Create config
-  template: src=../templates/config.xml.j2 dest="~jenkins/config.xml"
-
-- name: Restart Jenkins if necessary
-  service: name=jenkins state=restarted
-
-- name: Wait for Jenkins to become available
-  wait_for: port=8080
-
 - name: Get Jenkins crumb
   uri:
     user: admin
@@ -48,4 +39,5 @@
       }
     status_code: 302
 
-- include_tasks: seed-job.yml
+- include_tasks: seed-main-job.yml
+- include_tasks: seed-infrastructure-job.yml
