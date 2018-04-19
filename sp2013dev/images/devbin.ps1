@@ -10,7 +10,6 @@ Configuration $configName
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DSCResource -Module xSystemSecurity -Name xIEEsc -ModuleVersion 1.2.0.0
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.0.0.0
     Import-DSCResource -ModuleName cChoco -ModuleVersion 2.3.1.0
 
     Node $AllNodes.NodeName
@@ -22,16 +21,10 @@ Configuration $configName
             UserRole    = "Administrators"
         }
 
-        xRemoteFile VSInstallerDownloaded
-        {
-            Uri             = "https://download.visualstudio.microsoft.com/download/pr/11346816/52257ee3e96d6e07313e41ad155b155a/vs_Enterprise.exe"
-            DestinationPath = "C:\temp\vs_installer.exe"
-        }
-
         Script VSInstallerRunning
         {
             SetScript = {
-                Start-Process -FilePath C:\temp\vs_installer.exe -ArgumentList '--quiet --wait --add Microsoft.VisualStudio.Workload.Office' -Wait;
+                Start-Process -FilePath C:\Install\VSInstall\vs_installer.exe -ArgumentList '--quiet --wait --add Microsoft.VisualStudio.Workload.Office' -Wait;
             }
             TestScript = {
                 Get-WmiObject -Class Win32_Product | ? { $_.name -eq "Microsoft Visual Studio Setup Configuration" } | % { return $true }
@@ -41,7 +34,6 @@ Configuration $configName
                 $installedApplications = Get-WmiObject -Class Win32_Product | ? { $_.name -eq "Microsoft Visual Studio Setup Configuration" }
                 return $installedApplications
             }
-            DependsOn = @( "[xRemoteFile]VSInstallerDownloaded" )
         }
 
         cChocoInstaller ChocoInstalled

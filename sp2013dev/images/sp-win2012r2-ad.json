@@ -53,22 +53,13 @@
         },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1", "pause_before": "5m" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
-        { "type": "powershell", "script": "sppsmodules.ps1" },
-        { "type": "powershell", "script": "devpsmodules.ps1" },
-        { "type": "powershell", "script": "spprebin.ps1" },
-        { "type": "powershell", "script": "spmedia.ps1" },
-        { "type": "powershell", "script": "spbin.ps1" },
-        { "type": "windows-restart" },
-        { "type": "powershell", "script": "spbin.ps1" },
-        { "type": "windows-restart" },
-        { "type": "powershell", "script": "spbin.ps1" },
-        { "type": "powershell", "script": "spappclean.ps1" },
-        { "type": "powershell", "script": "devbin.ps1" }
+        { "type": "powershell", "script": "adpsmodules.ps1" },
+        { "type": "powershell", "script": "adbin.ps1" }
     ],
     "post-processors": [
         {
           "type": "vagrant",
-          "output": "sp-win2012r2-db-web-code.box"
+          "output": "sp-win2012r2-ad.box"
         }
     ]
 }

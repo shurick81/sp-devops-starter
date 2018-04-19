@@ -1,4 +1,4 @@
-$configName = "DevPSModules"
+$configName = "DomainClientPSModules"
 Configuration $configName
 {
     param(
@@ -10,22 +10,22 @@ Configuration $configName
     Node $AllNodes.NodeName
     {
 
-        PSModule "PSModule_cChoco"
+        PSModule "PSModule_xNetworking"
         {
             Ensure              = "Present"
-            Name                = "cChoco"
+            Name                = "xNetworking"
             Repository          = "PSGallery"
             InstallationPolicy  = "Trusted"
-            RequiredVersion     = "2.3.1.0"
+            RequiredVersion     = "5.6.0.0"
         }
 
-        PSModule "PSModule_xSystemSecurity"
+        PSModule "PSModule_xComputerManagement"
         {
             Ensure              = "Present"
-            Name                = "xSystemSecurity"
+            Name                = "xComputerManagement"
             Repository          = "PSGallery"
             InstallationPolicy  = "Trusted"
-            RequiredVersion     = "1.2.0.0"
+            RequiredVersion     = "3.2.0.0"
         }
 
     }

@@ -1,4 +1,4 @@
-$configName = "DevPSModules"
+$configName = "DBPSModules"
 Configuration $configName
 {
     param(
@@ -10,22 +10,31 @@ Configuration $configName
     Node $AllNodes.NodeName
     {
 
-        PSModule "PSModule_cChoco"
+        PSModule "PSModule_xPSDesiredStateConfiguration"
         {
             Ensure              = "Present"
-            Name                = "cChoco"
+            Name                = "xPSDesiredStateConfiguration"
             Repository          = "PSGallery"
             InstallationPolicy  = "Trusted"
-            RequiredVersion     = "2.3.1.0"
+            RequiredVersion     = "8.0.0.0"
         }
 
-        PSModule "PSModule_xSystemSecurity"
+        PSModule "PSModule_xPendingReboot"
         {
             Ensure              = "Present"
-            Name                = "xSystemSecurity"
+            Name                = "xPendingReboot"
             Repository          = "PSGallery"
             InstallationPolicy  = "Trusted"
-            RequiredVersion     = "1.2.0.0"
+            RequiredVersion     = "0.3.0.0"
+        }
+
+        PSModule "PSModule_SqlServerDsc"
+        {
+            Ensure              = "Present"
+            Name                = "SqlServerDsc"
+            Repository          = "PSGallery"
+            InstallationPolicy  = "Trusted"
+            RequiredVersion     = "11.1.0.0"
         }
 
     }

@@ -43,7 +43,7 @@ Configuration $configName
             Name                = "SqlServerDsc"
             Repository          = "PSGallery"
             InstallationPolicy  = "Trusted"
-            RequiredVersion     = "10.0.0.0"
+            RequiredVersion     = "11.1.0.0"
         }
 
         PSModule "PSModule_xWebAdministration"
