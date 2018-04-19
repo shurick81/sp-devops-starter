@@ -60,7 +60,7 @@ pipeline {
                 echo 'Building farms'
             }
         }
-        stage('Test of CI Infrastructure') {
+        stage('CI Infrastructure - Images and VM') {
             agent {
                 label 'win && infrastructure'
             }

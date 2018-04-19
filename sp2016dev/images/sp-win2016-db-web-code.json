@@ -11,6 +11,7 @@
             ],
             "guest_additions_mode": "attach",
             "guest_os_type": "Windows2016_64",
+            "headless": true,
             "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
             "vboxmanage": [
                 [ "modifyvm", "{{.Name}}", "--memory", "2048" ],

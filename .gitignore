@@ -6,3 +6,5 @@ iso/*
 output-virtualbox-iso/*
 */.vagrant/*
 *.vdi
+*.ovf
+*.vmdk

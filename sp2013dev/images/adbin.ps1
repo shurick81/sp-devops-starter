@@ -23,4 +23,3 @@ $configurationData = @{ AllNodes = @(
 &$configName -ConfigurationData $configurationData;
 Start-DscConfiguration $configName -Verbose -Wait -Force;
 Write-Host "Sleeping 180"
-Sleep 180;

@@ -53,17 +53,11 @@ Updating pipelines:
 ## Connecting hypervisor manager slave
 It might be wise to run the following snippet in a separate console in order to continue controlling vagrant.
 ### Windows
-#### VirtualBox
+#### VirtualBox or Hyper-V
 Run in PowerShell:
 ```
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "hvmanager win vbox"
-```
-#### Hyper-V
-Run in PowerShell:
-```
-Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "hvmanager win hyperv"
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "hvmanager win"
 ```
 
 ## Connecting sharepoint client slave
@@ -73,15 +67,9 @@ java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -
 ## Connecting hypervisor manager slave for infrastructure testing
 It might be wise to run the following snippet in a separate console in order to continue controlling vagrant.
 ### Windows
-#### VirtualBox
+#### VirtualBox or Hyper-V
 Run in PowerShell:
 ```
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "hvmanager win vbox infrastructure"
-```
-#### Hyper-V
-Run in PowerShell:
-```
-Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "hvmanager win hyperv infrastructure"
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "hvmanager win infrastructure"
 ```
