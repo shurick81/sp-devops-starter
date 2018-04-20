@@ -24,7 +24,7 @@ Configuration $configName
         Script VSInstallerRunning
         {
             SetScript = {
-                Start-Process -FilePath C:\Install\VSInstall\vs_installer.exe -ArgumentList '--quiet --wait --add Microsoft.VisualStudio.Workload.Office' -Wait;
+                Start-Process -FilePath C:\Install\VSInstall\vs_enterprise.exe -ArgumentList '--quiet --wait --add Microsoft.VisualStudio.Workload.Office --includeRecommended' -Wait; 
             }
             TestScript = {
                 Get-WmiObject -Class Win32_Product | ? { $_.name -eq "Microsoft Visual Studio Setup Configuration" } | % { return $true }
