@@ -40,6 +40,7 @@ $imageNames | % {
             }
         } else {
             Write-Host "$(Get-Date) Image is already registered in vagrant";
+            $jobDone = $true;
         }
     } While ( ( $retriesCounter -lt $retriesLimit ) -and !$jobDone )
 }
