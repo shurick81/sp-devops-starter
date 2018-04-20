@@ -13,7 +13,7 @@ Configuration $configName
         PSModule "PSModule_xActiveDirectory"
         {
             Ensure              = "Present"
-            Name                = "xPSDesiredStateConfiguration"
+            Name                = "xActiveDirectory"
             Repository          = "PSGallery"
             InstallationPolicy  = "Trusted"
             RequiredVersion     = "2.16.0.0"
@@ -22,7 +22,7 @@ Configuration $configName
         PSModule "PSModule_xDnsServer"
         {
             Ensure              = "Present"
-            Name                = "xPendingReboot"
+            Name                = "xDnsServer"
             Repository          = "PSGallery"
             InstallationPolicy  = "Trusted"
             RequiredVersion     = "1.9.0.0"
