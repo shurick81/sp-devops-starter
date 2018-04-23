@@ -8,3 +8,4 @@ output-virtualbox-iso/*
 *.vdi
 *.ovf
 *.vmdk
+*/swarm-client-3.5.jar
