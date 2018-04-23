@@ -129,5 +129,5 @@ It might be wise to run the following snippet in a separate console in order to 
 Run in PowerShell:
 ```
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "hvmanager win infrastructure" -executors 1
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "hvmanager win infrastructure" -executors 2
 ```
