@@ -50,6 +50,7 @@ Go to CI directory. For example, `cd c:\projects\sp-devops-starter\ci`
 Create a box (virtual machine image):
 
 ```
+cd c:\projects\sp-devops-starter\ci\images
 packer build centos7-ci.json
 ```
 
@@ -57,7 +58,10 @@ packer build centos7-ci.json
 
 Spin up a virtual machine from the boxes:
 
-`vagrant up`
+```
+cd c:\projects\sp-devops-starter\ci
+vagrant up
+```
 
 ### Rerunning
 ```
@@ -66,7 +70,7 @@ packer build centos7-ci.json
 ```
 ```
 vagrant destroy --force
-vagrant box remove file://centos7-ci.box --force
+vagrant box remove file://./images/centos7-ci.box --force
 vagrant up
 ```
 
@@ -95,7 +99,11 @@ $dest = "C:\sp-onprem-files\d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f
 Start-BitsTransfer `
     -Source $src `
     -Destination $dest
-Invoke-RestMethod -Uri http://mirrors.ocf.berkeley.edu/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso -OutFile C:\sp-onprem-files\bd9af0f74accdd31075599b723f346293dc407f3d69e09f6db74937b2b2d4c99.iso
+$src = "http://mirrors.kernel.org/centos/7.4.1708/isos/x86_64/CentOS-7-x86_64-DVD-1708.iso"
+$dest = "C:\sp-onprem-files\c4bf15f4237756dfa011191c28b7cfb6c897c65b3d56775b528770d5fa0c888f.iso"
+Start-BitsTransfer `
+    -Source $src `
+    -Destination $dest
 choco install -y jre8
 ```
 

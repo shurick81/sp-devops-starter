@@ -16,8 +16,8 @@ pipeline {
 */
                 powershell 'cd sp2013dev; New-Item -Path images/packer_cache -ItemType Directory -Force | Out-Null; Copy-Item C:/sp-onprem-files/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso ./images/packer_cache'
                 powershell 'cd sp2013dev; if ( !( Get-Item ./images/packer_cache/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso -ErrorAction Ignore ) ) { Write-Host "Windows Server 2012 R2 image missing"; exit 1 }'
-                powershell 'cd ci; New-Item -Path packer_cache -ItemType Directory -Force | Out-Null; Copy-Item C:/sp-onprem-files/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso ./packer_cache'
-                powershell 'cd ci; if ( !( Get-Item ./packer_cache/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso -ErrorAction Ignore ) ) { Write-Host "CentOS image missing"; exit 1 }'
+                powershell 'cd ci; New-Item -Path images/packer_cache -ItemType Directory -Force | Out-Null; Copy-Item C:/sp-onprem-files/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso ./images/packer_cache'
+                powershell 'cd ci; if ( !( Get-Item ./images/packer_cache/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso -ErrorAction Ignore ) ) { Write-Host "CentOS image missing"; exit 1 }'
             }
         }
         stage('Infrastructure - Destroying existing VMs') {
@@ -71,9 +71,9 @@ pipeline {
                 label 'win && infrastructure'
             }
             steps {
-                sh 'packer build ci/centos7-ci.json'
+                powershell 'cd ci; packer build centos7-ci.json'
                 powershell 'cd ci; if ( !( Get-Item centos7-ci.box ) ) { exit 1 }'
-                powershell 'cd ci; vagrant box remove file://centos7-ci.box --force; vagrant up'
+                powershell 'cd ci; vagrant box remove file://./images/centos7-ci.box --force; vagrant up'
                 powershell 'if ( !( vagrant status | ? { $_ -like "default* running (*" } ) ) { exit 1 }'
                 powershell 'cd ci; vagrant destroy --force'
                 powershell 'if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }'

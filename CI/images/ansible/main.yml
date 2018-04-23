@@ -75,13 +75,11 @@
       - "{{ jenkins_http_port }}"
       - "{{ jenkins_slave_port }}"
   roles:
-    - geerlingguy.nfs
-    - geerlingguy.packer-rhel
     - geerlingguy.git
     - geerlingguy.java
     - geerlingguy.firewall
     - geerlingguy.jenkins
   tasks:
     - name: Create config
-      template: src=../templates/config.xml.j2 dest="~jenkins/config.xml"
+      template: src=../config.xml.j2 dest="~jenkins/config.xml"
       register: jenkins_config_change
