@@ -5,8 +5,10 @@ param(
     $ConFigFile
 )
 
+[Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem") | Out-Null;
+
 $config = Get-Content -Raw -Path $ConFigFile | ConvertFrom-Json;
-"sql" | % {
+"sql", "sp", "vs" | % {
     $key = $_;
     Write-Host "$(Get-Date) Processing $key media";
     $sourceImageUrl = $config.$key.SourceImageUrl;

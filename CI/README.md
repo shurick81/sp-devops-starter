@@ -81,8 +81,15 @@ Updating pipelines:
 
 ## Prerequisites
 * Software
-  * All the prerequisites for infrastructure (see readme in sp2013dev and sp2016dev)
-  * Java
+  * Packer
+  * Vagrant
+  * Hypervisor
+  * /sp2013dev/SPServer2013SP1 directory with SP installation media with classic structure:
+    * 2013
+      * SharePoint
+      * LanguagePacks
+  Use AutoSPSourceBuilder to generate this one or extract from SP iso to /sp2013dev/SPServer2013SP1/2013/SharePoint
+
 * ~ 2 hours to run tests
 
 ### Windows
@@ -98,7 +105,11 @@ Start-BitsTransfer -Source $src -Destination $dest;
 $src = "http://mirrors.kernel.org/centos/7.4.1708/isos/x86_64/CentOS-7-x86_64-DVD-1708.iso";
 $dest = "C:\sp-onprem-files\c4bf15f4237756dfa011191c28b7cfb6c897c65b3d56775b528770d5fa0c888f.iso";
 Start-BitsTransfer -Source $src -Destination $dest;
-.\..\media.ps1 .\media.json
+$directoryName = [guid]::NewGuid().Guid;
+New-Item -Path "$env:Temp\$directoryName" -ItemType Directory -Force | Out-Null
+Invoke-RestMethod -Uri https://download.visualstudio.microsoft.com/download/pr/11346816/52257ee3e96d6e07313e41ad155b155a/vs_Enterprise.exe -OutFile "$env:Temp\$directoryName\vs_Enterprise.exe"
+Start-Process -FilePath "$env:Temp\$directoryName\vs_Enterprise.exe" -ArgumentList '--layout C:\sp-onprem-files\VS2017 --add Microsoft.VisualStudio.Workload.Office --includeRecommended --lang en-US --quiet' -Wait;
+.\..\media.ps1 .\mediasp2013.json
 choco install -y jre8;
 ```
 2. Close the PowerShell console.
