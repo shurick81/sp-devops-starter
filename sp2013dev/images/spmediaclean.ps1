@@ -1,4 +1,4 @@
-$configName = "SPAppClean"
+$configName = "SPMediaClean"
 Configuration $configName
 {
     param(
@@ -19,6 +19,11 @@ Configuration $configName
             Type = "Directory"
             Ensure = "Absent"
             Force = $true
+        }
+
+        File SPNoLocalMediaArchiveEnsure {
+            DestinationPath = "C:\Install\SPServer2013SP1.zip"
+            Ensure = "Absent"
         }
 
     }

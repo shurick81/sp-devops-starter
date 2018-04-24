@@ -5,7 +5,6 @@ Configuration $configName
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.0.0.0
     Import-DscResource -ModuleName StorageDsc -ModuleVersion 4.0.0.0
 
     $SPImageLocation = $systemParameters.SPImageLocation

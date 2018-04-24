@@ -12,14 +12,14 @@ Configuration $configName
 
         SPInstallPrereqs SPPrereqsInstalled
         {
-            InstallerPath   = "C:\Install\SPInstall\2013\Prerequisiteinstaller.exe"
+            InstallerPath   = "C:\Install\SPInstall\2013\SharePoint\Prerequisiteinstaller.exe"
             OnlineMode      = $true
         }
 
         SPInstall SharePointBinariesInstalled 
         { 
             Ensure      = "Present"
-            BinaryDir   = "C:\Install\SPInstall\2013"
+            BinaryDir   = "C:\Install\SPInstall\2013\SharePoint"
             ProductKey  = "NQTMW-K63MQ-39G6H-B2CH9-FRDWJ"
             DependsOn   = "[SPInstallPrereqs]SPPrereqsInstalled"
         }

@@ -21,6 +21,10 @@ Configuration $configName
             Force = $true
         }
 
+        File VSNoLocalMediaArchiveEnsure {
+            DestinationPath = "C:\Install\VS2017.zip"
+            Ensure = "Absent"
+        }
     }
 }
 

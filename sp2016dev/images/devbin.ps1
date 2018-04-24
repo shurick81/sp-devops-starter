@@ -10,7 +10,7 @@ Configuration $configName
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DSCResource -Module xSystemSecurity -Name xIEEsc -ModuleVersion 1.2.0.0
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.0.0.0
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
     Import-DSCResource -ModuleName cChoco -ModuleVersion 2.3.1.0
 
     Node $AllNodes.NodeName

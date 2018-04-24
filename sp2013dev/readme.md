@@ -26,7 +26,7 @@ Remove-Item .\VS2017 -Recurse -Force
 # Usage
 
 ## PowerShell
-`cd` to `images` directory and run `preparevmimages.ps1`
+`cd` to `images` directory and run `.\preparevmimages.ps1`
 `cd` to `stack` directory and run `vagrant up`
 when 
 

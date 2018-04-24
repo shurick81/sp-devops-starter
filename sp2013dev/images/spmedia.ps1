@@ -5,15 +5,23 @@ Configuration $configName
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
 
     Node $AllNodes.NodeName
     {
 
-        File SPLocalMediaEnsure {
-            SourcePath = "\\192.168.0.159\Volume_1\Install\SP2013wSP1"
-            DestinationPath = "C:\Install\SPInstall"
-            Recurse = $true
-            Type = "Directory"
+        xRemoteFile SPMediaArchive
+        {
+            Uri             = "http://$env:PACKER_HTTP_ADDR/SPServer2013SP1.zip"
+            DestinationPath = "C:\Install\SPServer2013SP1.zip"
+        }
+
+        Archive SPMediaArchiveUnpacked
+        {
+            Ensure = "Present"
+            Path = "C:\Install\SPServer2013SP1.zip"
+            Destination = "C:\Install\SPInstall"
+            DependsOn   = "[xRemoteFile]SPMediaArchive"
         }
 
     }

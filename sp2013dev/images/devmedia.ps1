@@ -5,15 +5,23 @@ Configuration $configName
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
 
     Node $AllNodes.NodeName
     {
 
-        File VSLocalMediaEnsure {
-            SourcePath = "\\192.168.0.159\Volume_1\Install\VS2017"
-            DestinationPath = "C:\Install\VSInstall"
-            Recurse = $true
-            Type = "Directory"
+        xRemoteFile VSMediaArchive
+        {
+            Uri             = "http://$env:PACKER_HTTP_ADDR/VS2017.zip"
+            DestinationPath = "C:\Install\VS2017.zip"
+        }
+
+        Archive VSMediaArchiveUnpacked
+        {
+            Ensure = "Present"
+            Path = "C:\Install\VS2017.zip"
+            Destination = "C:\Install\VSInstall"
+            DependsOn   = "[xRemoteFile]VSMediaArchive"
         }
 
     }

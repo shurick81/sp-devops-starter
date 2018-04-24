@@ -21,6 +21,11 @@ Configuration $configName
             Force = $true
         }
 
+        File SQLNoLocalMediaArchiveEnsure {
+            DestinationPath = "C:\Install\SQLServer2014SP1.zip"
+            Ensure = "Absent"
+        }
+
     }
 }
 

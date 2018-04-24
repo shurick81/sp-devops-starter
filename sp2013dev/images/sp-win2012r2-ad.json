@@ -23,9 +23,9 @@
         },
         {
             "type": "hyperv-iso",
-            "iso_checksum": "18a4f00a675b0338f3c7c93c4f131beb",
+            "iso_checksum": "5b5e08c490ad16b59b1d9fab0def883a",
             "iso_checksum_type": "md5",
-            "iso_url": "http://care.dlservice.microsoft.com/dl/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
+            "iso_url": "http://care.dlservice.microsoft.com/dl/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
             "floppy_files": [
                 "Autounattend.xml",
                 "winrm.ps1"

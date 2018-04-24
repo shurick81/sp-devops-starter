@@ -16,7 +16,7 @@ Configuration $configName
             Name                = "xPSDesiredStateConfiguration"
             Repository          = "PSGallery"
             InstallationPolicy  = "Trusted"
-            RequiredVersion     = "8.0.0.0"
+            RequiredVersion     = "8.2.0.0"
         }
 
         PSModule "PSModule_xPendingReboot"

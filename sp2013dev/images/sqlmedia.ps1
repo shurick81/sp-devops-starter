@@ -5,17 +5,25 @@ Configuration $configName
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
 
     Node $AllNodes.NodeName
     {
 
-        File SQLLocalMediaEnsure {
-            SourcePath = "\\192.168.0.159\Volume_1\Install\SQLServer2014SP1"
-            DestinationPath = "C:\Install\SQLInstall"
-            Recurse = $true
-            Type = "Directory"
+        xRemoteFile SQLMediaArchive
+        {
+            Uri             = "http://$env:PACKER_HTTP_ADDR/SQLServer2014SP1.zip"
+            DestinationPath = "C:\Install\SQLServer2014SP1.zip"
         }
 
+        Archive SQLMediaArchiveUnpacked
+        {
+            Ensure = "Present"
+            Path = "C:\Install\SQLServer2014SP1.zip"
+            Destination = "C:\Install\SQLInstall"
+            DependsOn   = "[xRemoteFile]SQLMediaArchive"
+        }
+        
     }
 }
 
