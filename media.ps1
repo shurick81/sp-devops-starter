@@ -19,6 +19,8 @@ $config = Get-Content -Raw -Path $ConFigFile | ConvertFrom-Json;
     {
         $unpackedUNC = "$env:TEMP\$directoryName\Extracted";
         $unpackedTemporary = $true;
+    } else {
+        $unpackedTemporary = $false;
     }
     $targetZip = $config.$key.TargetZip;
     
