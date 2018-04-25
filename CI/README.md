@@ -77,12 +77,13 @@ vagrant up
 Updating pipelines:
 `vagrant up --provision`
 
-# CI agent
+# CI HyperVisor agent
 
 ## Prerequisites
 * Software
   * Packer
   * Vagrant
+  * Reload add-in: `vagrant plugin install vagrant-reload`
   * Hypervisor
   * /sp2013dev/SPServer2013SP1 directory with SP installation media with classic structure:
     * 2013
@@ -122,8 +123,10 @@ It might be wise to run the following snippet in a separate console in order to 
 Run in PowerShell:
 ```PowerShell
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "hvmanager win" -executors 1
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "hvmanager win" -executors 1
 ```
+
+# CI SharePoint agent
 
 ## Connecting sharepoint client slave
 
@@ -136,5 +139,5 @@ It might be wise to run the following snippet in a separate console in order to 
 Run in PowerShell:
 ```PowerShell
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://localhost:8080 -username admin -password admin -labels "hvmanager win infrastructure" -executors 2
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "hvmanager win infrastructure" -executors 2
 ```

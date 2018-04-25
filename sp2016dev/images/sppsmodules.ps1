@@ -43,7 +43,7 @@ Configuration $configName
             Name                = "xNetworking"
             Repository          = "PSGallery"
             InstallationPolicy  = "Trusted"
-            RequiredVersion     = "5.3.0.0"
+            RequiredVersion     = "5.6.0.0"
         }
 
         PSModule "PSModule_SqlServerDsc"

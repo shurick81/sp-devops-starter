@@ -10,6 +10,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the solution'
+                powershell './src/spfarm_2013.ps1'
+                powershell './src/sampleps.ps1'
             }
         }
         stage('Test') {
