@@ -85,11 +85,11 @@ Updating pipelines:
   * Vagrant
   * Reload add-in: `vagrant plugin install vagrant-reload`
   * Hypervisor
-  * /sp2013dev/SPServer2013SP1 directory with SP installation media with classic structure:
+  * /infrastructure/sp2013dev/SPServer2013SP1 directory with SP installation media with classic structure:
     * 2013
       * SharePoint
       * LanguagePacks
-  Use AutoSPSourceBuilder to generate this one or extract from SP iso to /sp2013dev/SPServer2013SP1/2013/SharePoint
+  Use AutoSPSourceBuilder to generate this one or extract from SP iso to /infrastructure/sp2013dev/SPServer2013SP1/2013/SharePoint
 
 * ~ 2 hours to run tests
 
@@ -120,11 +120,14 @@ choco install -y jre8;
 It might be wise to run the following snippet in a separate console in order to continue controlling vagrant.
 ### Windows
 #### VirtualBox or Hyper-V
-Run in PowerShell:
+Run in a new PowerShell:
 ```PowerShell
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
 java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "hvmanager win"
 ```
+
+
+
 
 # CI SharePoint agent
 
@@ -136,10 +139,13 @@ java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
 java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "sharepoint server"
 
-## Connecting hypervisor manager slave for infrastructure testing
+
+
+
+# Connecting hypervisor manager slave for infrastructure testing
 It might be wise to run the following snippet in a separate console in order to continue controlling vagrant.
-### Windows
-#### VirtualBox or Hyper-V
+## Windows
+### VirtualBox or Hyper-V
 Run in PowerShell:
 ```PowerShell
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar

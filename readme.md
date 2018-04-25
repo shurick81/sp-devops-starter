@@ -1,4 +1,5 @@
-For usage, read README.md in /sp2013dev, /sp2016dev and /ci
+For usage, read README.md in infrastructure/sp2013dev, infrastructure/sp2016dev and /ci
+
 
 # Preparing a dev environment of the CI/Infrastructure project
 
