@@ -123,14 +123,18 @@ It might be wise to run the following snippet in a separate console in order to 
 Run in PowerShell:
 ```PowerShell
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "hvmanager win" -executors 1
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "hvmanager win"
 ```
 
 # CI SharePoint agent
 
 ## Connecting sharepoint client slave
+Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "sharepoint client"
 
 ## Connecting sharepoint server slave
+Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "sharepoint server"
 
 ## Connecting hypervisor manager slave for infrastructure testing
 It might be wise to run the following snippet in a separate console in order to continue controlling vagrant.
@@ -139,5 +143,5 @@ It might be wise to run the following snippet in a separate console in order to 
 Run in PowerShell:
 ```PowerShell
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "hvmanager win infrastructure" -executors 2
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "hvmanager win infrastructure"
 ```
