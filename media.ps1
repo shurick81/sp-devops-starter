@@ -23,20 +23,27 @@ $config = Get-Content -Raw -Path $ConFigFile | ConvertFrom-Json;
         $unpackedTemporary = $false;
     }
     $targetZip = $config.$key.TargetZip;
-    
+    Write-Host "$(Get-Date) Checking $targetZip";
     if ( !( Get-Item $targetZip -ErrorAction Ignore ) )
     {
         if ( !( Get-Item $unpackedUNC -ErrorAction Ignore ) )
         {
-            if ( !( Get-Item $imageUNC -ErrorAction Ignore ) )
+            if ( $sourceImageUrl )
             {
-                Write-Host "$(Get-Date) Local image file $imageUNC is not found locally, downloading from $sourceImageUrl.";
-                New-Item -ItemType Directory -Path "$env:TEMP\$directoryName" | Out-Null;
-                Start-BitsTransfer -Source $sourceImageUrl -Destination $imageUNC;
-                Write-Host "$(Get-Date) Done.";
-            }
-            if ( !( Get-Item $imageUNC ) )
-            {
+                if ( !( Get-Item $imageUNC -ErrorAction Ignore ) )
+                {
+                    Write-Host "$(Get-Date) Local image file $imageUNC is not found locally, downloading from $sourceImageUrl.";
+                    New-Item -ItemType Directory -Path "$env:TEMP\$directoryName" | Out-Null;
+                    Start-BitsTransfer -Source $sourceImageUrl -Destination $imageUNC;
+                    Write-Host "$(Get-Date) Done.";
+                }
+                if ( !( Get-Item $imageUNC ) )
+                {
+                    Write-Host "$(Get-Date) Done.";
+                    Exit 1;
+                }
+            } else {
+                Write-Host "$(Get-Date) Unpacked media at $unpackedUNC is not found, and SourceImageUrl is not found. So nothing we can do."
                 Exit 1;
             }
             Write-Host "$(Get-Date) Unpacked media at $unpackedUNC is not found, unpacking from $imageUNC.";
