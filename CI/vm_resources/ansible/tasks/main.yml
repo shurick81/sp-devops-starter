@@ -41,3 +41,4 @@
 
 - include_tasks: seed-main-job.yml
 - include_tasks: seed-infrastructure-job.yml
+- include_tasks: seed-infrastructure-ci-job.yml
