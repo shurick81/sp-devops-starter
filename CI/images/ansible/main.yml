@@ -11,8 +11,10 @@
     jenkins_admin_username: admin
     jenkins_admin_password: admin
     jenkins_plugins:
+      - envinject
       - envinject-api
       - authentication-tokens
+      - blueocean
       - bouncycastle-api
       - branch-api
       - cloudbees-folder
