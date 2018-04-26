@@ -16,6 +16,8 @@ pipeline {
 */
                 powershell 'cd infrastructure/sp2013dev; New-Item -Path images/packer_cache -ItemType Directory -Force | Out-Null; Copy-Item C:/sp-onprem-files/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso ./images/packer_cache'
                 powershell 'cd infrastructure/sp2013dev; if ( !( Get-Item ./images/packer_cache/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso -ErrorAction Ignore ) ) { Write-Host "Windows Server 2012 R2 image missing"; exit 1 }'
+                powershell 'cd infrastructure/sp2013dev; Copy-Item C:/sp-onprem-files/SQLServer2014SP1.iso ./images/http'
+                powershell 'cd infrastructure/sp2013dev; if ( !( Get-Item ./images/http/SQLServer2014SP1.zip -ErrorAction Ignore ) ) { Write-Host "SQL Server media missing"; exit 1 }'
                 powershell 'cd ci; New-Item -Path images/packer_cache -ItemType Directory -Force | Out-Null; Copy-Item C:/sp-onprem-files/c4bf15f4237756dfa011191c28b7cfb6c897c65b3d56775b528770d5fa0c888f.iso ./images/packer_cache'
                 powershell 'cd ci; if ( !( Get-Item ./images/packer_cache/c4bf15f4237756dfa011191c28b7cfb6c897c65b3d56775b528770d5fa0c888f.iso -ErrorAction Ignore ) ) { Write-Host "CentOS image missing"; exit 1 }'
             }
