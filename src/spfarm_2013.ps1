@@ -28,7 +28,7 @@ Configuration $configName
         {
             Ensure      = 'Present'
             Name        = 'SPDB'
-            ServerName  = 'DBWEBCODE01'
+            ServerName  = 'DBWEBCODE01\SPIntra01'
         }
 
         SPFarm Farm
