@@ -46,7 +46,7 @@ Configuration $configName
             ErrorReporting          = "True"
             SQLCollation            = "Finnish_Swedish_CI_AS_KS_WS"
             BrowserSvcStartupType   = "Automatic"   
-            DependsOn               = "[WindowsFeature]NetFramework45Core"
+            DependsOn               = "[WindowsFeature]NetFramework35Core"
         }
 
         SqlServerMemory SQLServerMaxMemoryIs2GB
