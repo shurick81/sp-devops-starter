@@ -24,7 +24,6 @@ Configuration $configName
         WindowsFeature NetFramework35Core
         {
             Name                    = "NET-Framework-Core"
-            DependsOn               = "[xHotfix]RemoveKB2894856"
         }
 
         xPendingReboot RebootBeforeSQLInstalling
