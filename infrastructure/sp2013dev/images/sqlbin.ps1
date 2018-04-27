@@ -21,16 +21,16 @@ Configuration $configName
             Ensure  = "Absent"
         }
 
-        WindowsFeature NetFramework45Core
+        WindowsFeature NetFramework35Core
         {
-            Name    = "NET-Framework-45-Core"
-            Ensure  = "Present"
+            Name                    = "NET-Framework-Core"
+            DependsOn               = "[xHotfix]RemoveKB2894856"
         }
 
         xPendingReboot RebootBeforeSQLInstalling
         { 
             Name        = 'BeforeSQLInstalling'
-            DependsOn   = "[WindowsFeature]NetFramework45Core"
+            DependsOn   = "[WindowsFeature]NetFramework35Core"
         }
         
         SQLSetup SQLSetup
