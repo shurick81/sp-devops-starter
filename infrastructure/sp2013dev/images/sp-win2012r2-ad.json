@@ -48,11 +48,11 @@
             "only": ["hyperv-iso"]
         },
         { "type": "powershell", "script": "rdpenable.ps1" },
-        { "type": "powershell", "script": "updatesource.ps1" },
         { "type": "powershell", "script": "wmf5.ps1",
             "elevated_user": "administrator", "elevated_password": "Fractalsol"
         },
-        { "type": "powershell", "script": "PackageManagementProviderResource.ps1", "pause_before": "5m" },
+        { "type": "powershell", "script": "updatesource.ps1", "pause_before": "5m" },
+        { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "adpsmodules.ps1" },
         { "type": "powershell", "script": "adbin.ps1" },

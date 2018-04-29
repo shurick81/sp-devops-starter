@@ -1,35 +1,26 @@
-$configName = "SPMedia"
+$configName = "SPBin"
 Configuration $configName
 {
     param(
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
+    Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
 
     Node $AllNodes.NodeName
     {
 
-        xRemoteFile SPMediaArchive
+        SPInstallPrereqs SPPrereqsInstalled
         {
-            Uri             = "http://$env:PACKER_HTTP_ADDR/SPServer2013SP1.zip"
-            DestinationPath = "C:\Install\SPServer2013SP1.zip"
-            MatchSource     = $false
-        }
-
-        Archive SPMediaArchiveUnpacked
-        {
-            Ensure      = "Present"
-            Path        = "C:\Install\SPServer2013SP1.zip"
-            Destination = "C:\Install\SPInstall"
-            DependsOn   = "[xRemoteFile]SPMediaArchive"
+            InstallerPath   = "C:\Install\SPInstall\2013\SharePoint\Prerequisiteinstaller.exe"
+            OnlineMode      = $true
         }
 
     }
 }
 
 $configurationData = @{ AllNodes = @(
-    @{ NodeName = 'localhost'; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 Write-Host "$(Get-Date) Compiling DSC"
 try

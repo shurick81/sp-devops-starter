@@ -9,11 +9,6 @@ Configuration $configName
     Node $AllNodes.NodeName
     {
         
-        LocalConfigurationManager
-        {
-            RebootNodeIfNeeded = $true;
-        }
-
         @(
             "Application-Server",
             "AS-NET-Framework",
@@ -68,19 +63,12 @@ Configuration $configName
             "NET-WCF-HTTP-Activation45",
             "NET-WCF-Pipe-Activation45",
             "NET-WCF-TCP-Activation45",
-            "Server-Media-Foundation",
-            "Windows-Identity-Foundation",
-            "PowerShell-V2",
-            "WAS",
-            "WAS-Process-Model",
-            "WAS-NET-Environment",
-            "WAS-Config-APIs",
-            "XPS-Viewer"
+            "Server-Media-Foundation"
         ) | % {
 
             WindowsFeature "SPPrerequisiteFeature$_"
             {
-                Name = $_
+                Name   = $_
                 Ensure = "Present"
                 Source = "D:\Sources\sxs"
             }
@@ -90,9 +78,43 @@ Configuration $configName
 }
 
 $configurationData = @{ AllNodes = @(
-    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
-) }
-
-&$configName `
-    -ConfigurationData $configurationData;
-Start-DscConfiguration $configName -Verbose -Wait -Force;
+        @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+    ) 
+}
+Write-Host "$(Get-Date) Compiling DSC"
+try {
+    &$configName `
+        -ConfigurationData $configurationData;
+}
+catch {
+    Write-Host "$(Get-Date) Exception in compiling DCS:";
+    $_.Exception.Message
+    Exit 1;
+}
+Write-Host "$(Get-Date) Starting DSC"
+try {
+    Start-DscConfiguration $configName -Verbose -Wait -Force;
+}
+catch {
+    Write-Host "$(Get-Date) Exception in starting DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
+Write-Host "$(Get-Date) Testing DSC"
+try {
+    $result = Test-DscConfiguration $configName -Verbose;
+    $inDesiredState = $result.InDesiredState;
+    $failed = $false;
+    $inDesiredState | % {
+        if ( !$_ ) {
+            Write-Host "$(Get-Date) Test failed"
+            Exit 1;
+        }
+    }
+}
+catch {
+    Write-Host "$(Get-Date) Exception in testing DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
+Exit 0;

@@ -1,35 +1,37 @@
-$configName = "SPMedia"
+$configName = "SPPreBin"
 Configuration $configName
 {
     param(
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
 
     Node $AllNodes.NodeName
     {
+        
+        @(
+            "Windows-Identity-Foundation",
+            "PowerShell-V2",
+            "WAS",
+            "WAS-Process-Model",
+            "WAS-NET-Environment",
+            "WAS-Config-APIs",
+            "XPS-Viewer"
+        ) | % {
 
-        xRemoteFile SPMediaArchive
-        {
-            Uri             = "http://$env:PACKER_HTTP_ADDR/SPServer2013SP1.zip"
-            DestinationPath = "C:\Install\SPServer2013SP1.zip"
-            MatchSource     = $false
+            WindowsFeature "SPPrerequisiteFeature$_"
+            {
+                Name = $_
+                Ensure = "Present"
+                Source = "D:\Sources\sxs"
+            }
+
         }
-
-        Archive SPMediaArchiveUnpacked
-        {
-            Ensure      = "Present"
-            Path        = "C:\Install\SPServer2013SP1.zip"
-            Destination = "C:\Install\SPInstall"
-            DependsOn   = "[xRemoteFile]SPMediaArchive"
-        }
-
     }
 }
 
 $configurationData = @{ AllNodes = @(
-    @{ NodeName = 'localhost'; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 Write-Host "$(Get-Date) Compiling DSC"
 try

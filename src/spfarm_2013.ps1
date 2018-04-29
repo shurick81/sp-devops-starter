@@ -26,9 +26,10 @@ Configuration $configName
 
         SqlAlias SPDBAlias
         {
-            Ensure      = 'Present'
-            Name        = 'SPDB'
-            ServerName  = 'DBWEBCODE01\SPIntra01'
+            Ensure              = 'Present'
+            Name                = 'SPDB'
+            ServerName          = 'DBWEBCODE01\SPIntra01'
+            UseDynamicTcpPort   = $true
         }
 
         SPFarm Farm

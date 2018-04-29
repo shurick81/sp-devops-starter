@@ -77,6 +77,22 @@ vagrant up
 Updating pipelines:
 `vagrant up --provision`
 
+
+
+
+# CI SharePoint agent
+
+## Connecting sharepoint client slave
+Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "sharepoint client"
+
+## Connecting sharepoint server slave
+Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "sharepoint server"
+
+
+
+
 # CI HyperVisor agent
 
 ## Prerequisites
@@ -125,20 +141,6 @@ Run in a new PowerShell:
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
 java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "hvmanager win"
 ```
-
-
-
-
-# CI SharePoint agent
-
-## Connecting sharepoint client slave
-Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "sharepoint client"
-
-## Connecting sharepoint server slave
-Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "sharepoint server"
-
 
 
 

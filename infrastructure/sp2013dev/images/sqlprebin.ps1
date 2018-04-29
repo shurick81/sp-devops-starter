@@ -1,28 +1,15 @@
-$configName = "SPMedia"
+$configName = "SQLBin"
 Configuration $configName
 {
-    param(
-    )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
 
     Node $AllNodes.NodeName
     {
 
-        xRemoteFile SPMediaArchive
+        WindowsFeature NetFramework35Core
         {
-            Uri             = "http://$env:PACKER_HTTP_ADDR/SPServer2013SP1.zip"
-            DestinationPath = "C:\Install\SPServer2013SP1.zip"
-            MatchSource     = $false
-        }
-
-        Archive SPMediaArchiveUnpacked
-        {
-            Ensure      = "Present"
-            Path        = "C:\Install\SPServer2013SP1.zip"
-            Destination = "C:\Install\SPInstall"
-            DependsOn   = "[xRemoteFile]SPMediaArchive"
+            Name    = "NET-Framework-Core"
         }
 
     }
