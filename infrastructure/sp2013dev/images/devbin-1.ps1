@@ -10,25 +10,24 @@ Configuration $configName
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DSCResource -Module xSystemSecurity -Name xIEEsc -ModuleVersion 1.2.0.0
-    Import-DSCResource -ModuleName cChoco -ModuleVersion 2.3.1.0
 
     Node $AllNodes.NodeName
     {
 
         xIEEsc DisableIEEsc
         {
-            IsEnabled   = $false
+            IsEnabled   = $false;
             UserRole    = "Administrators"
         }
 
         Script VSInstallerRunning
         {
             SetScript = {
-                Start-Process -FilePath C:\Install\VSInstall\vs_enterprise.exe -ArgumentList '--layout C:\Install\VSInstall --quiet --wait --add Microsoft.VisualStudio.Workload.Office --includeRecommended' -Wait; 
+                Start-Process -FilePath C:\Install\VSInstall\vs_enterprise.exe -ArgumentList '--quiet --wait --add Microsoft.VisualStudio.Workload.Office --includeRecommended' -Wait; 
             }
             TestScript = {
-                Get-WmiObject -Class Win32_Product | ? { $_.name -eq "Microsoft Visual Studio Setup Configuration" } | % { return $true }
-                return $false
+                Get-WmiObject -Class Win32_Product | ? { $_.Name -eq "Microsoft Visual Studio Setup Configuration" } | % { return $true }
+                return $false;
             }
             GetScript = {
                 $installedApplications = Get-WmiObject -Class Win32_Product | ? { $_.name -eq "Microsoft Visual Studio Setup Configuration" }
@@ -43,26 +42,6 @@ Configuration $configName
             Path        = "C:\Install\SSMS-Setup-ENU.exe"
             Arguments   = "/install /passive /norestart"
             ProductId   = "6ce0f2ad-2643-496c-9b48-d0587d3e10a9"
-        }
-
-        cChocoInstaller ChocoInstalled
-        {
-            InstallDir              = "c:\choco"
-            PsDscRunAsCredential    = $UserCredential
-        }
-
-        cChocoPackageInstaller VSCodeInstalled
-        {
-            Name                    = "visualstudiocode"
-            DependsOn               = "[cChocoInstaller]ChocoInstalled"
-            PsDscRunAsCredential    = $UserCredential
-        }
-
-        cChocoPackageInstaller GitInstalled
-        {
-            Name                    = "git"
-            DependsOn               = "[cChocoInstaller]ChocoInstalled"
-            PsDscRunAsCredential    = $UserCredential
         }
 
     }

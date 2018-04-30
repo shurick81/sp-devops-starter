@@ -1,4 +1,4 @@
-$configName = "SQLMedia"
+$configName = "DevMedia"
 Configuration $configName
 {
     param(
