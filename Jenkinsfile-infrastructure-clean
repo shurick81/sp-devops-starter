@@ -25,7 +25,7 @@ pipeline {
                     if ( !( Get-Item ./images/http/VS2017.zip -ErrorAction Ignore ) ) { Write-Host "Visual Studio media missing"; exit 1 }
                     cd ci;
                     if ( Get-Item C:/sp-onprem-files/c4bf15f4237756dfa011191c28b7cfb6c897c65b3d56775b528770d5fa0c888f.iso ) {
-                        New-Item -Path images/packer_cache -ItemType Directory -Force | Out-Null; Copy-Item C:/sp-onprem-files/c4bf15f4237756dfa011191c28b7cfb6c897c65b3d56775b528770d5fa0c888f.iso ./images/packer_cache'
+                        New-Item -Path images/packer_cache -ItemType Directory -Force | Out-Null; Copy-Item C:/sp-onprem-files/c4bf15f4237756dfa011191c28b7cfb6c897c65b3d56775b528770d5fa0c888f.iso ./images/packer_cache
                     }
                 '''
             }
