@@ -86,8 +86,6 @@ catch
     $_.Exception.Message
     Exit 1;
 }
-Write-Host "$(Get-Date) Sleeping 30"
-Sleep 30;
 Write-Host "$(Get-Date) Testing DSC"
 try {
     $result = Test-DscConfiguration $configName -Verbose;
