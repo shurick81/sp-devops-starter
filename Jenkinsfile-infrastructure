@@ -52,7 +52,7 @@ pipeline {
                     vagrant destroy --force;
                     if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
                     if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* not created (*" } ) ) { Write-Host "DBWEBCODE01 is not destroyed"; exit 1 }
-                ```
+                '''
             }
         }
     }
