@@ -26,8 +26,15 @@ Configuration $configName
                 Start-Process -FilePath C:\Install\VSInstall\vs_enterprise.exe -ArgumentList '--quiet --wait --add Microsoft.VisualStudio.Workload.Office --includeRecommended' -Wait; 
             }
             TestScript = {
-                Get-WmiObject -Class Win32_Product | ? { $_.Name -eq "Microsoft Visual Studio Setup Configuration" } | % { return $true }
-                return $false;
+                $products = Get-WmiObject -Class Win32_Product | ? { $_.Name -eq "Microsoft Visual Studio Setup Configuration" }
+                $products;
+                if ( $products ) {
+                    Write-Host "Products found";
+                    return $true;
+                } else {
+                    Write-Host "Products not found";
+                    return $false;
+                }
             }
             GetScript = {
                 $installedApplications = Get-WmiObject -Class Win32_Product | ? { $_.name -eq "Microsoft Visual Studio Setup Configuration" }

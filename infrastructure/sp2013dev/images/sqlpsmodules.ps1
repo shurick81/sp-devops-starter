@@ -28,6 +28,15 @@ Configuration $configName
             RequiredVersion     = "0.3.0.0"
         }
 
+        PSModule "PSModule_xNetworking"
+        {
+            Ensure              = "Present"
+            Name                = "xNetworking"
+            Repository          = "PSGallery"
+            InstallationPolicy  = "Trusted"
+            RequiredVersion     = "5.6.0.0"
+        }
+
         PSModule "PSModule_SqlServerDsc"
         {
             Ensure              = "Present"
