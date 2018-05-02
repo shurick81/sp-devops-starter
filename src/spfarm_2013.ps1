@@ -59,11 +59,52 @@ $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
 $SPInstallAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spadm16", $securedPassword );
 $SPFarmAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spfrm16", $securedPassword );
 
-&$configName `
-    -ConfigurationData $configurationData `
-    -SPPassphraseCredential $SPPassphraseCredential `
-    -SPInstallAccountCredential $SPInstallAccountCredential `
-    -SPFarmAccountCredential $SPFarmAccountCredential;
-
 #Set-DscLocalConfigurationManager $configName -Verbose -Force;
-Start-DscConfiguration $configName -Verbose -Wait -Force;
+
+$configurationData = @{ AllNodes = @(
+    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+) }
+Write-Host "$(Get-Date) Compiling DSC"
+try
+{
+    &$configName `
+        -ConfigurationData $configurationData `
+        -SPPassphraseCredential $SPPassphraseCredential `
+        -SPInstallAccountCredential $SPInstallAccountCredential `
+        -SPFarmAccountCredential $SPFarmAccountCredential;
+}
+catch
+{
+    Write-Host "$(Get-Date) Exception in compiling DCS:";
+    $_.Exception.Message
+    Exit 1;
+}
+Write-Host "$(Get-Date) Starting DSC"
+try
+{
+    Start-DscConfiguration $configName -Verbose -Wait -Force;
+}
+catch
+{
+    Write-Host "$(Get-Date) Exception in starting DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
+Write-Host "$(Get-Date) Testing DSC"
+try {
+    $result = Test-DscConfiguration $configName -Verbose;
+    $inDesiredState = $result.InDesiredState;
+    $failed = $false;
+    $inDesiredState | % {
+        if ( !$_ ) {
+            Write-Host "$(Get-Date) Test failed"
+            Exit 1;
+        }
+    }
+}
+catch {
+    Write-Host "$(Get-Date) Exception in testing DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
+Exit 0;
