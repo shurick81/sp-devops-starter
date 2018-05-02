@@ -49,10 +49,6 @@ Configuration $configName
     }
 }
 
-$configurationData = @{ AllNodes = @(
-    @{ NodeName = 'localhost'; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
-) }
-
 $securedPassword = ConvertTo-SecureString "sUp3rcomp1eX" -AsPlainText -Force
 $SPPassphraseCredential = New-Object System.Management.Automation.PSCredential( "fakeaccount", $securedPassword )
 $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
