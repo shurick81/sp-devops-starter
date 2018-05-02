@@ -10,6 +10,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the solution'
+                powershell './infrastructure/sp2013dev/images/sppsmodules.ps1'
                 powershell './src/spfarm_2013.ps1'
                 powershell './src/sampleps.ps1'
             }

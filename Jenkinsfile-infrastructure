@@ -45,12 +45,14 @@ pipeline {
             }
             steps {
                 echo 'Building farms'
-                powershell 'cd infrastructure/sp2013dev/stack; vagrant up'
-                powershell 'if ( !( vagrant status | ? { $_ -like "AD01* running (*" } ) ) { Write-Host "AD01 is not running"; exit 1 }'
-                powershell 'if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* running (*" } ) ) { Write-Host "DBWEBCODE01 is not running"; exit 1 }'
-                powershell 'cd ci; vagrant destroy --force'
-                powershell 'if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }'
-                powershell 'if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* not created (*" } ) ) { Write-Host "DBWEBCODE01 is not destroyed"; exit 1 }'
+                powershell '''cd infrastructure/sp2013dev/stack;
+                    vagrant up;
+                    if ( !( vagrant status | ? { $_ -like "AD01* running (*" } ) ) { Write-Host "AD01 is not running"; exit 1 }
+                    if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* running (*" } ) ) { Write-Host "DBWEBCODE01 is not running"; exit 1 }
+                    vagrant destroy --force;
+                    if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
+                    if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* not created (*" } ) ) { Write-Host "DBWEBCODE01 is not destroyed"; exit 1 }
+                ```
             }
         }
     }

@@ -82,6 +82,15 @@ Configuration $configName
             RequiredVersion     = "2.7.0.0"
         }
 
+        PSModule "PSModule_xCredSSP"
+        {
+            Ensure              = "Present"
+            Name                = "xCredSSP"
+            Repository          = "PSGallery"
+            InstallationPolicy  = "Trusted"
+            RequiredVersion     = "1.3.0.0"
+        }
+
     }
 }
 

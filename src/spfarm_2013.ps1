@@ -18,6 +18,7 @@ Configuration $configName
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DscResource -ModuleName SqlServerDsc -ModuleVersion 11.1.0.0
     Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
+    Import-DscResource -ModuleName xCredSSP -ModuleVersion 1.3.0.0
 
     $domainName = "contoso.local";
 
@@ -44,6 +45,19 @@ Configuration $configName
             CentralAdministrationPort = 15555
             PsDscRunAsCredential      = $SPInstallAccountCredential
             DependsOn                 = "[SqlAlias]SPDBAlias"
+        }
+
+        xCredSSP CredSSPServer
+        {
+            Ensure  = "Present"
+            Role    = "Server"
+        }
+
+        xCredSSP CredSSPClient
+        {
+            Ensure = "Present"
+            Role = "Client"
+            DelegateComputers = "*.contoso.local"
         }
 
     }
