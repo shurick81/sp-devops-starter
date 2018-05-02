@@ -18,7 +18,6 @@ Configuration $configName
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DscResource -ModuleName SqlServerDsc -ModuleVersion 11.1.0.0
     Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
-    Import-DscResource -ModuleName xCredSSP -ModuleVersion 1.3.0.0
 
     $domainName = "contoso.local";
 
@@ -68,8 +67,6 @@ $SPPassphraseCredential = New-Object System.Management.Automation.PSCredential( 
 $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
 $SPInstallAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spadm16", $securedPassword );
 $SPFarmAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spfrm16", $securedPassword );
-
-#Set-DscLocalConfigurationManager $configName -Verbose -Force;
 
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }

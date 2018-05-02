@@ -73,6 +73,7 @@
         { "type": "windows-restart" },
         { "type": "powershell", "script": "spbin.ps1" },
         { "type": "powershell", "script": "spmediaclean.ps1" },
+        { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "windows-restart" },
         { "type": "powershell", "script": "devmedia.ps1" },
         { "type": "powershell", "script": "devbin-1.ps1" },
