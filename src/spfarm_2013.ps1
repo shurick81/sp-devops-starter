@@ -19,8 +19,6 @@ Configuration $configName
     Import-DscResource -ModuleName SqlServerDsc -ModuleVersion 11.1.0.0
     Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
 
-    $domainName = "contoso.local";
-
     Node $AllNodes.NodeName
     {
 
