@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'sharepoint-auto || hvmanager-cleanvms'
+    }
     
     stages {
         stage('Infrastructure - Prepare') {
