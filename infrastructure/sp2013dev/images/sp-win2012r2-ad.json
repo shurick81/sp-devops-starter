@@ -42,11 +42,6 @@
             "script": "VirtualBox/installadditions.ps1",
             "only": ["virtualbox-iso"]
         },
-        {
-            "type": "powershell",
-            "script": "HyperV/integration.ps1",
-            "only": ["hyperv-iso"]
-        },
         { "type": "powershell", "script": "rdpenable.ps1" },
         { "type": "powershell", "script": "wmf5.ps1",
             "elevated_user": "administrator", "elevated_password": "Fractalsol"
