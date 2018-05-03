@@ -46,8 +46,10 @@ pipeline {
                 label 'win && infrastructuretester'
             }
             steps {
-                powershell 'cd ci; packer build centos7-ci.json'
-                powershell 'cd ci; if ( !( Get-Item ./images/centos7-ci.box ) ) { exit 1 }'
+                powershell '''cd ci/images;
+                    packer build centos7-ci.json
+                    if ( !( Get-Item ./centos7-ci.box ) ) { exit 1 }
+                '''
                 /*
                 powershell 'cd sp2016dev/images; ./preparevmimages.ps1'
                 powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-web-code *" } ) ) { exit 1 }'
