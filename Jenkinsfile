@@ -2,6 +2,12 @@ pipeline {
     agent { label 'sharepoint' }
 
     stages {
+        stage('Prepare') {
+            steps {
+                echo 'Waiting for infrastructure'
+                sleep 150
+            }
+        }
         stage('Build') {
             steps {
                 echo 'Building the solution'
