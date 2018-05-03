@@ -5,7 +5,7 @@ pipeline {
         stage('Prepare') {
             steps {
                 echo 'Waiting for infrastructure'
-                sleep 150
+                sleep 300
             }
         }
         stage('Build') {
