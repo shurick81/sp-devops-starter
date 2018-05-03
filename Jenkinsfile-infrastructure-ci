@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Infrastructure - Prepare') {
             agent {
-                label 'win infrastructuretester'
+                label 'win && infrastructuretester'
             }
             steps {
                 echo 'Copying Windows Image...'
@@ -41,7 +41,7 @@ pipeline {
         }
         stage('Infrastructure - Build') {
             agent {
-                label 'win infrastructuretester'
+                label 'win && infrastructuretester'
             }
             steps {
                 powershell 'cd ci; packer build centos7-ci.json'
@@ -57,7 +57,7 @@ pipeline {
         }
         stage('Infrastructure - Deploy') {
             agent {
-                label 'win infrastructuretester'
+                label 'win && infrastructuretester'
             }
             steps {
                 echo 'Building farms'
