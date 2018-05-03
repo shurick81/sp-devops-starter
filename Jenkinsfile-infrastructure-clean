@@ -53,7 +53,7 @@ pipeline {
         }
         stage('Build') {
             agent {
-                label 'sharepoint'
+                label 'sharepoint-auto'
             }
             steps {
                 echo 'Building the solution'
@@ -61,7 +61,7 @@ pipeline {
         }
         stage('Deploy') {
             agent {
-                label 'sharepoint'
+                label 'sharepoint-auto'
             }
             steps {
                 echo 'Deploying the solution'
@@ -71,7 +71,7 @@ pipeline {
         }
         stage('Test') {
             agent {
-                label 'sharepoint'
+                label 'sharepoint-auto'
             }
             steps {
                 echo 'Running tests'
