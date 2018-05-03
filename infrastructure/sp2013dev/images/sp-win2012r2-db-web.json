@@ -58,7 +58,6 @@
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "sqlpsmodules.ps1" },
         { "type": "powershell", "script": "sppsmodules.ps1" },
-        { "type": "powershell", "script": "devpsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
         { "type": "powershell", "script": "sqlmedia.ps1" },
         { "type": "powershell", "script": "sqlprebin.ps1" },
@@ -79,7 +78,7 @@
     "post-processors": [
         {
           "type": "vagrant",
-          "output": "sp-win2012r2-db-web-code.box"
+          "output": "sp-win2012r2-db-web.box"
         }
     ]
 }
