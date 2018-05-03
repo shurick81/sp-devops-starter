@@ -8,10 +8,10 @@ output-virtualbox-iso/*
 *.vdi
 *.ovf
 *.vmdk
-**/swarm-client-3.5.jar
+swarm-client-3.5.jar
 **/SQLServer2014SP1/*
 SQLServer2014SP1.zip
 **/SPServer2013SP1/*
 SPServer2013SP1.zip
-*/VS2017/*
+**/VS2017/*
 VS2017.zip
