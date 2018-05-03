@@ -21,6 +21,8 @@ Start-Process -FilePath "$env:Temp\$directoryName\vs_Enterprise.exe" -ArgumentLi
 Remove-Item .\VS2017 -Recurse -Force
 ```
 
+* On the Hyper-V host, open incoming ports 8000 to 9000.
+
 * ~ 3 hours to run tests
 
 # Usage
