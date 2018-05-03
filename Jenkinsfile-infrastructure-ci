@@ -1,12 +1,10 @@
 pipeline {
-    agent {
-        label 'infrastructuretester'
-    }
+    agent any
 
     stages {
-        stage('Prepare') {
+        stage('Infrastructure - Prepare') {
             agent {
-                label 'win'
+                label 'win infrastructuretester'
             }
             steps {
                 echo 'Copying Windows Image...'
@@ -41,9 +39,9 @@ pipeline {
                 powershell 'cd ci; if ( Get-Item ./images/centos7-ci.box ) { exit 1 }'
             }
         }
-        stage('Build') {
+        stage('Infrastructure - Build') {
             agent {
-                label 'win'
+                label 'win infrastructuretester'
             }
             steps {
                 powershell 'cd ci; packer build centos7-ci.json'
@@ -57,9 +55,9 @@ pipeline {
                 powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) ) { exit 1 }'
             }
         }
-        stage('Deploy') {
+        stage('Infrastructure - Deploy') {
             agent {
-                label 'win'
+                label 'win infrastructuretester'
             }
             steps {
                 echo 'Building farms'
@@ -67,6 +65,32 @@ pipeline {
                 powershell 'if ( !( vagrant status | ? { $_ -like "default* running (*" } ) ) { exit 1 }'
                 powershell 'cd ci; vagrant destroy --force'
                 powershell 'if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }'
+            }
+        }
+        stage('Build') {
+            agent {
+                label 'sharepoint-auto'
+            }
+            steps {
+                echo 'Building the solution'
+            }
+        }
+        stage('Deploy') {
+            agent {
+                label 'sharepoint-auto'
+            }
+            steps {
+                echo 'Deploying the solution'
+                powershell './src/spfarm_2013.ps1'
+                powershell './src/sampleps.ps1'
+            }
+        }
+        stage('Test') {
+            agent {
+                label 'sharepoint-auto'
+            }
+            steps {
+                echo 'Running tests'
             }
         }
     }
