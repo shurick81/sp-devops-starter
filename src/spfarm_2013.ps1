@@ -44,19 +44,6 @@ Configuration $configName
             DependsOn                 = "[SqlAlias]SPDBAlias"
         }
 
-        xCredSSP CredSSPServer
-        {
-            Ensure  = "Present"
-            Role    = "Server"
-        }
-
-        xCredSSP CredSSPClient
-        {
-            Ensure = "Present"
-            Role = "Client"
-            DelegateComputers = "*.contoso.local"
-        }
-
     }
 }
 
