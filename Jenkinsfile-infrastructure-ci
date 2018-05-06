@@ -36,6 +36,7 @@ pipeline {
                 */
                 powershell 'cd infrastructure/sp2013dev/images; ./removevmimages.ps1'
                 powershell 'if ( vagrant box list | ? { $_ -like "sp-win2012r2-db-web-code *" } ) { exit 1 }'
+                powershell 'if ( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) { exit 1 }'
                 powershell 'if ( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) { exit 1 }'
                 powershell 'cd ci; if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { Remove-Item ./images/centos7-ci.box }'
                 powershell 'cd ci; if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { exit 1 }'
@@ -60,6 +61,7 @@ pipeline {
                 */
                 powershell 'cd infrastructure/sp2013dev/images; ./preparevmimages.ps1'
                 powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web-code *" } ) ) { exit 1 }'
+                powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) ) { exit 1 }'
                 powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) ) { exit 1 }'
             }
         }
@@ -69,10 +71,19 @@ pipeline {
             }
             steps {
                 echo 'Building farms'
-                powershell 'cd ci; vagrant box remove file://./images/centos7-ci.box --force; vagrant up'
-                powershell 'if ( !( vagrant status | ? { $_ -like "default* running (*" } ) ) { exit 1 }'
-                powershell 'cd ci; vagrant destroy --force'
-                powershell 'if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }'
+                powershell '''cd ci
+                    vagrant box remove file://./images/centos7-ci.box --force; vagrant up
+                    if ( !( vagrant status | ? { $_ -like "default* running (*" } ) ) { exit 1 }
+                    cd ci; vagrant destroy --force
+                    if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }
+                '''
+                powershell '''cd infrastructure/sp2013dev/stacks/main;
+                    vagrant destroy DBWEBCODE01 --force;
+                    if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* not created (*" } ) ) { Write-Host "DBWEBCODE01 is not destroyed"; exit 1 }
+                    vagrant up;
+                    if ( !( vagrant status | ? { $_ -like "AD01* running (*" } ) ) { Write-Host "AD01 is not running"; exit 1 }
+                    if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* running (*" } ) ) { Write-Host "DBWEBCODE01 is not running"; exit 1 }
+                '''
             }
         }
         stage('Build') {
