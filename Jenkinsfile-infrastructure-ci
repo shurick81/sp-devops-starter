@@ -1,12 +1,12 @@
 pipeline {
     agent {
-        label 'sharepoint-auto || infrastructuretester'
+        label 'sharepoint-auto||infrastructuretester'
     }
 
     stages {
         stage('Infrastructure - Prepare') {
             agent {
-                label 'win && infrastructuretester'
+                label 'win&&hvmanager-cleanvms'
             }
             steps {
                 echo 'Copying Windows Image...'
@@ -44,7 +44,7 @@ pipeline {
         }
         stage('Infrastructure - Build') {
             agent {
-                label 'win && infrastructuretester'
+                label 'win&&hvmanager-cleanvms'
             }
             steps {
                 powershell '''cd ci/images;
@@ -67,7 +67,7 @@ pipeline {
         }
         stage('Infrastructure - Deploy') {
             agent {
-                label 'win && infrastructuretester'
+                label 'win&&hvmanager-cleanvms'
             }
             steps {
                 echo 'Building farms'
