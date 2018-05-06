@@ -1,7 +1,7 @@
-$imageNames = @(
-    "sp-win2012r2-ad",
-    "sp-win2012r2-db-web",
-    "sp-win2012r2-db-web-code"
+param(
+    [Parameter(Mandatory=$false,Position=1)]
+    [string[]]
+    $ImageNames
 )
 
 $startProcessingMoment = Get-Date;

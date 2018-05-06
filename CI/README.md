@@ -85,16 +85,28 @@ Updating pipelines:
 
 
 
-# CI SharePoint agent
+# CI/CD SharePoint agent
+
+## Prerequisites
+```
+Set-ExecutionPolicy Bypass -Force;
+iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+choco install -y git
+choco install -y jre8;
+```
+Close the console.
 
 ## Connecting sharepoint client slave
+```
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
 java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "sharepoint client"
+```
 
 ## Connecting sharepoint server slave
+```
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
 java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "sharepoint server"
-
+```
 
 
 
@@ -133,7 +145,10 @@ Invoke-RestMethod -Uri https://download.visualstudio.microsoft.com/download/pr/1
 Start-Process -FilePath "$env:Temp\$directoryName\vs_Enterprise.exe" -ArgumentList '--layout C:\sp-onprem-files\VS2017 --add Microsoft.VisualStudio.Workload.Office --includeRecommended --lang en-US --quiet' -Wait;
 .\..\media.ps1 .\mediasp2013.json
 Remove-Item C:\sp-onprem-files\VS2017 -Recurse -Force
+Set-ExecutionPolicy Bypass -Force;
+iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install -y jre8;
+choco install -y git
 ```
 2. Close the PowerShell console.
 

@@ -57,10 +57,10 @@ Using Hyper-V Manager, configure network switch with external access.
 
 * ~ 3 hours to run tests
 
-# Usage
+# Creating a development environment
 
 ## PowerShell
-`cd` to `images` directory and run `.\preparevmimages.ps1`
+`cd` to `images` directory and run `.\preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web-code`
 `cd` to `stacks/dev` directory and run `vagrant up`
 when 
 
