@@ -1,9 +1,10 @@
 # Requirements
 * Hardware
-  * 2GB free RAM
+  * 12GB free RAM
   * 100GB free disk space
 * Software
   * Vagrant
+  * Vagrant reload
   * Packer
   * Oracle VirtualBox or Hyper-V or VMWare
   * /infrastructure/sp2013dev/SPServer2013SP1 directory with SP installation media with classic structure:
@@ -12,6 +13,19 @@
       * LanguagePacks
 Use AutoSPSourceBuilder to generate this one or extract from SP iso to /infrastructure/sp2013dev/SPServer2013SP1/2013/SharePoint
 
+Run in PowerShell:
+```PowerShell
+Set-ExecutionPolicy Bypass -Force;
+iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+choco install -y packer
+choco install -y vagrant
+```
+Then reboot for finishing insalling Vagrant and continue with the following snippet:
+```PowerShell
+vagrant plugin install vagrant-reload
+```
+
+Then `cd` to the `/sp2013dev` directory and run:
 ```PowerShell
 $directoryName = [guid]::NewGuid().Guid;
 New-Item -Path "$env:Temp\$directoryName" -ItemType Directory -Force | Out-Null
@@ -21,7 +35,25 @@ Start-Process -FilePath "$env:Temp\$directoryName\vs_Enterprise.exe" -ArgumentLi
 Remove-Item .\VS2017 -Recurse -Force
 ```
 
-* On the Hyper-V host, open incoming ports 8000 to 9000.
+### Removing IE Enhanced Security
+```PowerShell
+$adminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+Set-ItemProperty -Path $adminKey -Name "IsInstalled" -Value 0
+Stop-Process -Name Explorer
+```
+
+### Installing VirtualBox on Windows
+```
+choco install -y virtualbox
+```
+
+### Installing Hyper-V on Windows Server or Windows Pro
+```PowerShell
+Enable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V -All
+New-NetFirewallRule -DisplayName 'Packer HTTP ports' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8000-9000 | Out-Null
+```
+You will need to reboot the machine for changes to apply
+Using Hyper-V Manager, configure network switch with external access.
 
 * ~ 3 hours to run tests
 

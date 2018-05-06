@@ -15,13 +15,17 @@ in admin PowerShell run:
 ```
 Set-ExecutionPolicy Bypass -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-choco install -y packer --version 1.2.2
+choco install -y packer
 choco install -y vagrant
 choco install -y git
 ```
 
 For VirtualBox, run `choco install -y virtualbox`
-For Hyper-V, run `Enable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V -All`
+For Hyper-V, run:
+```
+Enable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V -All
+New-NetFirewallRule -DisplayName 'Packer HTTP ports' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8000-9000 | Out-Null
+```
 
 Reboot the machine: `shutdown /r`
 
@@ -31,10 +35,11 @@ in command line run:
 powershell
 Set-ExecutionPolicy Bypass -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-choco install -y packer --version 1.2.1
+choco install -y packer
 choco install -y vagrant
 choco install -y git
 New-NetFirewallRule -DisplayName 'HTTP(S) Inbound' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort @('80', '443', '8080') | Out-Null
+New-NetFirewallRule -DisplayName 'Packer HTTP ports' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8000-9000 | Out-Null
 exit
 ```
 
@@ -161,3 +166,6 @@ Run in PowerShell:
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
 java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:8080 -username admin -password admin -labels "infrastructuretester win"
 ```
+
+# Cloning to other projecs
+Copy the whole CI directory to your project
