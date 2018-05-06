@@ -1,5 +1,6 @@
 $imageNames = @(
     "sp-win2012r2-ad",
+    "sp-win2012r2-db-web",
     "sp-win2012r2-db-web-code"
 )
 $imageNames | % {

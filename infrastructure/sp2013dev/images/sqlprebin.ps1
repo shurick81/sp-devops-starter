@@ -1,4 +1,4 @@
-$configName = "SQLBin"
+$configName = "SQLPreBin"
 Configuration $configName
 {
 

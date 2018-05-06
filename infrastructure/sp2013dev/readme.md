@@ -61,7 +61,7 @@ Using Hyper-V Manager, configure network switch with external access.
 
 ## PowerShell
 `cd` to `images` directory and run `.\preparevmimages.ps1`
-`cd` to `stack` directory and run `vagrant up`
+`cd` to `stacks/dev` directory and run `vagrant up`
 when 
 
 # Cleaning up
