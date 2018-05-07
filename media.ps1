@@ -53,7 +53,7 @@ $config = Get-Content -Raw -Path $ConFigFile | ConvertFrom-Json;
             Do {
                 Write-Host "$(Get-Date) Waiting 5 seconds until files are ready on $driveLetter drive";
                 $driveFiles = $null;
-                $temp = Start-Sleep 5;
+                Start-Sleep 5;
                 $driveFiles = Get-ChildItem "$driveLetter`:\*" -Recurse -ErrorAction SilentlyContinue;
             } Until ( $driveFiles )
             Write-Host "$(Get-Date) Creating $unpackedUNC directory"

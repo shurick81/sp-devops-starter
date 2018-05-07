@@ -1,24 +1,22 @@
-$configName = "DomainClient"
+$configName = "DomainClientHyperVNetwork"
 Configuration $configName
 {
     param(
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $DomainAdminCredential
     )
 
     Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DSCResource -ModuleName xComputerManagement -ModuleVersion 3.2.0.0
+    Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
 
+    $dnsIpAddress = Resolve-DnsName AD01;
     Node $AllNodes.NodeName
     {        
-
-        xComputer JoinDomain
+        
+        xDnsServerAddress DnsServerAddress
         {
-            Name        = $NodeName
-            DomainName  = "contoso.local"
-            Credential  = $DomainAdminCredential
+            InterfaceAlias = 'Ethernet'
+            AddressFamily  = 'IPv4'
+            Address        = $dnsIpAddress
+            Validate       = $false
         }
 
     }
@@ -29,14 +27,11 @@ $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 
-$securedPassword = ConvertTo-SecureString "Fractalsol" -AsPlainText -Force
-$DomainAdminCredential = New-Object System.Management.Automation.PSCredential( "contoso\administrator", $securedPassword )
 Write-Host "$(Get-Date) Compiling DSC"
 try
 {
     &$configName `
-        -ConfigurationData $configurationData `
-        -DomainAdminCredential $DomainAdminCredential;
+        -ConfigurationData $configurationData;
 }
 catch
 {

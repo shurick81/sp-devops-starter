@@ -55,7 +55,7 @@
         { "type": "powershell", "script": "sppsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
         { "type": "powershell", "script": "sqlmedia.ps1" },
-        { "type": "powershell", "script": "sqlprebin.ps1", "pause_before": "5m" },
+        { "type": "powershell", "script": "sqlprebin.ps1", "pause_before": "15m" },
         { "type": "windows-restart" },
         { "type": "powershell", "script": "sqlbin.ps1" },
         { "type": "powershell", "script": "sqlmediaclean.ps1" },
