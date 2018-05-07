@@ -1,8 +1,9 @@
-$imageNames = @(
-    "sp-win2012r2-ad",
-    "sp-win2012r2-db-web",
-    "sp-win2012r2-db-web-code"
+param(
+    [Parameter(Mandatory=$true,Position=1)]
+    [string[]]
+    $ImageNames
 )
+
 $imageNames | % {
     $imageName = $_;
     Write-Host "$(Get-Date) Checking $imageName image";

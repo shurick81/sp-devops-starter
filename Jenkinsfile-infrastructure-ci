@@ -45,12 +45,16 @@ pipeline {
                 powershell 'cd sp2016dev/images; ./removevmimages.ps1'
                 powershell 'if ( vagrant box list | ? { $_ -like "sp-win2016-db-web-code *" } ) { exit 1 }'
                 */
-                powershell 'cd infrastructure/sp2013dev/images; ./removevmimages.ps1'
-                powershell 'if ( vagrant box list | ? { $_ -like "sp-win2012r2-db-web-code *" } ) { exit 1 }'
-                powershell 'if ( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) { exit 1 }'
-                powershell 'if ( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) { exit 1 }'
-                powershell 'cd ci; if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { Remove-Item ./images/centos7-ci.box }'
-                powershell 'cd ci; if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { exit 1 }'
+                powershell '''cd infrastructure/sp2013dev/images;
+                    ./removevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-db-web,sp-win2012r2-db-web-code
+                    if ( vagrant box list | ? { $_ -like "sp-win2012r2-db-web-code *" } ) { exit 1 }
+                    if ( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) { exit 1 }
+                    if ( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) { exit 1 }
+                '''
+                powershell '''cd ci;
+                    if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { Remove-Item ./images/centos7-ci.box }
+                    if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { exit 1 };
+                '''
             }
         }
         stage('Infrastructure - Build') {
@@ -70,11 +74,13 @@ pipeline {
                 powershell 'cd sp2016dev/images; ./preparevmimages.ps1'
                 powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-web-code *" } ) ) { exit 1 }'
                 */
-                powershell 'cd infrastructure/sp2013dev/images; ./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-db-web,sp-win2012r2-db-web-code'
-                powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web-code *" } ) ) { exit 1 }'
-                powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) ) { exit 1 }'
-                powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-code *" } ) ) { exit 1 }'
-                powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) ) { exit 1 }'
+                powershell '''cd infrastructure/sp2013dev/images;
+                    ./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-db-web,sp-win2012r2-db-web-code
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web-code *" } ) ) { exit 1 }
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) ) { exit 1 }
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-code *" } ) ) { exit 1 }
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) ) { exit 1 }
+                '''
             }
         }
         stage('Infrastructure - Deploy') {
@@ -86,7 +92,7 @@ pipeline {
                 powershell '''cd ci
                     vagrant box remove file://./images/centos7-ci.box --force; vagrant up
                     if ( !( vagrant status | ? { $_ -like "default* running (*" } ) ) { exit 1 }
-                    cd ci; vagrant destroy --force
+                    vagrant destroy --force
                     if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }
                 '''
                 powershell '''cd infrastructure/sp2013dev/stacks/main;

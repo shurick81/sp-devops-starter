@@ -44,9 +44,11 @@ pipeline {
                 powershell 'cd sp2016dev/images; ./preparevmimages.ps1'
                 powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-web-code *" } ) ) { exit 1 }'
                 */
-                powershell 'cd infrastructure/sp2013dev/images; ./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web'
-                powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) ) { exit 1 }'
-                powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) ) { exit 1 }'
+                powershell '''cd infrastructure/sp2013dev/images;
+                    ./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) ) { exit 1 }
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) ) { exit 1 }
+                '''
             }
         }
         stage('Infrastructure - Deploy') {

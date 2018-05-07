@@ -1,5 +1,5 @@
 param(
-    [Parameter(Mandatory=$false,Position=1)]
+    [Parameter(Mandatory=$true,Position=1)]
     [string[]]
     $ImageNames
 )

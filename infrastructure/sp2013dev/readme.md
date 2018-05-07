@@ -66,7 +66,7 @@ when
 
 # Cleaning up
 `cd` to `stack` directory and run `vagrant destroy`
-`cd` to `images` directory and run `removevmimages.ps1`
+`cd` to `images` directory and run `removevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web-code`
 
 Consider also removing downloaded ISO files:
 
