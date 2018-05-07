@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Infrastructure - Prepare') {
             agent {
-                label 'win&&hvmanager-cleanvms'
+                label 'win&&infrastructuretester'
             }
             steps {
                 echo 'Copying Windows Image...'
@@ -55,7 +55,7 @@ pipeline {
         }
         stage('Infrastructure - Build') {
             agent {
-                label 'win&&hvmanager-cleanvms'
+                label 'win&&infrastructuretester'
             }
             steps {
                 powershell '''cd ci/images;
@@ -79,7 +79,7 @@ pipeline {
         }
         stage('Infrastructure - Deploy') {
             agent {
-                label 'win&&hvmanager-cleanvms'
+                label 'win&&infrastructuretester'
             }
             steps {
                 echo 'Building farms'
