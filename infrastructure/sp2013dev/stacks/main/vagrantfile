@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
         vm_config.vm.network "forwarded_port", guest: 3389, host: 13390, auto_correct: true
         vm_config.vm.provision :shell, path: "../spdomain.ps1"
         vm_config.vm.provision "reload"
-        vm_config.vm.provision :shell, path: "../spdomain.ps1"
+        vm_config.vm.provision :shell, path: "../spdomaincustomizations.ps1"
         vm_config.vm.provider "virtualbox" do |vb|
             #vb.gui = true
             vb.memory = "1024"
@@ -33,7 +33,7 @@ Vagrant.configure(2) do |config|
         vm_config.vm.provision :shell, path: "../joinslave.ps1"        
         vm_config.vm.provider "virtualbox" do |vb|
             #vb.gui = true
-            vb.memory = "12288"
+            vb.memory = "10240"
             vb.cpus = 8
         end
         vm_config.vm.boot_timeout = 600

@@ -18,7 +18,6 @@ Configuration $configName
             GroupName           = "Administrators"
             Credential          = $DomainAdminCredential
             MembersToInclude    = "contoso\OG SharePoint2016 Server Admin Prod"
-            DependsOn           = "[xComputer]JoinDomain"
         }
 
     }
