@@ -8,7 +8,7 @@ Vagrant.configure(2) do |config|
     config.vm.define "AD01" do | vm_config |
         vm_config.vm.hostname = "AD01"
         vm_config.vm.box = "sp-win2012r2-ad"
-        vm_config.vm.network :private_network, ip: "192.168.52.128", gateway: "192.168.52.1"
+        vm_config.vm.network :private_network, ip: "192.168.51.128", gateway: "192.168.51.1"
         vm_config.vm.network "forwarded_port", guest: 3389, host: 13390, auto_correct: true
         vm_config.vm.provision :shell, path: "../spdomain.ps1"
         vm_config.vm.provision "reload"
@@ -23,7 +23,7 @@ Vagrant.configure(2) do |config|
     config.vm.define "DBWEBCODE01" do | vm_config |
         vm_config.vm.hostname = "DBWEBCODE01"
         vm_config.vm.box = "sp-win2012r2-db-web-code"
-        vm_config.vm.network :private_network, ip: "192.168.52.129", gateway: "192.168.52.1"
+        vm_config.vm.network :private_network, ip: "192.168.51.129", gateway: "192.168.51.1"
         vm_config.vm.network "forwarded_port", guest: 3389, host: 13391, auto_correct: true
         vm_config.vm.provision :shell, path: "../domainclient.ps1"
         vm_config.vm.provision "reload"
@@ -31,7 +31,7 @@ Vagrant.configure(2) do |config|
         vm_config.vm.provision :shell, path: "../xcredclient.ps1"
         vm_config.vm.provider "virtualbox" do |vb|
             #vb.gui = true
-            vb.memory = "12288"
+            vb.memory = "11264"
             vb.cpus = 8
         end
         vm_config.vm.boot_timeout = 600

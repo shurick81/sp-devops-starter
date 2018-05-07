@@ -12,21 +12,24 @@ Configuration $configName
     Import-DSCResource -ModuleName xComputerManagement -ModuleVersion 3.2.0.0
     Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
 
+    $netIP = Get-NetAdapter 'Ethernet 2' | Get-NetIPAddress -ea 0 -AddressFamily IPv4;
+    $ipNumbers = $netIP.IPAddress.Split( "." );
+    $ipAddressPrefix = $ipNumbers[0], $ipNumbers[1], $ipNumbers[2] -join "."
     Node $AllNodes.NodeName
     {        
 
         xDefaultGatewayAddress SetDefaultGateway 
         { 
-            Address        = '192.168.52.1' 
-            InterfaceAlias = 'Ethernet 2' 
-            AddressFamily  = 'IPv4' 
+            Address        = "$ipAddressPrefix.1"
+            InterfaceAlias = 'Ethernet 2'
+            AddressFamily  = 'IPv4'
         }
         
         xDnsServerAddress DnsServerAddress
         {
             InterfaceAlias = 'Ethernet 2'
             AddressFamily  = 'IPv4'
-            Address        = '192.168.52.128'
+            Address        = "$ipAddressPrefix.128"
             Validate       = $false
         }
  
