@@ -1,37 +1,45 @@
 $configName = "DomainClientVirtualBoxNetwork"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-    )
+    Configuration $configName
+    {
+        param(
+        )
 
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
 
-    $netIP = Get-NetAdapter 'Ethernet 2' | Get-NetIPAddress -ea 0 -AddressFamily IPv4;
-    $ipNumbers = $netIP.IPAddress.Split( "." );
-    $ipAddressPrefix = $ipNumbers[0], $ipNumbers[1], $ipNumbers[2] -join "."
-    Node $AllNodes.NodeName
-    {        
+        $netIP = Get-NetAdapter 'Ethernet 2' | Get-NetIPAddress -ea 0 -AddressFamily IPv4;
+        $ipNumbers = $netIP.IPAddress.Split( "." );
+        $ipAddressPrefix = $ipNumbers[0], $ipNumbers[1], $ipNumbers[2] -join "."
+        Node $AllNodes.NodeName
+        {        
 
-        xDefaultGatewayAddress SetDefaultGateway 
-        { 
-            Address        = "$ipAddressPrefix.1"
-            InterfaceAlias = 'Ethernet 2'
-            AddressFamily  = 'IPv4'
+            xDefaultGatewayAddress SetDefaultGateway 
+            { 
+                Address        = "$ipAddressPrefix.1"
+                InterfaceAlias = 'Ethernet 2'
+                AddressFamily  = 'IPv4'
+            }
+            
+            xDnsServerAddress DnsServerAddress
+            {
+                InterfaceAlias = 'Ethernet 2'
+                AddressFamily  = 'IPv4'
+                Address        = "$ipAddressPrefix.128"
+                Validate       = $false
+            }
+
         }
-        
-        xDnsServerAddress DnsServerAddress
-        {
-            InterfaceAlias = 'Ethernet 2'
-            AddressFamily  = 'IPv4'
-            Address        = "$ipAddressPrefix.128"
-            Validate       = $false
-        }
-
     }
 }
-
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }

@@ -8,37 +8,45 @@ try
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
             [PSCredential]
+            $SPPassphraseCredential,
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
             $SPInstallAccountCredential,
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
             [PSCredential]
-            $SPWebAppPoolAccountCredential
+            $SPFarmAccountCredential
         )
         Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName SqlServerDsc -ModuleVersion 11.1.0.0
         Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
 
         Node $AllNodes.NodeName
         {
 
-            SPManagedAccount ApplicationWebPoolAccount
+            SqlAlias SPDBAlias
             {
-                AccountName             = $SPWebAppPoolAccountCredential.UserName
-                Account                 = $SPWebAppPoolAccountCredential
-                PsDscRunAsCredential    = $SPInstallAccountCredential
+                Ensure              = 'Present'
+                Name                = 'SPDB'
+                ServerName          = 'DBWEBCODE01\SPIntra01'
+                UseDynamicTcpPort   = $true
             }
 
-            SPWebApplication DefaultWebApp
+            SPFarm Farm
             {
-                Name                    = "Default App"
-                ApplicationPool         = "All Web Applications"
-                ApplicationPoolAccount  = $SPWebAppPoolAccountCredential.UserName
-                Url                     = "http://DBWEBCODE01"
-                Port                    = 80
-                DatabaseName            = "SP_Intra_Content_WA00"
-                PsDscRunAsCredential    = $SPInstallAccountCredential
-                DependsOn               = "[SPManagedAccount]ApplicationWebPoolAccount"
+                Ensure                    = "Present"
+                DatabaseServer            = "SPDB"
+                FarmConfigDatabaseName    = "SP_Intra01_Config"
+                AdminContentDatabaseName  = "SP_Intra01_Content_CA"
+                Passphrase                = $SPPassphraseCredential
+                FarmAccount               = $SPFarmAccountCredential
+                RunCentralAdmin           = $true
+                CentralAdministrationPort = 15555
+                PsDscRunAsCredential      = $SPInstallAccountCredential
+                DependsOn                 = "[SqlAlias]SPDBAlias"
             }
-        
+
         }
     }
 }
@@ -48,9 +56,11 @@ catch
     $_.Exception.Message
     Exit 1;
 }
+$securedPassword = ConvertTo-SecureString "sUp3rcomp1eX" -AsPlainText -Force
+$SPPassphraseCredential = New-Object System.Management.Automation.PSCredential( "fakeaccount", $securedPassword )
 $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
 $SPInstallAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spadm16", $securedPassword );
-$SPWebAppPoolAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spwebapppool16", $securedPassword );
+$SPFarmAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spfrm16", $securedPassword );
 
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
@@ -60,8 +70,9 @@ try
 {
     &$configName `
         -ConfigurationData $configurationData `
+        -SPPassphraseCredential $SPPassphraseCredential `
         -SPInstallAccountCredential $SPInstallAccountCredential `
-        -SPWebAppPoolAccountCredential $SPWebAppPoolAccountCredential;
+        -SPFarmAccountCredential $SPFarmAccountCredential;
 }
 catch
 {

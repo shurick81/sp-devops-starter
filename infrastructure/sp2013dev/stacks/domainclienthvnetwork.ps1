@@ -1,28 +1,36 @@
 $configName = "DomainClientHyperVNetwork"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-    )
+    Configuration $configName
+    {
+        param(
+        )
 
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
 
-    $dnsIpAddress = Resolve-DnsName AD01;
-    Node $AllNodes.NodeName
-    {        
-        
-        xDnsServerAddress DnsServerAddress
-        {
-            InterfaceAlias = 'Ethernet'
-            AddressFamily  = 'IPv4'
-            Address        = $dnsIpAddress
-            Validate       = $false
+        $resolved = Resolve-DnsName AD01 -Type A;
+        Node $AllNodes.NodeName
+        {        
+            
+            xDnsServerAddress DnsServerAddress
+            {
+                InterfaceAlias = 'Ethernet'
+                AddressFamily  = 'IPv4'
+                Address        = $resolved.IPAddress
+                Validate       = $false
+            }
+
         }
-
     }
 }
-
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }

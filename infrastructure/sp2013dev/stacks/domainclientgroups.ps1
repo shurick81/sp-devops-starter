@@ -1,29 +1,37 @@
 $configName = "DomainClientGroups"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $DomainAdminCredential
-    )
+    Configuration $configName
+    {
+        param(
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
+            $DomainAdminCredential
+        )
 
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
 
-    Node $AllNodes.NodeName
-    {        
+        Node $AllNodes.NodeName
+        {        
 
-        Group AdminGroup
-        {
-            GroupName           = "Administrators"
-            Credential          = $DomainAdminCredential
-            MembersToInclude    = "contoso\OG SharePoint2016 Server Admin Prod"
+            Group AdminGroup
+            {
+                GroupName           = "Administrators"
+                Credential          = $DomainAdminCredential
+                MembersToInclude    = "contoso\OG SharePoint2016 Server Admin Prod"
+            }
+
         }
-
     }
 }
-
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }

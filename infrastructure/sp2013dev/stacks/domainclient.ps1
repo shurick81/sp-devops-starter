@@ -1,30 +1,38 @@
 $configName = "DomainClient"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $DomainAdminCredential
-    )
+    Configuration $configName
+    {
+        param(
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
+            $DomainAdminCredential
+        )
 
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DSCResource -ModuleName xComputerManagement -ModuleVersion 3.2.0.0
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DSCResource -ModuleName xComputerManagement -ModuleVersion 3.2.0.0
 
-    Node $AllNodes.NodeName
-    {        
+        Node $AllNodes.NodeName
+        {        
 
-        xComputer JoinDomain
-        {
-            Name        = $NodeName
-            DomainName  = "contoso.local"
-            Credential  = $DomainAdminCredential
+            xComputer JoinDomain
+            {
+                Name        = $NodeName
+                DomainName  = "contoso.local"
+                Credential  = $DomainAdminCredential
+            }
+
         }
-
     }
 }
-
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }

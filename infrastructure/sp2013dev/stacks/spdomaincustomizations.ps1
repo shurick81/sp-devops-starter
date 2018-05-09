@@ -1,219 +1,73 @@
 $configName = "SPDomainCustomizations"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $DomainAdminCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $SPInstallAccountCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $SQLServiceAccountCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $SQLAgentAccountCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $SPFarmAccountCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $SPWebAppPoolAccountCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $SPServicesAccountCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $SPSearchServiceAccountCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $SPCrawlerAccountCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $SPOCAccountCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $SPTestAccountCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $SPSecondTestAccountCredential
-    )
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xActiveDirectory -ModuleVersion 2.16.0.0
-
-    $domainName = "contoso.local";
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
+        param(
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
+            $SPInstallAccountCredential,
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
+            $SPFarmAccountCredential
+        )
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName xActiveDirectory -ModuleVersion 2.16.0.0
 
-        xADUser DomainAdminAccountUser
-        {
-            DomainName              = $DomainName
-            UserName                = $DomainAdminCredential.GetNetworkCredential().UserName
-            Password                = $DomainAdminCredential
-            PasswordNeverExpires    = $true
-        }
-        
-        xADUser SPInstallAccountUser
-        {
-            DomainName              = $DomainName
-            UserName                = $SPInstallAccountCredential.GetNetworkCredential().UserName
-            Password                = $SPInstallAccountCredential
-            PasswordNeverExpires    = $true
-        }
-        
-        xADUser SQLServiceAccount
-        {
-            DomainName              = $DomainName
-            UserName                = $SQLServiceAccountCredential.GetNetworkCredential().UserName
-            Password                = $SQLServiceAccountCredential
-            PasswordNeverExpires    = $true
-        }
+        $domainName = "contoso.local";
 
-        xADUser SQLAgentAccount
+        Node $AllNodes.NodeName
         {
-            DomainName              = $DomainName
-            UserName                = $SQLAgentAccountCredential.GetNetworkCredential().UserName
-            Password                = $SQLAgentAccountCredential
-            PasswordNeverExpires    = $true
-        }
 
-        xADUser SPFarmAccountUser
-        {
-            DomainName              = $DomainName
-            UserName                = $SPFarmAccountCredential.GetNetworkCredential().UserName
-            Password                = $SPFarmAccountCredential
-            PasswordNeverExpires    = $true
-        }
+            xADUser SPInstallAccountUser
+            {
+                DomainName              = $DomainName
+                UserName                = $SPInstallAccountCredential.GetNetworkCredential().UserName
+                Password                = $SPInstallAccountCredential
+                PasswordNeverExpires    = $true
+            }
+            
+            xADUser SPFarmAccountUser
+            {
+                DomainName              = $DomainName
+                UserName                = $SPFarmAccountCredential.GetNetworkCredential().UserName
+                Password                = $SPFarmAccountCredential
+                PasswordNeverExpires    = $true
+            }
 
-        xADUser SPWebAppPoolAccountUser
-        {
-            DomainName              = $DomainName
-            UserName                = $SPWebAppPoolAccountCredential.GetNetworkCredential().UserName
-            Password                = $SPWebAppPoolAccountCredential
-            PasswordNeverExpires    = $true
-        }
+            xADGroup SPAdminGroup
+            {
+                GroupName           = "OG SharePoint2016 Server Admin Prod"
+                MembersToInclude    = $SPInstallAccountCredential.GetNetworkCredential().UserName
+                DependsOn           = "[xADUser]SPInstallAccountUser"
+            }
 
-        xADUser SPServicesAccountUser
-        {
-            DomainName              = $DomainName
-            UserName                = $SPServicesAccountCredential.GetNetworkCredential().UserName
-            Password                = $SPServicesAccountCredential
-            PasswordNeverExpires    = $true
         }
-
-        xADUser SPSearchServiceAccountUser
-        {
-            DomainName              = $DomainName
-            UserName                = $SPSearchServiceAccountCredential.GetNetworkCredential().UserName
-            Password                = $SPSearchServiceAccountCredential
-            PasswordNeverExpires    = $true
-        }
-
-        xADUser SPCrawlerAccountUser
-        {
-            DomainName              = $DomainName
-            UserName                = $SPCrawlerAccountCredential.GetNetworkCredential().UserName
-            Password                = $SPCrawlerAccountCredential
-            PasswordNeverExpires    = $true
-        }
-
-        xADUser SPOCSuperUserADUser
-        {
-            DomainName              = $DomainName
-            UserName                = "_spocuser16"
-            Password                = $SPOCAccountCredential
-            PasswordNeverExpires    = $true
-        }
-
-        xADUser SPOCSuperReaderUser
-        {
-            DomainName              = $DomainName
-            UserName                = "_spocrdr16"
-            Password                = $SPOCAccountCredential
-            PasswordNeverExpires    = $true
-        }
-
-        xADUser SPTestUser
-        {
-            DomainName              = $DomainName
-            UserName                = $SPTestAccountCredential.GetNetworkCredential().UserName
-            Password                = $SPTestAccountCredential
-            PasswordNeverExpires    = $true
-        }
-
-        xADUser SPSecondTestUser
-        {
-            DomainName              = $DomainName
-            UserName                = $SPSecondTestAccountCredential.GetNetworkCredential().UserName
-            Password                = $SPSecondTestAccountCredential
-            PasswordNeverExpires    = $true
-        }
-        
-        xADGroup DomainAdminGroup
-        {
-            GroupName           = "Domain Admins"
-            MembersToInclude    = $DomainAdminCredential.GetNetworkCredential().UserName
-            DependsOn           = "[xADUser]DomainAdminAccountUser"
-        }
-
-        xADGroup SPAdminGroup
-        {
-            GroupName           = "OG SharePoint2016 Server Admin Prod"
-            MembersToInclude    = $SPInstallAccountCredential.GetNetworkCredential().UserName
-            DependsOn           = "[xADUser]SPInstallAccountUser"
-        }
-
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
-    @{ NodeName = 'localhost'; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 
 $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
-$DomainAdminCredential = New-Object System.Management.Automation.PSCredential( "contoso\dauser1", $securedPassword );
 $SPInstallAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spadm16", $securedPassword );
-$SQLServiceAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_sqlsvc16", $securedPassword );
-$SQLAgentAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_sqlagent16", $securedPassword );
 $SPFarmAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spfrm16", $securedPassword );
-$SPWebAppPoolAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spwebapppool16", $securedPassword );
-$SPServicesAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spsrv16", $securedPassword );
-$SPSearchServiceAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spsrchsrv16", $securedPassword );
-$SPCrawlerAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spcrawler16", $securedPassword );
-$SPOCAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spocuser16", $securedPassword );
-$SPTestAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_sptestuser161", $securedPassword );
-$SPSecondTestAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_sptestuser162", $securedPassword );
 Write-Host "$(Get-Date) Compiling DSC"
 try
 {
     &$configName `
         -ConfigurationData $configurationData `
-        -DomainAdminCredential $DomainAdminCredential `
         -SPInstallAccountCredential $SPInstallAccountCredential `
-        -SQLServiceAccountCredential $SQLServiceAccountCredential `
-        -SQLAgentAccountCredential $SQLAgentAccountCredential `
-        -SPFarmAccountCredential $SPFarmAccountCredential `
-        -SPWebAppPoolAccountCredential $SPWebAppPoolAccountCredential `
-        -SPServicesAccountCredential $SPServicesAccountCredential `
-        -SPSearchServiceAccountCredential $SPSearchServiceAccountCredential `
-        -SPCrawlerAccountCredential $SPCrawlerAccountCredential `
-        -SPOCAccountCredential $SPOCAccountCredential `
-        -SPTestAccountCredential $SPTestAccountCredential `
-        -SPSecondTestAccountCredential $SPSecondTestAccountCredential;
+        -SPFarmAccountCredential $SPFarmAccountCredential;
 }
 catch
 {

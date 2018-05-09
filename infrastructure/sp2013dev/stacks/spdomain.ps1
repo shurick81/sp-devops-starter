@@ -1,45 +1,54 @@
 $configName = "SPDomain"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $ShortDomainAdminCredential,
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $DomainSafeModeAdministratorPasswordCredential
-    )
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xActiveDirectory -ModuleVersion 2.16.0.0
-
-    $domainName = "contoso.local";
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
+        param(
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
+            $ShortDomainAdminCredential,
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
+            $DomainSafeModeAdministratorPasswordCredential
+        )
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName xActiveDirectory -ModuleVersion 2.16.0.0
 
-        xADDomain ADDomain
+        $domainName = "contoso.local";
+
+        Node $AllNodes.NodeName
         {
-            DomainName                      = $domainName
-            SafemodeAdministratorPassword   = $domainSafeModeAdministratorPasswordCredential
-            DomainAdministratorCredential   = $shortDomainAdminCredential
-        }
 
-        xWaitForADDomain WaitForDomain
-        {
-            DomainName              = $domainName
-            DomainUserCredential    = $ShortDomainAdminCredential
-            RetryCount              = 100
-            RetryIntervalSec        = 10
-            DependsOn               = "[xADDomain]ADDomain"
-        }
+            xADDomain ADDomain
+            {
+                DomainName                      = $domainName
+                SafemodeAdministratorPassword   = $domainSafeModeAdministratorPasswordCredential
+                DomainAdministratorCredential   = $shortDomainAdminCredential
+            }
 
+            xWaitForADDomain WaitForDomain
+            {
+                DomainName              = $domainName
+                DomainUserCredential    = $ShortDomainAdminCredential
+                RetryCount              = 100
+                RetryIntervalSec        = 10
+                DependsOn               = "[xADDomain]ADDomain"
+            }
+
+        }
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
-    @{ NodeName = 'localhost'; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 
 $securedPassword = ConvertTo-SecureString "Fractalsol" -AsPlainText -Force
