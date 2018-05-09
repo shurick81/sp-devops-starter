@@ -1,24 +1,33 @@
 $configName = "SPBin"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-    )
-
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
+        param(
+        )
 
-        SPInstallPrereqs SPPrereqsInstalled
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
+
+        Node $AllNodes.NodeName
         {
-            InstallerPath   = "C:\Install\SPInstall\2013\SharePoint\Prerequisiteinstaller.exe"
-            OnlineMode      = $true
-        }
 
+            SPInstallPrereqs SPPrereqsInstalled
+            {
+                InstallerPath   = "C:\Install\SPInstall\2013\SharePoint\Prerequisiteinstaller.exe"
+                OnlineMode      = $true
+            }
+
+        }
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }

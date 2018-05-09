@@ -1,69 +1,78 @@
 $configName = "SQLBin"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
-    Import-DscResource -ModuleName SqlServerDsc -ModuleVersion 11.1.0.0
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
-        
-        xFireWall SQLFirewallRuleTCP
-        {
-            Name        = "AllowSQLConnection"
-            DisplayName = "Allow SQL Connection"
-            Ensure      = "Present"
-            Enabled     = "True"
-            Profile     = ("Domain")
-            Direction   = "InBound"
-            LocalPort   = ("1433")
-            Protocol    = "TCP"
-            Description = "Firewall rule to allow SQL communication"
-        }
 
-        xFireWall SQLFirewallRuleBrowser
-        {
-            Name        = "AllowSQLBrowser"
-            DisplayName = "Allow SQL Browser"
-            Ensure      = "Present"
-            Enabled     = "True"
-            Profile     = ("Domain")
-            Direction   = "InBound"
-            LocalPort   = ("1434")
-            Protocol    = "UDP"
-            Description = "Firewall rule to allow SQL Browser"
-        }
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
+        Import-DscResource -ModuleName SqlServerDsc -ModuleVersion 11.1.0.0
 
-        SQLSetup SQLSetup
+        Node $AllNodes.NodeName
         {
-            InstanceName            = "SPIntra01"
-            SourcePath              = "C:\Install\SQLInstall"
-            Features                = "SQLENGINE,FULLTEXT"
-            InstallSharedDir        = "C:\Program Files\Microsoft SQL Server\SPIntra01"
-            SQLSysAdminAccounts     = "BUILTIN\Administrators"
-            UpdateEnabled           = "False"
-            UpdateSource            = "MU"
-            SQMReporting            = "False"
-            ErrorReporting          = "True"
-            BrowserSvcStartupType   = "Automatic"
-        }
+            
+            xFireWall SQLFirewallRuleTCP
+            {
+                Name        = "AllowSQLConnection"
+                DisplayName = "Allow SQL Connection"
+                Ensure      = "Present"
+                Enabled     = "True"
+                Profile     = ("Domain")
+                Direction   = "InBound"
+                LocalPort   = ("1433")
+                Protocol    = "TCP"
+                Description = "Firewall rule to allow SQL communication"
+            }
 
-        SqlServerMemory SQLServerMaxMemoryIs2GB
-        {
-            ServerName      = $NodeName
-            DynamicAlloc    = $false
-            MinMemory       = 1024
-            MaxMemory       = 2048
-            InstanceName    = "SPIntra01"
-            DependsOn       = "[SQLSetup]SQLSetup"
+            xFireWall SQLFirewallRuleBrowser
+            {
+                Name        = "AllowSQLBrowser"
+                DisplayName = "Allow SQL Browser"
+                Ensure      = "Present"
+                Enabled     = "True"
+                Profile     = ("Domain")
+                Direction   = "InBound"
+                LocalPort   = ("1434")
+                Protocol    = "UDP"
+                Description = "Firewall rule to allow SQL Browser"
+            }
+
+            SQLSetup SQLSetup
+            {
+                InstanceName            = "SPIntra01"
+                SourcePath              = "C:\Install\SQLInstall"
+                Features                = "SQLENGINE,FULLTEXT"
+                InstallSharedDir        = "C:\Program Files\Microsoft SQL Server\SPIntra01"
+                SQLSysAdminAccounts     = "BUILTIN\Administrators"
+                UpdateEnabled           = "False"
+                UpdateSource            = "MU"
+                SQMReporting            = "False"
+                ErrorReporting          = "True"
+                BrowserSvcStartupType   = "Automatic"
+            }
+
+            SqlServerMemory SQLServerMaxMemoryIs2GB
+            {
+                ServerName      = $NodeName
+                DynamicAlloc    = $false
+                MinMemory       = 1024
+                MaxMemory       = 2048
+                InstanceName    = "SPIntra01"
+                DependsOn       = "[SQLSetup]SQLSetup"
+            }
+            
         }
-        
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
-    @{ NodeName = 'localhost'; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 Write-Host "$(Get-Date) Compiling DSC"
 try

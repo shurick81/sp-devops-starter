@@ -1,22 +1,31 @@
 $configName = "SQLPreBin"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
 
-        WindowsFeature NetFramework35Core
-        {
-            Name    = "NET-Framework-Core"
-        }
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
 
+        Node $AllNodes.NodeName
+        {
+
+            WindowsFeature NetFramework35Core
+            {
+                Name    = "NET-Framework-Core"
+            }
+
+        }
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
-    @{ NodeName = 'localhost'; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 Write-Host "$(Get-Date) Compiling DSC"
 try

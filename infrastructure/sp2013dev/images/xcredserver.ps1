@@ -1,23 +1,32 @@
 $configName = "XCredServer"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-    )
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xCredSSP -ModuleVersion 1.3.0.0
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
+        param(
+        )
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName xCredSSP -ModuleVersion 1.3.0.0
 
-        xCredSSP CredSSPServer
+        Node $AllNodes.NodeName
         {
-            Ensure  = "Present"
-            Role    = "Server"
-        }
 
+            xCredSSP CredSSPServer
+            {
+                Ensure  = "Present"
+                Role    = "Server"
+            }
+
+        }
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }

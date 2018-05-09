@@ -51,6 +51,8 @@
         { "type": "powershell", "script": "updatesource.ps1", "pause_before": "5m" },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
+        { "type": "powershell", "script": "devpsmodules.ps1" },
+        { "type": "powershell", "script": "domainclientpsmodules.ps1" },
         { "type": "powershell", "script": "devmedia.ps1" },
         { "type": "powershell", "script": "devbin-1.ps1" },
         { "type": "powershell", "script": "devmediaclean.ps1" },

@@ -1,46 +1,64 @@
 $configName = "DevMedia"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-    )
-
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
+        param(
+        )
 
-        xRemoteFile VSMediaArchive
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
+
+        Node $AllNodes.NodeName
         {
-            Uri             = "http://$env:PACKER_HTTP_ADDR/VS2017.zip"
-            DestinationPath = "C:\Install\VS2017.zip"
-            MatchSource     = $false
-        }
 
-        Archive VSMediaArchiveUnpacked
-        {
-            Ensure      = "Present"
-            Path        = "C:\Install\VS2017.zip"
-            Destination = "C:\Install\VSInstall"
-            DependsOn   = "[xRemoteFile]VSMediaArchive"
-        }
+            xRemoteFile VSMediaArchive
+            {
+                Uri             = "http://$env:PACKER_HTTP_ADDR/VS2017.zip"
+                DestinationPath = "C:\Install\VS2017.zip"
+                MatchSource     = $false
+            }
 
-        xRemoteFile SSMSMedia
-        {
-            Uri             = "https://download.microsoft.com/download/C/3/D/C3DBFF11-C72E-429A-A861-4C316524368F/SSMS-Setup-ENU.exe"
-            DestinationPath = "C:\Install\SSMS-Setup-ENU.exe"
-            MatchSource     = $false
-        }
+            Archive VSMediaArchiveUnpacked
+            {
+                Ensure      = "Present"
+                Path        = "C:\Install\VS2017.zip"
+                Destination = "C:\Install\VSInstall"
+                DependsOn   = "[xRemoteFile]VSMediaArchive"
+            }
 
+            xRemoteFile SSMSMedia
+            {
+                Uri             = "https://download.microsoft.com/download/C/3/D/C3DBFF11-C72E-429A-A861-4C316524368F/SSMS-Setup-ENU.exe"
+                DestinationPath = "C:\Install\SSMS-Setup-ENU.exe"
+                MatchSource     = $false
+            }
+
+        }
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
-    @{ NodeName = 'localhost'; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 Write-Host "$(Get-Date) Compiling DSC"
-&$configName `
-    -ConfigurationData $configurationData;
+try
+{
+    &$configName `
+        -ConfigurationData $configurationData;
+}
+catch
+{
+    Write-Host "$(Get-Date) Exception in compiling DCS:";
+    $_.Exception.Message
+    Exit 1;
+}
 Write-Host "$(Get-Date) Starting DSC"
 try
 {

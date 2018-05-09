@@ -1,34 +1,43 @@
 $configName = "SPMediaClean"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-    )
-
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-
-    $SPImageLocation = $systemParameters.SPImageLocation
-    $SPInstallationMediaPath = $configParameters.SPInstallationMediaPath
-    $SPVersion = $configParameters.SPVersion;
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
+        param(
+        )
 
-        File SPNoLocalMediaEnsure {
-            DestinationPath = "C:\Install\SPInstall"
-            Recurse = $true
-            Type = "Directory"
-            Ensure = "Absent"
-            Force = $true
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+
+        $SPImageLocation = $systemParameters.SPImageLocation
+        $SPInstallationMediaPath = $configParameters.SPInstallationMediaPath
+        $SPVersion = $configParameters.SPVersion;
+
+        Node $AllNodes.NodeName
+        {
+
+            File SPNoLocalMediaEnsure {
+                DestinationPath = "C:\Install\SPInstall"
+                Recurse = $true
+                Type = "Directory"
+                Ensure = "Absent"
+                Force = $true
+            }
+
+            File SPNoLocalMediaArchiveEnsure {
+                DestinationPath = "C:\Install\SPServer2013SP1.zip"
+                Ensure = "Absent"
+            }
+
         }
-
-        File SPNoLocalMediaArchiveEnsure {
-            DestinationPath = "C:\Install\SPServer2013SP1.zip"
-            Ensure = "Absent"
-        }
-
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }

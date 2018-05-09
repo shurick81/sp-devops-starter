@@ -1,35 +1,44 @@
 $configName = "SPMedia"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-    )
-
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
+        param(
+        )
 
-        xRemoteFile SPMediaArchive
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
+
+        Node $AllNodes.NodeName
         {
-            Uri             = "http://$env:PACKER_HTTP_ADDR/SPServer2013SP1.zip"
-            DestinationPath = "C:\Install\SPServer2013SP1.zip"
-            MatchSource     = $false
-        }
 
-        Archive SPMediaArchiveUnpacked
-        {
-            Ensure      = "Present"
-            Path        = "C:\Install\SPServer2013SP1.zip"
-            Destination = "C:\Install\SPInstall"
-            DependsOn   = "[xRemoteFile]SPMediaArchive"
-        }
+            xRemoteFile SPMediaArchive
+            {
+                Uri             = "http://$env:PACKER_HTTP_ADDR/SPServer2013SP1.zip"
+                DestinationPath = "C:\Install\SPServer2013SP1.zip"
+                MatchSource     = $false
+            }
 
+            Archive SPMediaArchiveUnpacked
+            {
+                Ensure      = "Present"
+                Path        = "C:\Install\SPServer2013SP1.zip"
+                Destination = "C:\Install\SPInstall"
+                DependsOn   = "[xRemoteFile]SPMediaArchive"
+            }
+
+        }
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
-    @{ NodeName = 'localhost'; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 Write-Host "$(Get-Date) Compiling DSC"
 try

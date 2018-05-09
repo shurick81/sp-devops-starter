@@ -1,35 +1,44 @@
 $configName = "SPPreBin"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-    )
-
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
-        
-        @(
-            "Windows-Identity-Foundation",
-            "PowerShell-V2",
-            "WAS",
-            "WAS-Process-Model",
-            "WAS-NET-Environment",
-            "WAS-Config-APIs",
-            "XPS-Viewer"
-        ) | % {
+        param(
+        )
 
-            WindowsFeature "SPPrerequisiteFeature$_"
-            {
-                Name = $_
-                Ensure = "Present"
-                Source = "D:\Sources\sxs"
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+
+        Node $AllNodes.NodeName
+        {
+            
+            @(
+                "Windows-Identity-Foundation",
+                "PowerShell-V2",
+                "WAS",
+                "WAS-Process-Model",
+                "WAS-NET-Environment",
+                "WAS-Config-APIs",
+                "XPS-Viewer"
+            ) | % {
+
+                WindowsFeature "SPPrerequisiteFeature$_"
+                {
+                    Name = $_
+                    Ensure = "Present"
+                    Source = "D:\Sources\sxs"
+                }
+
             }
-
         }
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }

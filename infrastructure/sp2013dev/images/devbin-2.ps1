@@ -1,53 +1,56 @@
 $configName = "DevBin"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullorEmpty()]
-        [PSCredential]
-        $UserCredential
-    )
-
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DSCResource -ModuleName cChoco -ModuleVersion 2.3.1.0
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
+        param(
+        )
 
-        cChocoInstaller ChocoInstalled
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DSCResource -ModuleName cChoco -ModuleVersion 2.3.1.0
+
+        Node $AllNodes.NodeName
         {
-            InstallDir              = "c:\choco"
-            PsDscRunAsCredential    = $UserCredential
-        }
 
-        cChocoPackageInstaller VSCodeInstalled
-        {
-            Name                    = "visualstudiocode"
-            DependsOn               = "[cChocoInstaller]ChocoInstalled"
-            PsDscRunAsCredential    = $UserCredential
-        }
+            cChocoInstaller ChocoInstalled
+            {
+                InstallDir              = "c:\choco"
+                PsDscRunAsCredential    = $UserCredential
+            }
 
-        cChocoPackageInstaller GitInstalled
-        {
-            Name                    = "git"
-            DependsOn               = "[cChocoInstaller]ChocoInstalled"
-            PsDscRunAsCredential    = $UserCredential
-        }
+            cChocoPackageInstaller VSCodeInstalled
+            {
+                Name                    = "visualstudiocode"
+                DependsOn               = "[cChocoInstaller]ChocoInstalled"
+                PsDscRunAsCredential    = $UserCredential
+            }
 
+            cChocoPackageInstaller GitInstalled
+            {
+                Name                    = "git"
+                DependsOn               = "[cChocoInstaller]ChocoInstalled"
+                PsDscRunAsCredential    = $UserCredential
+            }
+
+        }
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 $securedPassword = ConvertTo-SecureString "Fractalsol" -AsPlainText -Force
-$UserCredential = New-Object System.Management.Automation.PSCredential( "administrator", $securedPassword )
 Write-Host "$(Get-Date) Compiling DSC"
 try
 {
     &$configName `
-        -ConfigurationData $configurationData `
-        -UserCredential $UserCredential;
+        -ConfigurationData $configurationData;
 }
 catch
 {

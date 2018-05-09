@@ -1,25 +1,34 @@
 $configName = "SPBin"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-    )
-
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
-
-    Node $AllNodes.NodeName
+    Configuration $configName
     {
+        param(
+        )
 
-        SPInstall SharePointBinariesInstalled 
-        { 
-            Ensure      = "Present"
-            BinaryDir   = "C:\Install\SPInstall\2013\SharePoint"
-            ProductKey  = "NQTMW-K63MQ-39G6H-B2CH9-FRDWJ"
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
+
+        Node $AllNodes.NodeName
+        {
+
+            SPInstall SharePointBinariesInstalled 
+            { 
+                Ensure      = "Present"
+                BinaryDir   = "C:\Install\SPInstall\2013\SharePoint"
+                ProductKey  = "NQTMW-K63MQ-39G6H-B2CH9-FRDWJ"
+            }
+
         }
-
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }

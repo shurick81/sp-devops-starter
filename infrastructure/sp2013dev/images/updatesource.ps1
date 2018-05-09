@@ -1,37 +1,47 @@
 $configName = "UpdateSource"
-Configuration $configName
+Write-Host "$(Get-Date) Defining DSC"
+try
 {
-    param(
-    )
+    Configuration $configName
+    {
+        param(
+        )
 
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName PSDesiredStateConfiguration
 
-    Node localhost {
+        Node localhost {
 
-        Registry UpdateFromWindowsUpdateCenterEnable
-        {
-            Ensure      = "Present"
-            Key         = "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Servicing"
-            ValueName   = "LocalSourcePath"
-            ValueType   = "ExpandString"
+            Registry UpdateFromWindowsUpdateCenterEnable
+            {
+                Ensure      = "Present"
+                Key         = "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Servicing"
+                ValueName   = "LocalSourcePath"
+                ValueType   = "ExpandString"
+            }
+
+            Registry UpdateFromWindowsUpdateCenter
+            {
+                Ensure      = "Present"
+                Key         = "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Servicing"
+                ValueName   = "RepairContentServerSource"
+                ValueType   = "DWORD"
+                ValueData   = "2"
+                DependsOn   = "[Registry]UpdateFromWindowsUpdateCenterEnable"
+            }
+
         }
-
-        Registry UpdateFromWindowsUpdateCenter
-        {
-            Ensure      = "Present"
-            Key         = "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Servicing"
-            ValueName   = "RepairContentServerSource"
-            ValueType   = "DWORD"
-            ValueData   = "2"
-            DependsOn   = "[Registry]UpdateFromWindowsUpdateCenterEnable"
-        }
-
     }
 }
-
+catch
+{
+    Write-Host "$(Get-Date) Exception in defining DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
+Write-Host "$(Get-Date) Compiling DSC"
 try
 {
     &$configName `
