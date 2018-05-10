@@ -28,15 +28,20 @@ $imageNames | % {
             }
             Write-Host "$(Get-Date) Starting packer";
             packer build "$imageName.json"
-            Write-Host "$(Get-Date) Adding image to vagrant";
-            vagrant box add "$imageName.box" --name $imageName
-            Write-Host "$(Get-Date) Removing temporary box file";
-            Remove-Item "$imageName.box";
-            $existingImages = vagrant box list | ? { $_ -like "$imageName *" };
-            if ( $existingImages ) {
-                $jobDone = $true;
+            if ( Get-Item "$imageName.box" -ErrorAction Ignore ) {
+                Write-Host "$(Get-Date) Adding image to vagrant";
+                vagrant box add "$imageName.box" --name $imageName
+                Write-Host "$(Get-Date) Removing temporary box file";
+                Remove-Item "$imageName.box";
+                $existingImages = vagrant box list | ? { $_ -like "$imageName *" };
+                if ( $existingImages ) {
+                    $jobDone = $true;
+                } else {
+                    Write-Host "$(Get-Date) Vagrant box is not found, sleeping before starting the next step";
+                    Sleep 300;
+                }
             } else {
-                Write-Host "$(Get-Date) Sleeping before starting the next step";
+                Write-Host "$(Get-Date) Vagrant box file is not found, sleeping before starting the next step";
                 Sleep 300;
             }
         } else {

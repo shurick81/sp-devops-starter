@@ -62,7 +62,15 @@ Using Hyper-V Manager, configure network switch with external access.
 ## PowerShell
 `cd` to `images` directory and run `.\preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web-code`
 `cd` to `stacks/dev` directory and run `vagrant up`
-when 
+
+### Hyper-V
+When running `vagrant up` you will be asked to choose the switch manually.
+if you encounter `The box is not able to report an address for WinRM to connect to yet.` exit, run `vagrant up` again.
+
+# Accessing the machine
+`vagrant rdp DBWEBCODE01`
+account: `contoso\_spadm16`
+pass: `c0mp1Expa~~`
 
 # Cleaning up
 `cd` to `stack` directory and run `vagrant destroy`
