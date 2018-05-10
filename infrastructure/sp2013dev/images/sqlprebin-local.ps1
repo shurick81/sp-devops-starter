@@ -13,6 +13,7 @@ try
             WindowsFeature NetFramework35Core
             {
                 Name    = "NET-Framework-Core"
+                Source  = "D:\sources\sxs"
             }
 
         }
