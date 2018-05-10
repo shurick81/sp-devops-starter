@@ -50,11 +50,9 @@
         },
         {
             "type": "powershell",
-            "script": "updatesource.ps1",
-            "only": [],
+            "inline": "Write-Host 'Canary script just for pause after wmf5 installation'",
             "pause_before": "5m"
         },
-        { "type": "windows-restart", "only": [] },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "sqlpsmodules.ps1" },
