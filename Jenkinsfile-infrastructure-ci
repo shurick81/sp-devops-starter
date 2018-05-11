@@ -95,7 +95,7 @@ pipeline {
                     vagrant destroy --force
                     if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }
                 '''
-                powershell '''cd infrastructure/sp2013dev/stacks/main;
+                powershell '''cd infrastructure/sp2013dev/stacks/main-ci;
                     vagrant destroy DBWEBCODE01 --force;
                     if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* not created (*" } ) ) { Write-Host "DBWEBCODE01 is not destroyed"; exit 1 }
                     vagrant up;
