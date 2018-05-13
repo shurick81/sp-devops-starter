@@ -60,6 +60,7 @@ pipeline {
                 powershell '''cd infrastructure/sp2013dev/stacks/main-ci;
                     vagrant destroy DBWEBCODE01 --force;
                     if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* not created (*" } ) ) { Write-Host "DBWEBCODE01 is not destroyed"; exit 1 }
+                    $env:SPDEVOPSSTARTER_SPLABEL = "clean";
                     vagrant up;
                     if ( !( vagrant status | ? { $_ -like "AD01* running (*" } ) ) { Write-Host "AD01 is not running"; exit 1 }
                     if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* running (*" } ) ) { Write-Host "DBWEBCODE01 is not running"; exit 1 }
@@ -68,7 +69,7 @@ pipeline {
         }
         stage('Build') {
             agent {
-                label 'sharepoint-auto'
+                label 'sharepoint-auto-clean'
             }
             steps {
                 echo 'Building the solution'
@@ -76,7 +77,7 @@ pipeline {
         }
         stage('Deploy') {
             agent {
-                label 'sharepoint-auto'
+                label 'sharepoint-auto-clean'
             }
             steps {
                 echo 'Deploying the solution'
@@ -86,7 +87,7 @@ pipeline {
         }
         stage('Test') {
             agent {
-                label 'sharepoint-auto'
+                label 'sharepoint-auto-clean'
             }
             steps {
                 echo 'Running tests'
