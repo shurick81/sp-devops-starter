@@ -1,18 +1,18 @@
 {
     "sql": {
         "sourceImageUrl": "http://care.dlservice.microsoft.com/dl/download/2/F/8/2F8F7165-BB21-4D1E-B5D8-3BD3CE73C77D/SQLServer2014SP1-FullSlipstream-x64-ENU.iso",
-        "targetZip": "./images/http/SQLServer2014SP1.zip"
+        "localFilePath": "./images/http/SQLServer2014SP1.zip"
     },
     "ssms": {
         "sourceImageUrl": "https://download.microsoft.com/download/C/3/D/C3DBFF11-C72E-429A-A861-4C316524368F/SSMS-Setup-ENU.exe",
-        "targetZip": "./images/http/SSMS.zip"
+        "localFilePath": "./images/http/SSMS-Setup-ENU.exe"
     },
     "sp": {
         "UnpackedUNC": "./SPServer2013SP1",
-        "targetZip": "./images/http/SPServer2013SP1.zip"
+        "localFilePath": "./images/http/SPServer2013SP1.zip"
     },
     "vs": {
         "UnpackedUNC": "./VS2017",
-        "targetZip": "./images/http/VS2017.zip"
+        "localFilePath": "./images/http/VS2017.zip"
     }
 }

@@ -13,24 +13,38 @@ try
         Node $AllNodes.NodeName
         {
 
-            xRemoteFile VSMediaArchive
+            if ( $env:SPDEVOPSSTARTER_LOCALVS -eq 1 )
             {
-                Uri             = "http://$env:PACKER_HTTP_ADDR/VS2017.zip"
-                DestinationPath = "C:\Install\VS2017.zip"
-                MatchSource     = $false
-            }
 
-            Archive VSMediaArchiveUnpacked
-            {
-                Ensure      = "Present"
-                Path        = "C:\Install\VS2017.zip"
-                Destination = "C:\Install\VSInstall"
-                DependsOn   = "[xRemoteFile]VSMediaArchive"
+                xRemoteFile VSMediaArchive
+                {
+                    Uri             = "http://$env:PACKER_HTTP_ADDR/VS2017.zip"
+                    DestinationPath = "C:\Install\VS2017.zip"
+                    MatchSource     = $false
+                }
+
+                Archive VSMediaArchiveUnpacked
+                {
+                    Ensure      = "Present"
+                    Path        = "C:\Install\VS2017.zip"
+                    Destination = "C:\Install\VSInstall"
+                    DependsOn   = "[xRemoteFile]VSMediaArchive"
+                }
+
+            } else {
+
+                xRemoteFile VSMediaBootstrapperDownloaded
+                {
+                    Uri             = "https://download.visualstudio.microsoft.com/download/pr/12221250/52257ee3e96d6e07313e41ad155b155a/vs_Enterprise.exe"
+                    DestinationPath = "C:\Install\VSInstall\vs_Enterprise.exe"
+                    MatchSource     = $false
+                }
+
             }
 
             xRemoteFile SSMSMedia
             {
-                Uri             = "https://download.microsoft.com/download/C/3/D/C3DBFF11-C72E-429A-A861-4C316524368F/SSMS-Setup-ENU.exe"
+                Uri             = "http://$env:PACKER_HTTP_ADDR/SSMS-Setup-ENU.exe"
                 DestinationPath = "C:\Install\SSMS-Setup-ENU.exe"
                 MatchSource     = $false
             }

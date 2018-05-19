@@ -141,7 +141,8 @@ $dest = "C:\sp-onprem-files\c4bf15f4237756dfa011191c28b7cfb6c897c65b3d56775b5287
 Start-BitsTransfer -Source $src -Destination $dest;
 $directoryName = [guid]::NewGuid().Guid;
 New-Item -Path "$env:Temp\$directoryName" -ItemType Directory -Force | Out-Null
-Invoke-RestMethod -Uri https://download.visualstudio.microsoft.com/download/pr/11346816/52257ee3e96d6e07313e41ad155b155a/vs_Enterprise.exe -OutFile "$env:Temp\$directoryName\vs_Enterprise.exe"
+Invoke-RestMethod -Uri https://download.visualstudio.microsoft.com/download/pr/12221250/52257ee3e96d6e07313e41ad155b155a/vs_Enterprise.exe -OutFile "$env:Temp\$directoryName\vs_Enterprise.exe"
+# https://download.visualstudio.microsoft.com/download/pr/11346816/52257ee3e96d6e07313e41ad155b155a/vs_Enterprise.exe was the old URL
 Start-Process -FilePath "$env:Temp\$directoryName\vs_Enterprise.exe" -ArgumentList '--layout C:\sp-onprem-files\VS2017 --add Microsoft.VisualStudio.Workload.Office --includeRecommended --lang en-US --quiet' -Wait;
 .\..\media.ps1 .\mediasp2013.json
 Remove-Item C:\sp-onprem-files\VS2017 -Recurse -Force

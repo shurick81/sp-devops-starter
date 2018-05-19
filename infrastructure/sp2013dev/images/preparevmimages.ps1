@@ -19,7 +19,7 @@ $imageNames | % {
             if ( Get-Item "output-*-iso" -ErrorAction Ignore ) {
                 Write-Host "$(Get-Date) Found current output directory(s), now removing";
                 Get-Item "output-*-iso";
-                Remove-Item "output-*-iso" -Recurse;
+                Remove-Item "output-*-iso" -Recurse | Out-Null;
             }
             if ( Get-Item "$imageName.box" -ErrorAction Ignore ) {
                 Write-Host "$(Get-Date) Found current box file, now removing";

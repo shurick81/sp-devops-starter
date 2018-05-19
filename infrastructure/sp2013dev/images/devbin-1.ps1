@@ -19,26 +19,55 @@ try
                 UserRole    = "Administrators"
             }
 
-            Script VSInstallerRunning
+            if ( $env:SPDEVOPSSTARTER_LOCALVS -eq 1 )
             {
-                SetScript = {
-                    Start-Process -FilePath C:\Install\VSInstall\vs_enterprise.exe -ArgumentList '--quiet --wait --add Microsoft.VisualStudio.Workload.Office --includeRecommended' -Wait; 
-                }
-                TestScript = {
-                    $products = Get-WmiObject -Class Win32_Product | ? { $_.Name -eq "Microsoft Visual Studio Setup Configuration" }
-                    $products;
-                    if ( $products ) {
-                        Write-Host "Products found";
-                        return $true;
-                    } else {
-                        Write-Host "Products not found";
-                        return $false;
+
+                Script VSInstallerRunning
+                {
+                    SetScript = {
+                        Start-Process -FilePath C:\Install\VSInstall\vs_enterprise.exe -ArgumentList '--quiet --wait --add Microsoft.VisualStudio.Workload.Office --includeRecommended' -Wait;
+                    }
+                    TestScript = {
+                        $products = Get-WmiObject -Class Win32_Product | ? { $_.Name -eq "Microsoft Visual Studio Setup Configuration" }
+                        $products;
+                        if ( $products ) {
+                            Write-Host "Products found";
+                            return $true;
+                        } else {
+                            Write-Host "Products not found";
+                            return $false;
+                        }
+                    }
+                    GetScript = {
+                        $installedApplications = Get-WmiObject -Class Win32_Product | ? { $_.name -eq "Microsoft Visual Studio Setup Configuration" }
+                        return $installedApplications
                     }
                 }
-                GetScript = {
-                    $installedApplications = Get-WmiObject -Class Win32_Product | ? { $_.name -eq "Microsoft Visual Studio Setup Configuration" }
-                    return $installedApplications
+
+            } else {
+
+                Script VSInstallerRunning
+                {
+                    SetScript = {
+                        Start-Process -FilePath C:\Install\VSInstall\vs_enterprise.exe -ArgumentList '--quiet --wait --add Microsoft.VisualStudio.Workload.Office --includeRecommended' -Wait; 
+                    }
+                    TestScript = {
+                        $products = Get-WmiObject -Class Win32_Product | ? { $_.Name -eq "Microsoft Visual Studio Setup Configuration" }
+                        $products;
+                        if ( $products ) {
+                            Write-Host "Products found";
+                            return $true;
+                        } else {
+                            Write-Host "Products not found";
+                            return $false;
+                        }
+                    }
+                    GetScript = {
+                        $installedApplications = Get-WmiObject -Class Win32_Product | ? { $_.name -eq "Microsoft Visual Studio Setup Configuration" }
+                        return $installedApplications
+                    }
                 }
+
             }
 
             Package SSMS
@@ -103,4 +132,3 @@ catch {
     Exit 1;
 }
 Exit 0;
-    

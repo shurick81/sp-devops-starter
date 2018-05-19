@@ -14,3 +14,6 @@ SQLServer2014SP1.zip
 SPServer2013SP1.zip
 **/VS2017/*
 VS2017.zip
+*.exe
+**/output-hyperv-iso/Virtual Machines/*
+*.msu

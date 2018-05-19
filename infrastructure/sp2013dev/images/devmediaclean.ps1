@@ -29,7 +29,7 @@ try
                 Ensure          = "Absent"
             }
 
-            File VSNoSSMSMediaArchiveEnsure {
+            File SSMSNoMediaArchiveEnsure {
                 DestinationPath = "C:\Install\SSMS-Setup-ENU.exe"
                 Ensure          = "Absent"
             }

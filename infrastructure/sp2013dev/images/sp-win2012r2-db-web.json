@@ -15,8 +15,8 @@
             "http_directory": "http",
             "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
             "vboxmanage": [
-                [ "modifyvm", "{{.Name}}", "--memory", "2048" ],
-                [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
+                [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
+                [ "modifyvm", "{{.Name}}", "--cpus", "8" ]
             ],
             "communicator": "winrm",
             "winrm_username": "administrator",
@@ -33,6 +33,9 @@
             ],
             "http_directory": "http",
             "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "ram_size": 4096,
+            "cpu": 8,
+            "switch_name": "Default Switch",
             "communicator": "winrm",
             "winrm_username": "administrator",
             "winrm_password": "Fractalsol"
@@ -76,7 +79,7 @@
         { "type": "powershell", "script": "spbin.ps1" },
         { "type": "powershell", "script": "spmediaclean.ps1" },
         { "type": "powershell", "script": "xcredserver.ps1" },
-        { "type": "powershell", "inline": "Sleep 300" }
+        { "type": "powershell", "inline": "Sleep 180" }
     ],
     "post-processors": [
         {
