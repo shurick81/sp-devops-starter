@@ -54,7 +54,7 @@
         {
             "type": "powershell",
             "inline": "Write-Host 'Canary script just for pause after wmf5 installation'",
-            "pause_before": "5m"
+            "pause_before": "10m"
         },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
