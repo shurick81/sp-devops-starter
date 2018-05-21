@@ -39,7 +39,7 @@ Vagrant.configure(2) do |config|
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
             override.vm.provision :shell, path: "../xcredclient.ps1"
             override.vm.provision :shell, path: "../spfarm_2013.ps1"
-            override.vm.provision :shell, path: "../../../../src/spfarm_2013.ps1"
+            override.vm.provision :shell, path: "../../../src/spfarm_2013.ps1"
             #vb.vm.gui = true
             vb.memory = "11264"
             vb.cpus = 8
@@ -50,7 +50,7 @@ Vagrant.configure(2) do |config|
             override.vm.provision "reload"
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
             override.vm.provision :shell, path: "../spfarm_2013.ps1"
-            override.vm.provision :shell, path: "../../../../src/spfarm_2013.ps1"
+            override.vm.provision :shell, path: "../../../src/spfarm_2013.ps1"
             hv.memory = "4096"
             hv.maxmemory = "11264"
             hv.cpus = 8
