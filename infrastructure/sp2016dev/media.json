@@ -1,0 +1,14 @@
+{
+    "sql": {
+        "sourceImageUrl": "http://care.dlservice.microsoft.com/dl/download/F/E/9/FE9397FA-BFAB-4ADD-8B97-91234BC774B2/SQLServer2016-x64-ENU.iso",
+        "localFilePath": "./images/http/SQLServer2016-x64-ENU.iso"
+    },
+    "ssms": {
+        "sourceImageUrl": "https://download.microsoft.com/download/C/3/D/C3DBFF11-C72E-429A-A861-4C316524368F/SSMS-Setup-ENU.exe",
+        "localFilePath": "./images/http/SSMS-Setup-ENU.exe"
+    },
+    "vs": {
+        "UnpackedUNC": "./VS2017",
+        "localFilePath": "./images/http/VS2017.zip"
+    }
+}
