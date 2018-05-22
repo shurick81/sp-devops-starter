@@ -39,16 +39,14 @@ try
                 DependsOn               = "[SPManagedAccount]ApplicationWebPoolAccount"
             }
         
-            SPSite InsidanPathSite
+            SPSite DefaultPathSite
             {
-
                 Url                     = "http://DBWEBCODE01"
                 OwnerAlias              = $SPInstallAccountCredential.UserName
                 Name                    = "Default Team Site"
                 Template                = "STS#0"
                 PsDscRunAsCredential    = $SPInstallAccountCredential
                 DependsOn               = "[SPWebApplication]DefaultWebApp"
-
             }
 
         }
