@@ -7,11 +7,11 @@
   * Vagrant reload
   * Packer
   * Oracle VirtualBox or Hyper-V or VMWare
-  * /infrastructure/SPServer2013SP1 directory with SP installation media with classic structure:
+  * C:/sp-onprem-files/SPServer2013SP1 directory with SP installation media with classic structure:
     * 2013
       * SharePoint
       * LanguagePacks
-Use AutoSPSourceBuilder to generate this one or extract from SP iso to /infrastructure/SPServer2013SP1/2013/SharePoint
+Use AutoSPSourceBuilder to generate this one or extract from SP iso to C:/sp-onprem-files/SPServer2013SP1/2013/SharePoint
 
 Run in PowerShell:
 ```PowerShell
