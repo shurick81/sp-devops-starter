@@ -144,7 +144,7 @@ New-Item -Path "$env:Temp\$directoryName" -ItemType Directory -Force | Out-Null
 Invoke-RestMethod -Uri https://download.visualstudio.microsoft.com/download/pr/12221250/52257ee3e96d6e07313e41ad155b155a/vs_Enterprise.exe -OutFile "$env:Temp\$directoryName\vs_Enterprise.exe"
 # https://download.visualstudio.microsoft.com/download/pr/11346816/52257ee3e96d6e07313e41ad155b155a/vs_Enterprise.exe was the old URL
 Start-Process -FilePath "$env:Temp\$directoryName\vs_Enterprise.exe" -ArgumentList '--layout C:\sp-onprem-files\VS2017 --add Microsoft.VisualStudio.Workload.Office --includeRecommended --lang en-US --quiet' -Wait;
-.\..\media.ps1 .\mediasp2013.json
+.\..\infrastructure\media.ps1 .\mediasp2013.json
 Remove-Item C:\sp-onprem-files\VS2017 -Recurse -Force
 Set-ExecutionPolicy Bypass -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
