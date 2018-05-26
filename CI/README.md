@@ -48,14 +48,14 @@ Reboot the machine: `shutdown /r`
 Configure external switch.
 
 ## Usage
-Clone the project. For example, `git clone https://github.com/shurick81/sp-devops-starter c:\projects\sp-devops-starter`
-Go to CI directory. For example, `cd c:\projects\sp-devops-starter\ci`
+Clone the project. For example, `git clone https://github.com/KentorIT/Unionen_Klubbwebb c:\projects\Unionen_Klubbwebb`
+Go to CI directory. For example, `cd c:\projects\Unionen_Klubbwebb\ci`
 
 ### Image
 Create a box (virtual machine image):
 
 ```
-cd c:\projects\sp-devops-starter\ci\images
+cd c:\projects\Unionen_Klubbwebb\ci\images
 packer build centos7-ci.json
 ```
 
@@ -64,7 +64,7 @@ packer build centos7-ci.json
 Spin up a virtual machine from the boxes:
 
 ```
-cd c:\projects\sp-devops-starter\ci
+cd c:\projects\Unionen_Klubbwebb\ci
 vagrant up
 ```
 
@@ -72,10 +72,10 @@ vagrant up
 ```
 del centos7-ci.box
 packer build centos7-ci.json
+vagrant box remove file://./images/centos7-ci.box --force
 ```
 ```
 vagrant destroy --force
-vagrant box remove file://./images/centos7-ci.box --force
 vagrant up
 ```
 
