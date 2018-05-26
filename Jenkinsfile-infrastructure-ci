@@ -24,10 +24,18 @@ pipeline {
                         Copy-Item C:/sp-onprem-files/SQLServer2014SP1.zip ./images/http
                     }
                     if ( !( Get-Item ./images/http/SQLServer2014SP1.zip -ErrorAction Ignore ) ) { Write-Host "SQL Server media missing"; exit 1 }
-                    if ( !( Get-Item ./images/http/SPServer2013SP1.zip -ErrorAction Ignore ) ) {
-                        Copy-Item C:/sp-onprem-files/SPServer2013SP1.zip ./images/http
+                    if ( !( Get-Item ./images/http/SPServer2013SwSP11511.exe -ErrorAction Ignore ) ) {
+                        Copy-Item C:/sp-onprem-files/SPServer2013SwSP11511.exe ./images/http
                     }
-                    if ( !( Get-Item ./images/http/SPServer2013SP1.zip -ErrorAction Ignore ) ) { Write-Host "SharePoint Server media missing"; exit 1 }
+                    if ( !( Get-Item ./images/http/SPServer2013SwSP11511.exe -ErrorAction Ignore ) ) { Write-Host "SharePoint Server media missing"; exit 1 }
+                    if ( !( Get-Item ./images/http/SPServer2013SwSP11511.7z.001 -ErrorAction Ignore ) ) {
+                        Copy-Item C:/sp-onprem-files/SPServer2013SwSP11511.7z.001 ./images/http
+                    }
+                    if ( !( Get-Item ./images/http/SPServer2013SwSP11511.7z.001 -ErrorAction Ignore ) ) { Write-Host "SharePoint Server media missing"; exit 1 }
+                    if ( !( Get-Item ./images/http/SPServer2013SwSP11511.7z.002 -ErrorAction Ignore ) ) {
+                        Copy-Item C:/sp-onprem-files/SPServer2013SwSP11511.7z.002 ./images/http
+                    }
+                    if ( !( Get-Item ./images/http/SPServer2013SwSP11511.7z.002 -ErrorAction Ignore ) ) { Write-Host "SharePoint Server media missing"; exit 1 }
                     if ( !( Get-Item ./images/http/VS2017.zip -ErrorAction Ignore ) ) {
                         Copy-Item C:/sp-onprem-files/VS2017.zip ./images/http
                     }
