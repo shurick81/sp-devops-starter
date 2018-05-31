@@ -26,6 +26,12 @@ For Hyper-V, run:
 Enable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V -All
 New-NetFirewallRule -DisplayName 'Packer HTTP ports' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8000-9000 | Out-Null
 ```
+For uninstalling VirtualBox, run `choco uninstall -y virtualbox`
+For uninstalling Hyper-V, run:
+```
+Get-NetFirewallRule | ? { $_.DisplayName -eq 'Packer HTTP ports' } | Disable-NetFirewallRule
+Disable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V
+```
 
 Reboot the machine: `shutdown /r`
 

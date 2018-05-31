@@ -57,12 +57,19 @@ New-NetFirewallRule -DisplayName 'Packer HTTP ports' -Profile @('Domain', 'Priva
 You will need to reboot the machine for changes to apply
 Using Hyper-V Manager, configure network switch with external access.
 
+For uninstalling Hyper-V, run:
+```
+Get-NetFirewallRule | ? { $_.DisplayName -eq 'Packer HTTP ports' } | Disable-NetFirewallRule
+Disable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V
+```
+
 * ~ 3 hours to run tests
 
 ### (alernatively) Installing VirtualBox on Windows
 ```
 choco install -y virtualbox
 ```
+For uninstalling VirtualBox, run `choco uninstall -y virtualbox`
 
 # Creating a development environment
 
@@ -73,6 +80,13 @@ choco install -y virtualbox
 ### Hyper-V
 When running `vagrant up` you will be asked to choose the switch manually.
 if you encounter `The box is not able to report an address for WinRM to connect to yet.` exit, run `vagrant up` again.
+
+### Resetting SP machine
+
+```
+vagrant destroy DBWEBCODE01 --force
+vagrant up
+```
 
 # Accessing the machine
 `vagrant rdp DBWEBCODE01`
