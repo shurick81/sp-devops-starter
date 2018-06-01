@@ -30,7 +30,7 @@ For uninstalling VirtualBox, run `choco uninstall -y virtualbox`
 For uninstalling Hyper-V, run:
 ```
 Get-NetFirewallRule | ? { $_.DisplayName -eq 'Packer HTTP ports' } | Disable-NetFirewallRule
-Disable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V
+Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-All
 ```
 
 Reboot the machine: `shutdown /r`

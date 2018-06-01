@@ -60,7 +60,7 @@ Using Hyper-V Manager, configure network switch with external access.
 For uninstalling Hyper-V, run:
 ```
 Get-NetFirewallRule | ? { $_.DisplayName -eq 'Packer HTTP ports' } | Disable-NetFirewallRule
-Disable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V
+Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-All
 ```
 
 * ~ 3 hours to run tests
