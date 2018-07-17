@@ -8,6 +8,14 @@ try
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
             [PSCredential]
+            $ShortDomainAdminCredential,
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
+            $DomainSafeModeAdministratorPasswordCredential,
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
             $SPInstallAccountCredential,
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
@@ -15,16 +23,23 @@ try
             $SPFarmAccountCredential
         )
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName xActiveDirectory -ModuleVersion 2.16.0.0
+        Import-DscResource -ModuleName xActiveDirectory -ModuleVersion 2.19.0.0
 
         $domainName = "contoso.local";
 
         Node $AllNodes.NodeName
         {
 
+            xADDomain ADDomain
+            {
+                DomainName                      = $domainName
+                SafemodeAdministratorPassword   = $domainSafeModeAdministratorPasswordCredential
+                DomainAdministratorCredential   = $shortDomainAdminCredential
+            }
+
             xADUser SPInstallAccountUser
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = $SPInstallAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPInstallAccountCredential
                 PasswordNeverExpires    = $true
@@ -32,7 +47,7 @@ try
             
             xADUser SPFarmAccountUser
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = $SPFarmAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPFarmAccountCredential
                 PasswordNeverExpires    = $true
@@ -58,6 +73,10 @@ $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 
+$securedPassword = ConvertTo-SecureString "Fractalsol" -AsPlainText -Force
+$ShortDomainAdminCredential = New-Object System.Management.Automation.PSCredential( "administrator", $securedPassword )
+$securedPassword = ConvertTo-SecureString "sUp3rcomp1eX" -AsPlainText -Force
+$DomainSafeModeAdministratorPasswordCredential = New-Object System.Management.Automation.PSCredential( "fakeaccount", $securedPassword )
 $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
 $SPInstallAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spadm16", $securedPassword );
 $SPFarmAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spfrm16", $securedPassword );
@@ -66,6 +85,8 @@ try
 {
     &$configName `
         -ConfigurationData $configurationData `
+        -ShortDomainAdminCredential $ShortDomainAdminCredential `
+        -DomainSafeModeAdministratorPasswordCredential $DomainSafeModeAdministratorPasswordCredential `
         -SPInstallAccountCredential $SPInstallAccountCredential `
         -SPFarmAccountCredential $SPFarmAccountCredential;
 }
@@ -86,21 +107,21 @@ catch
     $_.Exception.Message
     Exit 1;
 }
-Write-Host "$(Get-Date) Testing DSC"
-try {
-    $result = Test-DscConfiguration $configName -Verbose;
-    $inDesiredState = $result.InDesiredState;
-    $failed = $false;
-    $inDesiredState | % {
-        if ( !$_ ) {
-            Write-Host "$(Get-Date) Test failed"
-            Exit 1;
-        }
-    }
-}
-catch {
-    Write-Host "$(Get-Date) Exception in testing DCS:"
-    $_.Exception.Message
-    Exit 1;
-}
+# Write-Host "$(Get-Date) Testing DSC"
+# try {
+#     $result = Test-DscConfiguration $configName -Verbose;
+#     $inDesiredState = $result.InDesiredState;
+#     $failed = $false;
+#     $inDesiredState | % {
+#         if ( !$_ ) {
+#             Write-Host "$(Get-Date) Test failed"
+#             Exit 1;
+#         }
+#     }
+# }
+# catch {
+#     Write-Host "$(Get-Date) Exception in testing DCS:"
+#     $_.Exception.Message
+#     Exit 1;
+# }
 Exit 0;

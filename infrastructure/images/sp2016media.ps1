@@ -1,4 +1,4 @@
-$configName = "DomainPSModules"
+$configName = "SPMedia"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
@@ -6,31 +6,41 @@ try
     {
         param(
         )
-
+    
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName PackageManagementProviderResource -ModuleVersion 1.0.3
-
+        Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
+        Import-DscResource -ModuleName StorageDsc -ModuleVersion 4.0.0.0
+    
         Node $AllNodes.NodeName
         {
-
-            PSModule "PSModule_xActiveDirectory"
+    
+            $spImageUrl = "https://download.microsoft.com/download/0/0/4/004EE264-7043-45BF-99E3-3F74ECAE13E5/officeserver.img";
+            $SPImageUrl -match '[^/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))' | Out-Null
+            $SPImageFileName = $matches[0]
+            $SPImageDestinationPath = "C:\Install\SP2016RTMImage\$SPImageFileName"
+    
+            xRemoteFile SPServerImageFilePresent
             {
-                Ensure              = "Present"
-                Name                = "xActiveDirectory"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "2.19.0.0"
+                Uri             = $SPImageUrl
+                DestinationPath = $SPImageDestinationPath
+                MatchSource     = $false
             }
-
-            PSModule "PSModule_xDnsServer"
+    
+            MountImage SPServerImageMounted
             {
-                Ensure              = "Present"
-                Name                = "xDnsServer"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "1.9.0.0"
+                ImagePath   = $SPImageDestinationPath
+                DriveLetter = 'G'
+                DependsOn   = "[xRemoteFile]SPServerImageFilePresent"
             }
-
+    
+            WaitForVolume SPServerImageMounted
+            {
+                DriveLetter      = 'G'
+                RetryIntervalSec = 5
+                RetryCount       = 10
+                DependsOn   = "[MountImage]SPServerImageMounted"
+            }
+            
         }
     }
 }

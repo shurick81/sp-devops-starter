@@ -8,6 +8,14 @@ try
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
             [PSCredential]
+            $ShortDomainAdminCredential,
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
+            $DomainSafeModeAdministratorPasswordCredential,
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
             $DomainAdminCredential,
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
@@ -47,16 +55,23 @@ try
             $SPSecondTestAccountCredential
         )
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName xActiveDirectory -ModuleVersion 2.16.0.0
+        Import-DscResource -ModuleName xActiveDirectory -ModuleVersion 2.19.0.0
 
         $domainName = "contoso.local";
 
         Node $AllNodes.NodeName
         {
 
+            xADDomain ADDomain
+            {
+                DomainName                      = $domainName
+                SafemodeAdministratorPassword   = $domainSafeModeAdministratorPasswordCredential
+                DomainAdministratorCredential   = $shortDomainAdminCredential
+            }
+
             xADUser DomainAdminAccountUser
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = $DomainAdminCredential.GetNetworkCredential().UserName
                 Password                = $DomainAdminCredential
                 PasswordNeverExpires    = $true
@@ -64,7 +79,7 @@ try
             
             xADUser SQLServiceAccount
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = $SQLServiceAccountCredential.GetNetworkCredential().UserName
                 Password                = $SQLServiceAccountCredential
                 PasswordNeverExpires    = $true
@@ -72,7 +87,7 @@ try
 
             xADUser SQLAgentAccount
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = $SQLAgentAccountCredential.GetNetworkCredential().UserName
                 Password                = $SQLAgentAccountCredential
                 PasswordNeverExpires    = $true
@@ -80,7 +95,7 @@ try
 
             xADUser SPWebAppPoolAccountUser
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = $SPWebAppPoolAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPWebAppPoolAccountCredential
                 PasswordNeverExpires    = $true
@@ -88,7 +103,7 @@ try
 
             xADUser SPServicesAccountUser
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = $SPServicesAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPServicesAccountCredential
                 PasswordNeverExpires    = $true
@@ -96,7 +111,7 @@ try
 
             xADUser SPSearchServiceAccountUser
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = $SPSearchServiceAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPSearchServiceAccountCredential
                 PasswordNeverExpires    = $true
@@ -104,7 +119,7 @@ try
 
             xADUser SPCrawlerAccountUser
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = $SPCrawlerAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPCrawlerAccountCredential
                 PasswordNeverExpires    = $true
@@ -112,7 +127,7 @@ try
 
             xADUser SPOCSuperUserADUser
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = "_spocuser16"
                 Password                = $SPOCAccountCredential
                 PasswordNeverExpires    = $true
@@ -120,7 +135,7 @@ try
 
             xADUser SPOCSuperReaderUser
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = "_spocrdr16"
                 Password                = $SPOCAccountCredential
                 PasswordNeverExpires    = $true
@@ -128,7 +143,7 @@ try
 
             xADUser SPTestUser
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = $SPTestAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPTestAccountCredential
                 PasswordNeverExpires    = $true
@@ -136,7 +151,7 @@ try
 
             xADUser SPSecondTestUser
             {
-                DomainName              = $DomainName
+                DomainName              = $domainName
                 UserName                = $SPSecondTestAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPSecondTestAccountCredential
                 PasswordNeverExpires    = $true
@@ -162,6 +177,10 @@ $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 
+$securedPassword = ConvertTo-SecureString "Fractalsol" -AsPlainText -Force
+$ShortDomainAdminCredential = New-Object System.Management.Automation.PSCredential( "administrator", $securedPassword )
+$securedPassword = ConvertTo-SecureString "sUp3rcomp1eX" -AsPlainText -Force
+$DomainSafeModeAdministratorPasswordCredential = New-Object System.Management.Automation.PSCredential( "fakeaccount", $securedPassword )
 $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
 $DomainAdminCredential = New-Object System.Management.Automation.PSCredential( "contoso\dauser1", $securedPassword );
 $SQLServiceAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_sqlsvc16", $securedPassword );
@@ -178,6 +197,8 @@ try
 {
     &$configName `
         -ConfigurationData $configurationData `
+        -ShortDomainAdminCredential $ShortDomainAdminCredential `
+        -DomainSafeModeAdministratorPasswordCredential $DomainSafeModeAdministratorPasswordCredential `
         -DomainAdminCredential $DomainAdminCredential `
         -SQLServiceAccountCredential $SQLServiceAccountCredential `
         -SQLAgentAccountCredential $SQLAgentAccountCredential `

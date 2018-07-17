@@ -23,7 +23,7 @@ choco install -y vagrant
 Then reboot for finishing insalling Vagrant and continue with `vagrant plugin install vagrant-reload`
 ```
 
-If you want to speed up the installation for the first time, save Windows installation media from http://care.dlservice.microsoft.com/dl/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO to C:/sp-onprem-files/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso
+If you want to speed up the installation for the first time, save Windows installation media from https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO to C:/sp-onprem-files/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso
 
 Then `cd` to the `/infrastructure` directory and run:
 ```PowerShell
@@ -74,8 +74,16 @@ For uninstalling VirtualBox, run `choco uninstall -y virtualbox`
 # Creating a development environment
 
 ## PowerShell
+
+## SharePoint 2013
+
 `cd` to `images` directory and run `.\preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web-code`
 `cd` to `stacks/dev-2013` directory and run `vagrant up`
+
+## SharePoint 2013
+
+`cd` to `images` directory and run `.\preparevmimages.ps1 sp-win2016-ad,sp-win2016-db-web-code`
+`cd` to `stacks/dev-2016` directory and run `vagrant up`
 
 ### Hyper-V
 When running `vagrant up` you will be asked to choose the switch manually.

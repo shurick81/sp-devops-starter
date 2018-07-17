@@ -4,36 +4,40 @@
             "type": "virtualbox-iso",
             "iso_checksum": "18a4f00a675b0338f3c7c93c4f131beb",
             "iso_checksum_type": "md5",
-            "iso_url": "http://care.dlservice.microsoft.com/dl/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
+            "iso_url": "https://download.microsoft.com/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
             "floppy_files": [
-                "Autounattend.xml",
+                "win2016/Autounattend.xml",
                 "winrm.ps1"
             ],
             "guest_additions_mode": "attach",
             "guest_os_type": "Windows2016_64",
             "headless": true,
+            "http_directory": "http",
             "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
             "vboxmanage": [
-                [ "modifyvm", "{{.Name}}", "--memory", "2048" ],
-                [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
+                [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
+                [ "modifyvm", "{{.Name}}", "--cpus", "8" ]
             ],
             "communicator": "winrm",
             "winrm_username": "administrator",
-            "winrm_password": "Fractalsol"
+            "winrm_password": "Fractalsol",
+            "winrm_timeout": "2h"
         },
         {
             "type": "hyperv-iso",
             "iso_checksum": "18a4f00a675b0338f3c7c93c4f131beb",
             "iso_checksum_type": "md5",
-            "iso_url": "http://care.dlservice.microsoft.com/dl/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
+            "iso_url": "https://download.microsoft.com/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
             "floppy_files": [
-                "Autounattend.xml",
+                "win2016/Autounattend.xml",
                 "winrm.ps1"
             ],
+            "http_directory": "http",
             "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
             "communicator": "winrm",
             "winrm_username": "administrator",
-            "winrm_password": "Fractalsol"
+            "winrm_password": "Fractalsol",
+            "winrm_timeout": "2h"
         }
     ],
     "provisioners": [
@@ -48,23 +52,22 @@
             "only": ["hyperv-iso"]
         },
         { "type": "powershell", "script": "rdpenable.ps1" },
-        { "type": "windows-restart" },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
+        { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "sppsmodules.ps1" },
-        { "type": "powershell", "script": "devpsmodules.ps1" },
-        { "type": "powershell", "script": "spapp.ps1" },
-        { "type": "powershell", "script": "spbin.ps1" },
+        { "type": "powershell", "script": "domainclientpsmodules.ps1" },
+        { "type": "powershell", "script": "sp2016media.ps1" },
+        { "type": "powershell", "script": "sp2016prebin.ps1" },
         { "type": "windows-restart" },
-        { "type": "powershell", "script": "spbin.ps1" },
-        { "type": "windows-restart" },
-        { "type": "powershell", "script": "spbin.ps1" },
-        { "type": "powershell", "script": "spappclean.ps1" },
-        { "type": "powershell", "script": "devbin.ps1" }
+        { "type": "powershell", "script": "sp2016media.ps1" },
+        { "type": "powershell", "script": "sp2016bin.ps1" },
+        { "type": "powershell", "script": "sp2016mediaclean.ps1" },
+        { "type": "powershell", "script": "waitforcpucalm.ps1" }
     ],
     "post-processors": [
         {
           "type": "vagrant",
-          "output": "sp-win2016-db-web-code.box"
+          "output": "sp-win2016-web.box"
         }
     ]
 }

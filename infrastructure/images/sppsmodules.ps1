@@ -31,7 +31,16 @@ try
                 RequiredVersion     = "0.3.0.0"
             }
 
-            PSModule "PSModule_xNetworking"
+            PSModule "PSModule_StorageDsc"
+            {
+                Ensure              = "Present"
+                Name                = "StorageDsc"
+                Repository          = "PSGallery"
+                InstallationPolicy  = "Trusted"
+                RequiredVersion     = "4.0.0.0"
+            }
+    
+                PSModule "PSModule_xNetworking"
             {
                 Ensure              = "Present"
                 Name                = "xNetworking"

@@ -1,4 +1,4 @@
-$configName = "DomainClientPSModules"
+$configName = "SQLMedia"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
@@ -6,31 +6,41 @@ try
     {
         param(
         )
-
+    
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName PackageManagementProviderResource -ModuleVersion 1.0.3
-
+        Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
+        Import-DscResource -ModuleName StorageDsc -ModuleVersion 4.0.0.0
+    
         Node $AllNodes.NodeName
         {
-
-            PSModule "PSModule_xNetworking"
+    
+            $SQLImageUrl = "http://$env:PACKER_HTTP_ADDR/en_sql_server_2017_enterprise_x64_dvd_11293666.iso";
+            $SQLImageUrl -match '[^/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))' | Out-Null
+            $SQLImageFileName = $matches[0]
+            $SQLImageDestinationPath = "C:\Install\SQL2017RTMImage\$SQLImageFileName"
+    
+            xRemoteFile SQLServerImageFilePresent
             {
-                Ensure              = "Present"
-                Name                = "xNetworking"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "5.6.0.0"
+                Uri             = $SQLImageUrl
+                DestinationPath = $SQLImageDestinationPath
+                MatchSource     = $false
             }
-
-            PSModule "PSModule_xComputerManagement"
+    
+            MountImage SQLServerImageMounted
             {
-                Ensure              = "Present"
-                Name                = "xComputerManagement"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "3.2.0.0"
+                ImagePath   = $SQLImageDestinationPath
+                DriveLetter = 'F'
+                DependsOn   = "[xRemoteFile]SQLServerImageFilePresent"
             }
-
+    
+            WaitForVolume SQLServerImageMounted
+            {
+                DriveLetter         = 'F'
+                RetryIntervalSec    = 5
+                RetryCount          = 10
+                DependsOn           = "[MountImage]SQLServerImageMounted"
+            }
+            
         }
     }
 }
@@ -84,4 +94,3 @@ catch {
     Exit 1;
 }
 Exit 0;
-    

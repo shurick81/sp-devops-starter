@@ -1,36 +1,21 @@
-$configName = "DevPSModules"
+$configName = "SQLPreBin"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
     Configuration $configName
     {
-        param(
-        )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName PackageManagementProviderResource -ModuleVersion 1.0.3
 
         Node $AllNodes.NodeName
         {
 
-            PSModule "PSModule_cChoco"
+            WindowsFeature NetFramework45Core
             {
-                Ensure              = "Present"
-                Name                = "cChoco"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "2.3.1.0"
+                Name    = "NET-Framework-45-Core"
+                Source  = "D:\sources\sxs"
             }
-
-            PSModule "PSModule_xSystemSecurity"
-            {
-                Ensure              = "Present"
-                Name                = "xSystemSecurity"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "1.2.0.0"
-            }
-
+    
         }
     }
 }
@@ -84,4 +69,3 @@ catch {
     Exit 1;
 }
 Exit 0;
-        

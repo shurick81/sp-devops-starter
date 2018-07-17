@@ -90,7 +90,8 @@
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "userpsmodules.ps1" },
-        { "type": "powershell", "script": "userbin.ps1" }
+        { "type": "powershell", "script": "userbin.ps1" },
+        { "type": "powershell", "script": "waitforcpucalm.ps1" }
     ],
     "post-processors": [
         {
@@ -99,7 +100,7 @@
         }
     ],
     "variables": {
-        "iso_url": "http://care.dlservice.microsoft.com/dl/download/B/8/B/B8B452EC-DD2D-4A8F-A88C-D2180C177624/15063.0.170317-1834.RS2_RELEASE_CLIENTENTERPRISEEVAL_OEMRET_X64FRE_EN-US.ISO",
+        "iso_url": "https://download.microsoft.com/download/B/8/B/B8B452EC-DD2D-4A8F-A88C-D2180C177624/15063.0.170317-1834.RS2_RELEASE_CLIENTENTERPRISEEVAL_OEMRET_X64FRE_EN-US.ISO",
         "iso_checksum_type": "sha1",
         "iso_checksum": "6C60F91BF0AD7B20F469AB8F80863035C517F34F", 
         "autounattend": "win10/Autounattend.xml",

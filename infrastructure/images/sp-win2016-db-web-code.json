@@ -16,7 +16,7 @@
             "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
             "vboxmanage": [
                 [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
-                [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
+                [ "modifyvm", "{{.Name}}", "--cpus", "8" ]
             ],
             "communicator": "winrm",
             "winrm_username": "administrator",
@@ -34,9 +34,6 @@
             ],
             "http_directory": "http",
             "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
-            "ram_size": 4096,
-            "cpu": 8,
-            "switch_name": "Default Switch",
             "communicator": "winrm",
             "winrm_username": "administrator",
             "winrm_password": "Fractalsol",
@@ -57,8 +54,19 @@
         { "type": "powershell", "script": "rdpenable.ps1" },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
+        { "type": "powershell", "script": "sqlpsmodules.ps1" },
+        { "type": "powershell", "script": "sppsmodules.ps1" },
         { "type": "powershell", "script": "devpsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
+        { "type": "powershell", "script": "sql2016media.ps1" },
+        { "type": "powershell", "script": "sql2016bin.ps1" },
+        { "type": "powershell", "script": "sql2016mediaclean.ps1" },
+        { "type": "powershell", "script": "sp2016media.ps1" },
+        { "type": "powershell", "script": "sp2016prebin.ps1" },
+        { "type": "windows-restart" },
+        { "type": "powershell", "script": "sp2016media.ps1" },
+        { "type": "powershell", "script": "sp2016bin.ps1" },
+        { "type": "powershell", "script": "sp2016mediaclean.ps1" },
         {
             "type": "powershell",
             "script": "devmedia.ps1",
@@ -81,7 +89,7 @@
     "post-processors": [
         {
           "type": "vagrant",
-          "output": "sp-win2016-code.box"
+          "output": "sp-win2016-db-web-code.box"
         }
     ]
 }

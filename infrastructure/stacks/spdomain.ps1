@@ -15,7 +15,7 @@ try
             $DomainSafeModeAdministratorPasswordCredential
         )
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName xActiveDirectory -ModuleVersion 2.16.0.0
+        Import-DscResource -ModuleName xActiveDirectory -ModuleVersion 2.19.0.0
 
         $domainName = "contoso.local";
 

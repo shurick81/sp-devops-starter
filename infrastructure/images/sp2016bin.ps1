@@ -1,4 +1,4 @@
-$configName = "BasePSModules"
+$configName = "SPBin"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
@@ -8,29 +8,18 @@ try
         )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName PackageManagementProviderResource -ModuleVersion 1.0.3
+        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
 
         Node $AllNodes.NodeName
         {
 
-            PSModule "PSModule_xPSDesiredStateConfiguration"
-            {
-                Ensure              = "Present"
-                Name                = "xPSDesiredStateConfiguration"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "8.2.0.0"
+            SPInstall SharePointBinariesInstalled 
+            { 
+                Ensure      = "Present"
+                BinaryDir   = "G:"
+                ProductKey  = "NQGJR-63HC8-XCRQH-MYVCH-3J3QR"
             }
-
-            PSModule "PSModule_xWindowsUpdate"
-            {
-                Ensure              = "Present"
-                Name                = "xWindowsUpdate"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "2.7.0.0"
-            }
-
+    
         }
     }
 }

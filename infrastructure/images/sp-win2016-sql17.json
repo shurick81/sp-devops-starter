@@ -13,10 +13,10 @@
             "guest_os_type": "Windows2016_64",
             "headless": true,
             "http_directory": "http",
-            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "vboxmanage": [
                 [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
-                [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
+                [ "modifyvm", "{{.Name}}", "--cpus", "8" ]
             ],
             "communicator": "winrm",
             "winrm_username": "administrator",
@@ -33,10 +33,7 @@
                 "winrm.ps1"
             ],
             "http_directory": "http",
-            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
-            "ram_size": 4096,
-            "cpu": 8,
-            "switch_name": "Default Switch",
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "communicator": "winrm",
             "winrm_username": "administrator",
             "winrm_password": "Fractalsol",
@@ -57,31 +54,27 @@
         { "type": "powershell", "script": "rdpenable.ps1" },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
-        { "type": "powershell", "script": "devpsmodules.ps1" },
+        { "type": "powershell", "script": "sqlpsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
+        { "type": "powershell", "script": "sql2017media.ps1" },
+        { "type": "powershell", "script": "sql2016bin.ps1" },
+        { "type": "powershell", "script": "sql2017mediaclean.ps1" },
+        { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
-            "type": "powershell",
-            "script": "devmedia.ps1",
-            "environment_vars": [
-                "SPDEVOPSSTARTER_LOCALVS=1"
-            ]
+            "type": "file",
+            "source": "sysprep.ps1",
+            "destination": "c:\\tmp\\sysprep.ps1"
         },
         {
-            "type": "powershell",
-            "script": "devbin-1.ps1",
-            "environment_vars": [
-                "SPDEVOPSSTARTER_LOCALVS=1"
-            ]
-        },
-        { "type": "windows-restart" },
-        { "type": "powershell", "script": "devmediaclean.ps1" },
-        { "type": "powershell", "script": "devbin-2.ps1" },
-        { "type": "powershell", "script": "waitforcpucalm.ps1" }
+            "type": "file",
+            "source": "autounattend_sysprep.xml",
+            "destination": "c:\\tmp\\autounattend_sysprep.xml"
+        }
     ],
     "post-processors": [
         {
           "type": "vagrant",
-          "output": "sp-win2016-code.box"
+          "output": "sp-win2016-sql17.box"
         }
     ]
 }

@@ -1,4 +1,4 @@
-$configName = "DevMediaClean"
+$configName = "SQLMedia"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
@@ -6,32 +6,39 @@ try
     {
         param(
         )
-
+    
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-
-        $SPImageLocation = $systemParameters.SPImageLocation
-        $SPInstallationMediaPath = $configParameters.SPInstallationMediaPath
-        $SPVersion = $configParameters.SPVersion;
-
+        Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
+        Import-DscResource -ModuleName StorageDsc -ModuleVersion 4.0.0.0
+    
         Node $AllNodes.NodeName
         {
-
-            File VSNoLocalMediaEnsure {
-                DestinationPath = "C:\Install\VSInstall"
-                Recurse         = $true
-                Type            = "Directory"
-                Ensure          = "Absent"
-                Force           = $true
+    
+            $SQLImageUrl = "https://download.microsoft.com/download/F/E/9/FE9397FA-BFAB-4ADD-8B97-91234BC774B2/SQLServer2016-x64-ENU.iso";
+            $SQLImageUrl -match '[^/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))' | Out-Null
+            $SQLImageFileName = $matches[0]
+            $SQLImageDestinationPath = "C:\Install\SQL2016RTMImage\$SQLImageFileName"
+    
+            xRemoteFile SQLServerImageFilePresent
+            {
+                Uri             = $SQLImageUrl
+                DestinationPath = $SQLImageDestinationPath
+                MatchSource     = $false
             }
-
-            File VSNoLocalMediaArchiveEnsure {
-                DestinationPath = "C:\Install\VS2017.zip"
-                Ensure          = "Absent"
+    
+            MountImage SQLServerImageMounted
+            {
+                ImagePath   = $SQLImageDestinationPath
+                DriveLetter = 'F'
+                DependsOn   = "[xRemoteFile]SQLServerImageFilePresent"
             }
-
-            File VSNoSSMSMediaArchiveEnsure {
-                DestinationPath = "C:\Install\SSMS-Setup-ENU.exe"
-                Ensure          = "Absent"
+    
+            WaitForVolume SQLServerImageMounted
+            {
+                DriveLetter         = 'F'
+                RetryIntervalSec    = 5
+                RetryCount          = 10
+                DependsOn           = "[MountImage]SQLServerImageMounted"
             }
             
         }

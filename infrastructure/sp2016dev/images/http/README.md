@@ -1,1 +1,0 @@
-Files that should be transferred from a host to a guest are located in this directory.

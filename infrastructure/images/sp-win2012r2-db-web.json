@@ -4,7 +4,7 @@
             "type": "virtualbox-iso",
             "iso_checksum": "5b5e08c490ad16b59b1d9fab0def883a",
             "iso_checksum_type": "md5",
-            "iso_url": "http://care.dlservice.microsoft.com/dl/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
+            "iso_url": "https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
             "floppy_files": [
                 "win2012r2/Autounattend.xml",
                 "winrm.ps1"
@@ -20,13 +20,14 @@
             ],
             "communicator": "winrm",
             "winrm_username": "administrator",
-            "winrm_password": "Fractalsol"
+            "winrm_password": "Fractalsol",
+            "winrm_timeout": "2h"
         },
         {
             "type": "hyperv-iso",
             "iso_checksum": "5b5e08c490ad16b59b1d9fab0def883a",
             "iso_checksum_type": "md5",
-            "iso_url": "http://care.dlservice.microsoft.com/dl/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
+            "iso_url": "https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
             "floppy_files": [
                 "win2012r2/Autounattend.xml",
                 "winrm.ps1"
@@ -38,7 +39,8 @@
             "switch_name": "Default Switch",
             "communicator": "winrm",
             "winrm_username": "administrator",
-            "winrm_password": "Fractalsol"
+            "winrm_password": "Fractalsol",
+            "winrm_timeout": "2h"
         }
     ],
     "provisioners": [
@@ -79,7 +81,7 @@
         { "type": "powershell", "script": "spbin.ps1" },
         { "type": "powershell", "script": "spmediaclean.ps1" },
         { "type": "powershell", "script": "xcredserver.ps1" },
-        { "type": "powershell", "inline": "Sleep 180" }
+        { "type": "powershell", "script": "waitforcpucalm.ps1" }
     ],
     "post-processors": [
         {

@@ -1,39 +1,24 @@
-$configName = "DevBin"
+$configName = "NoDefender"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
     Configuration $configName
     {
-        param(
-        )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DSCResource -ModuleName cChoco -ModuleVersion 2.3.1.0
 
-        Node $AllNodes.NodeName
+        WindowsFeature WindowsDefenderRemoved
         {
-
-            cChocoInstaller ChocoInstalled
-            {
-                InstallDir              = "c:\choco"
-                PsDscRunAsCredential    = $UserCredential
-            }
-
-            cChocoPackageInstaller VSCodeInstalled
-            {
-                Name                    = "visualstudiocode"
-                DependsOn               = "[cChocoInstaller]ChocoInstalled"
-                PsDscRunAsCredential    = $UserCredential
-            }
-
-            cChocoPackageInstaller GitInstalled
-            {
-                Name                    = "git"
-                DependsOn               = "[cChocoInstaller]ChocoInstalled"
-                PsDscRunAsCredential    = $UserCredential
-            }
-
+            Name    = "Windows-Defender"
+            Ensure  = "Absent"
         }
+
+        WindowsFeature WindowsDefenderGUIRemoved
+        {
+            Name    = "Windows-Defender-GUI"
+            Ensure  = "Absent"
+        }
+
     }
 }
 catch
@@ -45,7 +30,6 @@ catch
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
-$securedPassword = ConvertTo-SecureString "Fractalsol" -AsPlainText -Force
 Write-Host "$(Get-Date) Compiling DSC"
 try
 {
@@ -87,4 +71,3 @@ catch {
     Exit 1;
 }
 Exit 0;
-    

@@ -2,41 +2,43 @@
     "builders": [
         {
             "type": "virtualbox-iso",
-            "iso_checksum": "5b5e08c490ad16b59b1d9fab0def883a",
+            "iso_checksum": "18a4f00a675b0338f3c7c93c4f131beb",
             "iso_checksum_type": "md5",
-            "iso_url": "https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
+            "iso_url": "https://download.microsoft.com/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
             "floppy_files": [
-                "win2012r2/Autounattend.xml",
+                "win2016/Autounattend.xml",
                 "winrm.ps1"
             ],
             "guest_additions_mode": "attach",
-            "guest_os_type": "Windows2012_64",
+            "guest_os_type": "Windows2016_64",
             "headless": true,
-            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "vboxmanage": [
                 [ "modifyvm", "{{.Name}}", "--memory", "2048" ],
                 [ "modifyvm", "{{.Name}}", "--cpus", "8" ]
             ],
             "communicator": "winrm",
             "winrm_username": "administrator",
-            "winrm_password": "Fractalsol"
+            "winrm_password": "Fractalsol",
+            "winrm_timeout": "2h"
         },
         {
             "type": "hyperv-iso",
-            "iso_checksum": "5b5e08c490ad16b59b1d9fab0def883a",
+            "iso_checksum": "18a4f00a675b0338f3c7c93c4f131beb",
             "iso_checksum_type": "md5",
-            "iso_url": "https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
+            "iso_url": "https://download.microsoft.com/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
             "floppy_files": [
-                "win2012r2/Autounattend.xml",
+                "win2016/Autounattend.xml",
                 "winrm.ps1"
             ],
-            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "ram_size": 2048,
             "cpu": 8,
             "switch_name": "Default Switch",
             "communicator": "winrm",
             "winrm_username": "administrator",
-            "winrm_password": "Fractalsol"
+            "winrm_password": "Fractalsol",
+            "winrm_timeout": "2h"
         }
     ],
     "provisioners": [
@@ -45,25 +47,32 @@
             "script": "VirtualBox/installadditions.ps1",
             "only": ["virtualbox-iso"]
         },
-        { "type": "powershell", "script": "rdpenable.ps1" },
-        { "type": "powershell", "script": "wmf5.ps1",
-            "elevated_user": "administrator", "elevated_password": "Fractalsol"
-        },
         {
             "type": "powershell",
-            "inline": "Write-Host 'Canary script just for pause after wmf5 installation'",
-            "pause_before": "10m"
+            "script": "HyperV/integration.ps1",
+            "only": ["hyperv-iso"]
         },
+        { "type": "powershell", "script": "rdpenable.ps1" },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "adpsmodules.ps1" },
         { "type": "powershell", "script": "adbin.ps1" },
-        { "type": "powershell", "script": "waitforcpucalm.ps1" }
+        { "type": "powershell", "script": "waitforcpucalm.ps1" },
+        {
+            "type": "file",
+            "source": "sysprep.ps1",
+            "destination": "c:\\tmp\\sysprep.ps1"
+        },
+        {
+            "type": "file",
+            "source": "autounattend_sysprep.xml",
+            "destination": "c:\\tmp\\autounattend_sysprep.xml"
+        }
     ],
     "post-processors": [
         {
           "type": "vagrant",
-          "output": "sp-win2012r2-ad.box"
+          "output": "sp-win2016-ad.box"
         }
     ]
 }

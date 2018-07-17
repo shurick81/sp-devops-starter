@@ -1,4 +1,4 @@
-$configName = "DevMedia"
+$configName = "SPPreBin"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
@@ -8,34 +8,14 @@ try
         )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName xPSDesiredStateConfiguration -Name xRemoteFile -ModuleVersion 8.2.0.0
+        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
 
-        Node $AllNodes.NodeName
+        SPInstallPrereqs SPPrereqsInstalled
         {
-
-            xRemoteFile VSMediaArchive
-            {
-                Uri             = "http://$env:PACKER_HTTP_ADDR/VS2017.zip"
-                DestinationPath = "C:\Install\VS2017.zip"
-                MatchSource     = $false
-            }
-
-            Archive VSMediaArchiveUnpacked
-            {
-                Ensure      = "Present"
-                Path        = "C:\Install\VS2017.zip"
-                Destination = "C:\Install\VSInstall"
-                DependsOn   = "[xRemoteFile]VSMediaArchive"
-            }
-
-            xRemoteFile SSMSMedia
-            {
-                Uri             = "http://$env:PACKER_HTTP_ADDR/SSMS-Setup-ENU.exe"
-                DestinationPath = "C:\Install\SSMS-Setup-ENU.exe"
-                MatchSource     = $false
-            }
-
+            InstallerPath   = "G:\Prerequisiteinstaller.exe"
+            OnlineMode      = $true
         }
+
     }
 }
 catch
@@ -45,27 +25,24 @@ catch
     Exit 1;
 }
 $configurationData = @{ AllNodes = @(
-    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
-) }
+        @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+    ) 
+}
 Write-Host "$(Get-Date) Compiling DSC"
-try
-{
+try {
     &$configName `
         -ConfigurationData $configurationData;
 }
-catch
-{
+catch {
     Write-Host "$(Get-Date) Exception in compiling DCS:";
     $_.Exception.Message
     Exit 1;
 }
 Write-Host "$(Get-Date) Starting DSC"
-try
-{
+try {
     Start-DscConfiguration $configName -Verbose -Wait -Force;
 }
-catch
-{
+catch {
     Write-Host "$(Get-Date) Exception in starting DCS:"
     $_.Exception.Message
     Exit 1;
@@ -88,4 +65,3 @@ catch {
     Exit 1;
 }
 Exit 0;
-        
