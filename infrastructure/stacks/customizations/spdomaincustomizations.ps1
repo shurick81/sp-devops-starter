@@ -8,14 +8,6 @@ try
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
             [PSCredential]
-            $ShortDomainAdminCredential,
-            [Parameter(Mandatory=$true)]
-            [ValidateNotNullorEmpty()]
-            [PSCredential]
-            $DomainSafeModeAdministratorPasswordCredential,
-            [Parameter(Mandatory=$true)]
-            [ValidateNotNullorEmpty()]
-            [PSCredential]
             $DomainAdminCredential,
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
@@ -61,13 +53,6 @@ try
 
         Node $AllNodes.NodeName
         {
-
-            xADDomain ADDomain
-            {
-                DomainName                      = $domainName
-                SafemodeAdministratorPassword   = $domainSafeModeAdministratorPasswordCredential
-                DomainAdministratorCredential   = $shortDomainAdminCredential
-            }
 
             xADUser DomainAdminAccountUser
             {
@@ -177,10 +162,6 @@ $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 
-$securedPassword = ConvertTo-SecureString "Fractalsol" -AsPlainText -Force
-$ShortDomainAdminCredential = New-Object System.Management.Automation.PSCredential( "administrator", $securedPassword )
-$securedPassword = ConvertTo-SecureString "sUp3rcomp1eX" -AsPlainText -Force
-$DomainSafeModeAdministratorPasswordCredential = New-Object System.Management.Automation.PSCredential( "fakeaccount", $securedPassword )
 $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
 $DomainAdminCredential = New-Object System.Management.Automation.PSCredential( "contoso\dauser1", $securedPassword );
 $SQLServiceAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_sqlsvc16", $securedPassword );
@@ -197,8 +178,6 @@ try
 {
     &$configName `
         -ConfigurationData $configurationData `
-        -ShortDomainAdminCredential $ShortDomainAdminCredential `
-        -DomainSafeModeAdministratorPasswordCredential $DomainSafeModeAdministratorPasswordCredential `
         -DomainAdminCredential $DomainAdminCredential `
         -SQLServiceAccountCredential $SQLServiceAccountCredential `
         -SQLAgentAccountCredential $SQLAgentAccountCredential `

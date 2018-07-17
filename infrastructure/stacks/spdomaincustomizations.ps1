@@ -12,10 +12,6 @@ try
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
             [PSCredential]
-            $DomainSafeModeAdministratorPasswordCredential,
-            [Parameter(Mandatory=$true)]
-            [ValidateNotNullorEmpty()]
-            [PSCredential]
             $SPInstallAccountCredential,
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
@@ -30,11 +26,12 @@ try
         Node $AllNodes.NodeName
         {
 
-            xADDomain ADDomain
+            xWaitForADDomain WaitForDomain
             {
-                DomainName                      = $domainName
-                SafemodeAdministratorPassword   = $domainSafeModeAdministratorPasswordCredential
-                DomainAdministratorCredential   = $shortDomainAdminCredential
+                DomainName              = $domainName
+                DomainUserCredential    = $ShortDomainAdminCredential
+                RetryCount              = 100
+                RetryIntervalSec        = 10
             }
 
             xADUser SPInstallAccountUser
@@ -43,6 +40,7 @@ try
                 UserName                = $SPInstallAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPInstallAccountCredential
                 PasswordNeverExpires    = $true
+                DependsOn               = "[xWaitForADDomain]WaitForDomain"
             }
             
             xADUser SPFarmAccountUser
@@ -51,6 +49,7 @@ try
                 UserName                = $SPFarmAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPFarmAccountCredential
                 PasswordNeverExpires    = $true
+                DependsOn               = "[xWaitForADDomain]WaitForDomain"
             }
 
             xADGroup SPAdminGroup
@@ -75,8 +74,6 @@ $configurationData = @{ AllNodes = @(
 
 $securedPassword = ConvertTo-SecureString "Fractalsol" -AsPlainText -Force
 $ShortDomainAdminCredential = New-Object System.Management.Automation.PSCredential( "administrator", $securedPassword )
-$securedPassword = ConvertTo-SecureString "sUp3rcomp1eX" -AsPlainText -Force
-$DomainSafeModeAdministratorPasswordCredential = New-Object System.Management.Automation.PSCredential( "fakeaccount", $securedPassword )
 $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
 $SPInstallAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spadm16", $securedPassword );
 $SPFarmAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spfrm16", $securedPassword );
@@ -86,7 +83,6 @@ try
     &$configName `
         -ConfigurationData $configurationData `
         -ShortDomainAdminCredential $ShortDomainAdminCredential `
-        -DomainSafeModeAdministratorPasswordCredential $DomainSafeModeAdministratorPasswordCredential `
         -SPInstallAccountCredential $SPInstallAccountCredential `
         -SPFarmAccountCredential $SPFarmAccountCredential;
 }
@@ -107,21 +103,21 @@ catch
     $_.Exception.Message
     Exit 1;
 }
-# Write-Host "$(Get-Date) Testing DSC"
-# try {
-#     $result = Test-DscConfiguration $configName -Verbose;
-#     $inDesiredState = $result.InDesiredState;
-#     $failed = $false;
-#     $inDesiredState | % {
-#         if ( !$_ ) {
-#             Write-Host "$(Get-Date) Test failed"
-#             Exit 1;
-#         }
-#     }
-# }
-# catch {
-#     Write-Host "$(Get-Date) Exception in testing DCS:"
-#     $_.Exception.Message
-#     Exit 1;
-# }
+Write-Host "$(Get-Date) Testing DSC"
+try {
+    $result = Test-DscConfiguration $configName -Verbose;
+    $inDesiredState = $result.InDesiredState;
+    $failed = $false;
+    $inDesiredState | % {
+        if ( !$_ ) {
+            Write-Host "$(Get-Date) Test failed"
+            Exit 1;
+        }
+    }
+}
+catch {
+    Write-Host "$(Get-Date) Exception in testing DCS:"
+    $_.Exception.Message
+    Exit 1;
+}
 Exit 0;
