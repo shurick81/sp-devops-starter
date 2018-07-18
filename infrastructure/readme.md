@@ -21,7 +21,6 @@ choco install -y packer
 choco install -y vagrant
 ```
 Then reboot for finishing insalling Vagrant and continue with `vagrant plugin install vagrant-reload`
-```
 
 If you want to speed up the installation for the first time, save Windows installation media from https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO to C:/sp-onprem-files/d408977ecf91d58e3ae7c4d0f515d950c4b22b8eadebd436d57f915a0f791224.iso
 
