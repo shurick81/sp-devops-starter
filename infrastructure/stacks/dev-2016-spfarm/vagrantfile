@@ -1,0 +1,60 @@
+Vagrant.configure(2) do |config|
+    config.vm.communicator = "winrm"
+    config.winrm.username = "administrator"
+    config.winrm.password = "Fractalsol"
+    config.winrm.transport = :plaintext 
+    config.winrm.basic_auth_only = true
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+    config.vm.define "AD01" do |vm_config|
+        vm_config.vm.hostname = "AD01"
+        vm_config.vm.box = "sp-win2016-ad"
+        vm_config.vm.network "forwarded_port", guest: 3389, host: 13390, auto_correct: true
+        vm_config.vm.provider "virtualbox" do |vb, override|
+            override.vm.network :private_network, ip: "192.168.51.128", gateway: "192.168.51.1"
+            override.vm.provision :shell, path: "../spdomain.ps1"
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../spdomaincustomizations.ps1"
+            override.vm.provision :shell, path: "../customizations/spdomaincustomizations.ps1"
+            #vb.gui = true
+            vb.memory = "1024"
+            vb.cpus = 2
+        end
+        vm_config.vm.provider "hyperv" do |hv, override|
+            override.vm.provision :shell, path: "../spdomain.ps1"
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../spdomaincustomizations.ps1"
+            override.vm.provision :shell, path: "../customizations/spdomaincustomizations.ps1"
+        end
+        vm_config.vm.boot_timeout = 1800
+    end
+    config.vm.define "DBWEBCODE01" do |vm_config|
+        vm_config.vm.hostname = "DBWEBCODE01"
+        vm_config.vm.box = "sp-win2016-db-web-code"
+        vm_config.vm.network "forwarded_port", guest: 3389, host: 13391, auto_correct: true
+        vm_config.vm.provider "virtualbox" do |vb, override|
+            override.vm.network :private_network, ip: "192.168.51.129", gateway: "192.168.51.1"
+            override.vm.provision :shell, path: "../domainclientvbnetwork.ps1"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            override.vm.provision :shell, path: "../xcredclient.ps1"
+            override.vm.provision :shell, path: "../spfarm_2016.ps1"
+            override.vm.provision :shell, path: "../../../src/spfarm_customizations.ps1"
+            #vb.vm.gui = true
+            vb.memory = "8192"
+            vb.cpus = 8
+        end
+        vm_config.vm.provider "hyperv" do |hv, override|
+            override.vm.provision :shell, path: "../domainclienthvnetwork.ps1"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            override.vm.provision :shell, path: "../spfarm_2016.ps1"
+            override.vm.provision :shell, path: "../../../src/spfarm_customizations.ps1"
+            hv.memory = "4096"
+            hv.maxmemory = "8192"
+            hv.cpus = 8
+        end
+        vm_config.vm.boot_timeout = 1800
+    end
+end
