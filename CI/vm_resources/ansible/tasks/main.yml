@@ -4,7 +4,7 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:8080/crumbIssuer/api/json"
+    url: "http://127.0.0.1:16080/crumbIssuer/api/json"
     return_content: yes
     status_code: 200, 404
   register: jenkins_crumb
@@ -19,7 +19,7 @@
 - name: Creating git credential
   uri:
     method: POST
-    url: 'http://127.0.0.1:8080/credentials/store/system/domain/_/createCredentials'
+    url: 'http://127.0.0.1:16080/credentials/store/system/domain/_/createCredentials'
     user: admin
     password: admin
     force_basic_auth: yes

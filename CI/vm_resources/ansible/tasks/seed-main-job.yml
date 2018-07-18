@@ -4,7 +4,7 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:8080/api/json?tree=jobs[name]"
+    url: "http://127.0.0.1:16080/api/json?tree=jobs[name]"
     return_content: yes
   register: jenkins_jobs
   until: jenkins_jobs.content.find('Please wait while Jenkins is getting ready to work') == -1
@@ -20,7 +20,7 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:8080/createItem?name=main-ci&{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:16080/createItem?name=main-ci&{{ jenkins_crumb_token }}"
     method: POST
     headers:
       Content-Type: "application/xml"
@@ -33,7 +33,7 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:8080/job/main-ci/config.xml?{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:16080/job/main-ci/config.xml?{{ jenkins_crumb_token }}"
     method: POST
     headers:
       Content-Type: "application/xml"
@@ -46,7 +46,7 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:8080/job/main-ci/build?{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:16080/job/main-ci/build?{{ jenkins_crumb_token }}"
     method: POST
     status_code: 302
   register: jenkins_seed_job_started
@@ -57,7 +57,7 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:8080/job/main-ci/lastBuild/buildNumber?{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:16080/job/main-ci/lastBuild/buildNumber?{{ jenkins_crumb_token }}"
     method: GET
     status_code: 302
   register: jenkins_seed

@@ -2,6 +2,6 @@
 - hosts: all
   become: yes
   vars:
-    jenkins_slave_port: 8081
+    jenkins_slave_port: 16081
   tasks:
     - import_tasks: tasks/main.yml

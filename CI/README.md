@@ -44,7 +44,7 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/in
 choco install -y packer
 choco install -y vagrant
 choco install -y git
-New-NetFirewallRule -DisplayName 'HTTP(S) Inbound' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort @('80', '443', '8080') | Out-Null
+New-NetFirewallRule -DisplayName 'HTTP(S) Inbound' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort @('80', '443', '16080') | Out-Null
 New-NetFirewallRule -DisplayName 'Packer HTTP ports' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8000-9000 | Out-Null
 exit
 ```
@@ -105,13 +105,13 @@ Close the console.
 ## Connecting sharepoint client slave
 ```
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:8080 -username admin -password admin -labels "sharepoint client"
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:16080 -username admin -password admin -labels "sharepoint client"
 ```
 
 ## Connecting sharepoint server slave
 ```
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:8080 -username admin -password admin -labels "sharepoint server"
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:16080 -username admin -password admin -labels "sharepoint server"
 ```
 
 
@@ -166,7 +166,7 @@ It might be wise to run the following snippet in a separate console in order to 
 Run in a new PowerShell:
 ```PowerShell
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:8080 -username admin -password admin -labels "hvmanager win" -executors 2
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:16080 -username admin -password admin -labels "hvmanager win" -executors 2
 ```
 
 ## Connecting hypervisor manager slave with rebuilding SharePoint machine
@@ -176,7 +176,7 @@ It might be wise to run the following snippet in a separate console in order to 
 Run in a new PowerShell:
 ```PowerShell
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:8080 -username admin -password admin -labels "hvmanager-cleanvms win" -executors 2
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:16080 -username admin -password admin -labels "hvmanager-cleanvms win" -executors 2
 ```
 
 # Connecting hypervisor manager slave for infrastructure testing
@@ -186,7 +186,7 @@ It might be wise to run the following snippet in a separate console in order to 
 Run in PowerShell:
 ```PowerShell
 Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.5/swarm-client-3.5.jar -OutFile swarm-client-3.5.jar
-java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:8080 -username admin -password admin -labels "infrastructuretester win" -executors 2
+java -jar swarm-client-3.5.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:16080 -username admin -password admin -labels "infrastructuretester win" -executors 2
 ```
 
 # Cloning to other projecs
