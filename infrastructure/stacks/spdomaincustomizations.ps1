@@ -8,10 +8,6 @@ try
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
             [PSCredential]
-            $ShortDomainAdminCredential,
-            [Parameter(Mandatory=$true)]
-            [ValidateNotNullorEmpty()]
-            [PSCredential]
             $SPInstallAccountCredential,
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
@@ -26,21 +22,12 @@ try
         Node $AllNodes.NodeName
         {
 
-            xWaitForADDomain WaitForDomain
-            {
-                DomainName              = $domainName
-                DomainUserCredential    = $ShortDomainAdminCredential
-                RetryCount              = 100
-                RetryIntervalSec        = 10
-            }
-
             xADUser SPInstallAccountUser
             {
                 DomainName              = $domainName
                 UserName                = $SPInstallAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPInstallAccountCredential
                 PasswordNeverExpires    = $true
-                DependsOn               = "[xWaitForADDomain]WaitForDomain"
             }
             
             xADUser SPFarmAccountUser
@@ -49,7 +36,6 @@ try
                 UserName                = $SPFarmAccountCredential.GetNetworkCredential().UserName
                 Password                = $SPFarmAccountCredential
                 PasswordNeverExpires    = $true
-                DependsOn               = "[xWaitForADDomain]WaitForDomain"
             }
 
             xADGroup SPAdminGroup
@@ -72,8 +58,6 @@ $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 
-$securedPassword = ConvertTo-SecureString "Fractalsol" -AsPlainText -Force
-$ShortDomainAdminCredential = New-Object System.Management.Automation.PSCredential( "administrator", $securedPassword )
 $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
 $SPInstallAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spadm16", $securedPassword );
 $SPFarmAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spfrm16", $securedPassword );
@@ -82,7 +66,6 @@ try
 {
     &$configName `
         -ConfigurationData $configurationData `
-        -ShortDomainAdminCredential $ShortDomainAdminCredential `
         -SPInstallAccountCredential $SPInstallAccountCredential `
         -SPFarmAccountCredential $SPFarmAccountCredential;
 }
