@@ -85,7 +85,19 @@
         { "type": "powershell", "script": "spbin.ps1" },
         { "type": "powershell", "script": "spmediaclean.ps1" },
         { "type": "powershell", "script": "xcredserver.ps1" },
-        { "type": "powershell", "script": "waitforcpucalm.ps1" }
+        { "type": "powershell", "script": "waitforcpucalm.ps1" },
+        {
+            "type": "file",
+            "source": "sysprep.ps1",
+            "destination": "c:\\tmp\\sysprep.ps1",
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "file",
+            "source": "autounattend_sysprep.xml",
+            "destination": "c:\\tmp\\autounattend_sysprep.xml",
+            "only": ["virtualbox-iso","hyperv-iso"]
+        }
     ],
     "post-processors": [
         {
