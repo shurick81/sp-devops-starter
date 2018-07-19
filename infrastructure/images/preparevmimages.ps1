@@ -27,7 +27,7 @@ $imageNames | % {
                 Remove-Item "$imageName.box";
             }
             Write-Host "$(Get-Date) Starting packer";
-            packer build "$imageName.json"
+            packer build -only virtualbox-iso,hyperv-iso "$imageName.json"
             if ( Get-Item "$imageName.box" -ErrorAction Ignore ) {
                 Write-Host "$(Get-Date) Adding image to vagrant";
                 vagrant box add "$imageName.box" --name $imageName

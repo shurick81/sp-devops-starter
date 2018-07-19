@@ -51,7 +51,11 @@
             "script": "HyperV/integration.ps1",
             "only": ["hyperv-iso"]
         },
-        { "type": "powershell", "script": "rdpenable.ps1" },
+        {
+            "type": "powershell",
+            "script": "rdpenable.ps1",
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "sqlpsmodules.ps1" },

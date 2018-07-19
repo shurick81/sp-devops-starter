@@ -12,7 +12,7 @@
             "guest_additions_mode": "attach",
             "guest_os_type": "Windows2012_64",
             "headless": true,
-            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "vboxmanage": [
                 [ "modifyvm", "{{.Name}}", "--memory", "2048" ],
                 [ "modifyvm", "{{.Name}}", "--cpus", "8" ]
@@ -30,13 +30,39 @@
                 "win2012r2/Autounattend.xml",
                 "winrm.ps1"
             ],
-            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "ram_size": 2048,
             "cpu": 8,
             "switch_name": "Default Switch",
             "communicator": "winrm",
             "winrm_username": "administrator",
             "winrm_password": "Fractalsol"
+        },
+        {
+            "type": "azure-arm",
+        
+            "client_id": "{{user `client_id`}}",
+            "client_secret": "{{user `client_secret`}}",
+            "subscription_id": "{{user `subscription_id`}}",
+            "tenant_id": "{{user `tenant_id`}}",
+        
+            "managed_image_resource_group_name": "CommonRG",
+            "managed_image_name": "sp-win2012r2-ad",
+        
+            "os_type": "Windows",
+            "image_publisher": "MicrosoftWindowsServer",
+            "image_offer": "WindowsServer",
+            "image_sku": "2012-R2-Datacenter",
+        
+            "communicator": "winrm",
+            "winrm_use_ssl": "true",
+            "winrm_insecure": "true",
+            "winrm_timeout": "30m",
+            "winrm_username": "packer",
+        
+            "location": "South Central US",
+            "vm_size": "Standard_F2s",
+            "managed_image_storage_account_type": "Premium_LRS"
         }
     ],
     "provisioners": [
@@ -45,7 +71,11 @@
             "script": "VirtualBox/installadditions.ps1",
             "only": ["virtualbox-iso"]
         },
-        { "type": "powershell", "script": "rdpenable.ps1" },
+        {
+            "type": "powershell",
+            "script": "rdpenable.ps1",
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
         { "type": "powershell", "script": "wmf5.ps1",
             "elevated_user": "administrator", "elevated_password": "Fractalsol"
         },
@@ -58,7 +88,24 @@
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "adpsmodules.ps1" },
         { "type": "powershell", "script": "adbin.ps1" },
-        { "type": "powershell", "script": "waitforcpucalm.ps1" }
+        { "type": "powershell", "script": "waitforcpucalm.ps1" },
+        {
+            "type": "file",
+            "source": "sysprep.ps1",
+            "destination": "c:\\tmp\\sysprep.ps1",
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "file",
+            "source": "autounattend_sysprep.xml",
+            "destination": "c:\\tmp\\autounattend_sysprep.xml",
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "azure/sysprep.ps1",
+            "only": ["azure-arm"]
+        }
     ],
     "post-processors": [
         {

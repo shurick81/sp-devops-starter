@@ -13,7 +13,7 @@
             "guest_os_type": "Windows2012_64",
             "headless": true,
             "http_directory": "http",
-            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "disk_size": 102400,
             "vboxmanage": [
                 [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
@@ -34,7 +34,7 @@
                 "winrm.ps1"
             ],
             "http_directory": "http",
-            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "ram_size": 4096,
             "cpu": 8,
             "disk_size": 102400,
@@ -51,7 +51,11 @@
             "script": "VirtualBox/installadditions.ps1",
             "only": ["virtualbox-iso"]
         },
-        { "type": "powershell", "script": "rdpenable.ps1" },
+        {
+            "type": "powershell",
+            "script": "rdpenable.ps1",
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
         { "type": "powershell", "script": "wmf5.ps1",
             "elevated_user": "administrator", "elevated_password": "Fractalsol"
         },

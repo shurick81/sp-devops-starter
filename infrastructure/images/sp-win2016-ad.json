@@ -52,7 +52,11 @@
             "script": "HyperV/integration.ps1",
             "only": ["hyperv-iso"]
         },
-        { "type": "powershell", "script": "rdpenable.ps1" },
+        {
+            "type": "powershell",
+            "script": "rdpenable.ps1",
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "adpsmodules.ps1" },
@@ -61,12 +65,14 @@
         {
             "type": "file",
             "source": "sysprep.ps1",
-            "destination": "c:\\tmp\\sysprep.ps1"
+            "destination": "c:\\tmp\\sysprep.ps1",
+            "only": ["virtualbox-iso","hyperv-iso"]
         },
         {
             "type": "file",
             "source": "autounattend_sysprep.xml",
-            "destination": "c:\\tmp\\autounattend_sysprep.xml"
+            "destination": "c:\\tmp\\autounattend_sysprep.xml",
+            "only": ["virtualbox-iso","hyperv-iso"]
         }
     ],
     "post-processors": [

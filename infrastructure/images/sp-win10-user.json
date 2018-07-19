@@ -12,7 +12,7 @@
             "guest_additions_mode": "attach",
             "guest_os_type": "Windows10_64",
             "headless": "{{user `headless`}}",
-            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "disk_size": "{{user `disk_size`}}",
             "vboxmanage": [
                 [
@@ -43,7 +43,7 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_wait_timeout": "2h",
-            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "guest_os_type": "windows8srv-64",
             "tools_upload_flavor": "windows",
             "disk_size": "{{user `disk_size`}}",
@@ -70,7 +70,7 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_wait_timeout": "2h",
-            "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "guest_os_type": "win-10",
             "parallels_tools_flavor": "win",
             "disk_size": "{{user `disk_size`}}",
@@ -91,7 +91,25 @@
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "userpsmodules.ps1" },
         { "type": "powershell", "script": "userbin.ps1" },
-        { "type": "powershell", "script": "waitforcpucalm.ps1" }
+        { "type": "powershell", "script": "waitforcpucalm.ps1" },
+        {
+            "type": "file",
+            "source": "sysprep.ps1",
+            "destination": "c:\\tmp\\sysprep.ps1",
+            "only": ["virtualbox-iso","hyperv-iso","parallels-iso"]
+        },
+        {
+            "type": "file",
+            "source": "autounattend_sysprep.xml",
+            "destination": "c:\\tmp\\autounattend_sysprep.xml",
+            "only": ["virtualbox-iso","hyperv-iso","parallels-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "azure/sysprep.ps1",
+            "only": ["azure-arm"]
+        }
+
     ],
     "post-processors": [
         {

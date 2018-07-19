@@ -53,15 +53,27 @@ Reboot the machine: `shutdown /r`
 
 Configure external switch.
 
+### Azure RM
+
+1. Make sure you have storage account for saving images
+2. Create application and assign proper roles for managing Azure resources
+3. Set values for following variables:
+* ARM_CLIENT_ID
+* ARM_CLIENT_SECRET
+* ARM_SUBSCRIPTION_ID
+* ARM_TENANT_ID
+
+Use this instruction as a baseline: https://www.packer.io/docs/builders/azure-setup.html
+
 ## Usage
-Clone the project. For example, `git clone https://github.com/KentorIT/Unionen_Klubbwebb c:\projects\Unionen_Klubbwebb`
-Go to CI directory. For example, `cd c:\projects\Unionen_Klubbwebb\ci`
+Clone the project. For example, `git clone https://github.com/shurick81/sp-devops-starter c:\projects\sp-devops-starter`
+Go to CI directory. For example, `cd c:\projects\sp-devops-starter\ci`
 
 ### Image
 Create a box (virtual machine image):
 
 ```
-cd c:\projects\Unionen_Klubbwebb\ci\images
+cd c:\projects\sp-devops-starter\ci\images
 packer build centos7-ci.json
 ```
 
@@ -70,7 +82,7 @@ packer build centos7-ci.json
 Spin up a virtual machine from the boxes:
 
 ```
-cd c:\projects\Unionen_Klubbwebb\ci
+cd c:\projects\sp-devops-starter\ci
 vagrant up
 ```
 
