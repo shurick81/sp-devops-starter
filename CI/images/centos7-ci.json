@@ -254,7 +254,7 @@
     "iso_name": "CentOS-7-x86_64-DVD-1804.iso",
     "ks_path": "7/ks.cfg",
     "memory": "1024",
-    "mirror": "http://mirrors.kernel.org/centos",
+    "mirror": "https://mirrors.edge.kernel.org/centos",
     "mirror_directory": "7/isos/x86_64",
     "name": "centos-7.4",
     "no_proxy": "{{env `no_proxy`}}",
