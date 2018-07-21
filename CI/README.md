@@ -55,9 +55,10 @@ Configure external switch.
 
 ### Azure RM
 
-1. Make sure you have storage account for saving images
-2. Create application and assign proper roles for managing Azure resources
-3. Set values for following variables:
+1. `vagrant plugin install vagrant-azure`
+2. Make sure you have storage account for saving images
+3. Create application and assign proper roles for managing Azure resources
+4. Set values for following variables:
 * ARM_CLIENT_ID
 * ARM_CLIENT_SECRET
 * ARM_SUBSCRIPTION_ID
