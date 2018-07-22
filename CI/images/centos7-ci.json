@@ -192,7 +192,13 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "expect_disconnect": true,
       "scripts": [
-        "scripts/update.sh"
+        "scripts/update.sh",
+        "_common/sshd.sh",
+        "scripts/networking.sh",
+        "_common/vagrant.sh",
+        "_common/virtualbox.sh",
+        "_common/vmware.sh",
+        "_common/parallels.sh"
       ],
       "type": "shell"
     },
@@ -216,12 +222,6 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "expect_disconnect": true,
       "scripts": [
-        "_common/sshd.sh",
-        "scripts/networking.sh",
-        "_common/vagrant.sh",
-        "_common/virtualbox.sh",
-        "_common/vmware.sh",
-        "_common/parallels.sh",
         "scripts/cleanup.sh",
         "_common/minimize.sh"
       ],
@@ -235,7 +235,8 @@
       ],
       "inline_shebang": "/bin/sh -x",
       "type": "shell",
-      "skip_clean": true
+      "skip_clean": true,
+      "only": ["azure-arm"]
     }
   ],
   "variables": {

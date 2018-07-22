@@ -5,7 +5,7 @@
   vars:
     java_packages:
       - java-1.8.0-openjdk
-    jenkins_version: "2.63"
+    jenkins_version: "2.131"
     jenkins_http_port: 16080
     jenkins_slave_port: 16081
     jenkins_admin_username: admin
@@ -14,10 +14,10 @@
       - envinject
       - envinject-api
       - authentication-tokens
-      - blueocean
-      - bouncycastle-api
-      - branch-api
-      - cloudbees-folder
+    #  - blueocean
+    #  - bouncycastle-api
+    #  - branch-api
+    #  - cloudbees-folder
       - credentials-binding
       - credentials
       - display-url-api
