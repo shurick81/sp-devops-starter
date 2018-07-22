@@ -55,7 +55,7 @@ pipeline {
                     vagrant destroy DBWEBCODE01 --force;
                     if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* not created (*" } ) ) { Write-Host "DBWEBCODE01 is not destroyed"; exit 1 }
                     $env:SPDEVOPSSTARTER_VAGRANT_SPLABEL = "clean-2013";
-                    vagrant up;
+                    vagrant up --provider virtualbox;
                     if ( !( vagrant status | ? { $_ -like "AD01* running (*" } ) ) { Write-Host "AD01 is not running"; exit 1 }
                     if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* running (*" } ) ) { Write-Host "DBWEBCODE01 is not running"; exit 1 }
                 '''

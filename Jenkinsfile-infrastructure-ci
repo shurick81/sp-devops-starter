@@ -86,7 +86,7 @@ pipeline {
             steps {
                 echo 'Building farms'
                 powershell '''cd ci
-                    vagrant box remove file://./images/centos7-ci.box --force; vagrant up
+                    vagrant box remove file://./images/centos7-ci.box --force; vagrant up --provider virtualbox
                     if ( !( vagrant status | ? { $_ -like "default* running (*" } ) ) { exit 1 }
                     vagrant destroy --force
                     if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }
@@ -96,7 +96,7 @@ pipeline {
                     if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
                     if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* not created (*" } ) ) { Write-Host "DBWEBCODE01 is not destroyed"; exit 1 }
                     $env:SPDEVOPSSTARTER_VAGRANT_SPLABEL = "ci-2013";
-                    vagrant up;
+                    vagrant up --provider virtualbox;
                     if ( !( vagrant status | ? { $_ -like "AD01* running (*" } ) ) { Write-Host "AD01 is not running"; exit 1 }
                     if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* running (*" } ) ) { Write-Host "DBWEBCODE01 is not running"; exit 1 }
                 '''
