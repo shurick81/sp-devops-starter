@@ -33,6 +33,13 @@ try
                 PsDscRunAsCredential    = $UserCredential
             }
 
+            WindowsFeatureSet DomainFeatures
+            {
+                Name                    = @( "RSAT-DNS-Server", "RSAT-ADDS" )
+                Ensure                  = 'Present'
+                IncludeAllSubFeature    = $true
+            } 
+
         }
     }
 }

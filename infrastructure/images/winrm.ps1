@@ -25,4 +25,7 @@ Get-NetFirewallRule -Direction Inbound -Enabled False `
     | Where-Object {$winRmFirewallRuleNames -contains $_.Name} `
     | Set-NetFirewallRule -Enable True
 
-New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name LocalAccountTokenFilterPolicy -PropertyType DWord -Value 1
+Write-Host "PACKER_BUILDER_TYPE: $env:PACKER_BUILDER_TYPE"
+if ( !( $env:PACKER_BUILDER_TYPE -eq azure-arm ) ) {
+    New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name LocalAccountTokenFilterPolicy -PropertyType DWord -Value 1
+}
