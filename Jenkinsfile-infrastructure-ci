@@ -56,7 +56,7 @@ pipeline {
             }
             steps {
                 powershell '''cd ci/images;
-                    packer build -only virtualbox-iso,hyperv-iso, centos7-ci.json
+                    packer build -only virtualbox-iso,hyperv-iso centos7-ci.json
                     if ( !( Get-Item ./centos7-ci.box ) ) {
                         Write-Host "(Get-Date) ./centos7-ci.box is missing";
                         exit 1;
