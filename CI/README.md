@@ -12,7 +12,7 @@
 
 ### Windows Server 2016 / Windows 10
 in admin PowerShell run:
-```
+``` PowerShell
 Set-ExecutionPolicy Bypass -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install -y packer
@@ -66,6 +66,16 @@ Configure external switch.
 
 Use this instruction as a baseline: https://www.packer.io/docs/builders/azure-setup.html
 
+in admin PowerShell run:
+``` PowerShell
+Set-ExecutionPolicy Bypass -Force;
+iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+choco install -y packer
+choco install -y vagrant
+choco install -y git
+```
+
+
 ## Usage
 Clone the project. For example, `git clone https://github.com/shurick81/sp-devops-starter c:\projects\sp-devops-starter`
 
@@ -110,8 +120,8 @@ vagrant destroy --force
 vagrant up
 ```
 
-Updating pipelines:
-`vagrant up --provision`
+Updating pipelines in VirtualBox:
+`vagrant up --provision --provider virtualbox`
 
 
 
