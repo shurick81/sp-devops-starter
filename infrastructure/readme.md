@@ -70,21 +70,45 @@ choco install -y virtualbox
 ```
 For uninstalling VirtualBox, run `choco uninstall -y virtualbox`
 
+### Azure RM
+
+1. `vagrant plugin install vagrant-azure`
+2. Make sure you have storage account for saving images
+3. Create application and assign proper roles for managing Azure resources
+4. Set values for following variables:
+* ARM_CLIENT_ID
+* ARM_CLIENT_SECRET
+* ARM_SUBSCRIPTION_ID
+* ARM_TENANT_ID
+
+
+# Cloud dev machine
+If you want to use dev environment in the cloud, it makes sense to use cloud dev machine for running this solution from the cloud and avoid interruptions when your physical development machine is offline.
+
+## PowerShell
+
+`cd` to `images` directory and run `packer build env-win2016-dev.json`
+`vagrant box add azure https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box --provider azure`
+`cd` to `stacks/dev-env` directory and run `vagrant up` and then `vagrant rdp`
+
+This machine has all VM-management tools and dev tools pre-installed, so clone your project on it and run further commands from it. If you work for example from a laptop, then further commands will not be interrupted when you shut it down or disconnect from the network.
+
 # Creating a development environment
 
 ## PowerShell
 
-## SharePoint 2013
+### SharePoint 2013
 
 `cd` to `images` directory and run `.\preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web-code`
 `cd` to `stacks/dev-2013` directory and run `vagrant up`
 
-## SharePoint 2013
+### SharePoint 2016
 
 `cd` to `images` directory and run `.\preparevmimages.ps1 sp-win2016-ad,sp-win2016-db-web-code`
 `cd` to `stacks/dev-2016` directory and run `vagrant up`
 
 ### Hyper-V
+
 When running `vagrant up` you will be asked to choose the switch manually.
 if you encounter `The box is not able to report an address for WinRM to connect to yet.` exit, run `vagrant up` again.
 
@@ -96,7 +120,7 @@ vagrant up
 ```
 
 # Accessing the machine
-`vagrant rdp DBWEBCODE01`
+Open rdp://localhost:13391 with
 account: `contoso\_spadm16`
 pass: `c0mp1Expa~~`
 
