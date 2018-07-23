@@ -2,26 +2,27 @@ Vagrant.configure('2') do |config|
   config.vm.box = 'azure'
 
   config.vm.provider :azure do |azure, override|
-
-    # each of the below values will default to use the env vars named as below if not specified explicitly
     azure.tenant_id = ENV['ARM_TENANT_ID']
     azure.client_id = ENV['ARM_CLIENT_ID']
     azure.client_secret = ENV['ARM_CLIENT_SECRET']
     azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
-    # azure.vm_image = 'env-win2016-dev'
     azure.vm_managed_image_id = '/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/env-win2016-dev'
-    # azure.vm_vhd_uri = "https://commonstorsouthcentralus.blob.core.windows.net/system/Microsoft.Compute/Images/vmimages/env-win2016-dev-osDisk.5ae67658-0262-405e-8a84-eeaeb4b65507.vhd"
     azure.instance_ready_timeout = 600
     azure.location = 'WestUS2'
     azure.vm_size = 'Standard_DS1_v2'
-    azure.vm_operating_system = 'Windows'
-    azure.vm_name = 'envdev01'
-    azure.vm_password = 'TopSecretPassw0rd'
-    azure.admin_username = "OctoAdmin"
+    azure.admin_username = "vagrant"
+    azure.admin_password = "Vagrant365"
+    override.vm.guest = :windows
     override.winrm.transport = :ssl
     override.winrm.port = 5986
     override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
     override.vm.synced_folder ".", "/vagrant", disabled: true
+    override.vm.provision :shell, path: "../setazurevariables.ps1", env: {
+      "SPDEVOPSSTARTER_ARM_TENANT_ID" => ENV['ARM_TENANT_ID'],
+      "SPDEVOPSSTARTER_ARM_CLIENT_ID" => ENV['ARM_CLIENT_ID'],
+      "SPDEVOPSSTARTER_ARM_CLIENT_SECRET" => ENV['ARM_CLIENT_SECRET'],
+      "SPDEVOPSSTARTER_ARM_SUBSCRIPTION_ID" => ENV['ARM_SUBSCRIPTION_ID'],
+    }
   end
 
 end
