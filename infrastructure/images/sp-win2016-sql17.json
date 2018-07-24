@@ -62,7 +62,13 @@
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
         { "type": "powershell", "script": "sql2017media.ps1" },
         { "type": "powershell", "script": "sql2016bin.ps1" },
-        { "type": "powershell", "script": "sql2017mediaclean.ps1" },
+        {
+            "type": "powershell",
+            "script": "sql2017mediaclean.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
+            ]
+        },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
             "type": "file",

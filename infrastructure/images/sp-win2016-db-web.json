@@ -63,13 +63,25 @@
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
         { "type": "powershell", "script": "sql2016media.ps1" },
         { "type": "powershell", "script": "sql2016bin.ps1" },
-        { "type": "powershell", "script": "sql2016mediaclean.ps1" },
+        {
+            "type": "powershell",
+            "script": "sql2016mediaclean.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
+            ]
+        },
         { "type": "powershell", "script": "sp2016media.ps1" },
         { "type": "powershell", "script": "sp2016prebin.ps1" },
         { "type": "windows-restart" },
         { "type": "powershell", "script": "sp2016media.ps1" },
         { "type": "powershell", "script": "sp2016bin.ps1" },
-        { "type": "powershell", "script": "sp2016mediaclean.ps1" },
+        {
+            "type": "powershell",
+            "script": "sp2016mediaclean.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
+            ]
+        },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
             "type": "file",

@@ -60,7 +60,7 @@
             "winrm_timeout": "30m",
             "winrm_username": "packer",
         
-            "location": "South Central US",
+            "location": "WestUS2",
             "vm_size": "Standard_F2s",
             "managed_image_storage_account_type": "Premium_LRS"
         }

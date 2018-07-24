@@ -38,6 +38,33 @@
             "winrm_username": "administrator",
             "winrm_password": "Fractalsol",
             "winrm_timeout": "2h"
+        },
+        {
+            "type": "azure-arm",
+        
+            "client_id": "{{user `client_id`}}",
+            "client_secret": "{{user `client_secret`}}",
+            "subscription_id": "{{user `subscription_id`}}",
+            "tenant_id": "{{user `tenant_id`}}",
+        
+            "managed_image_resource_group_name": "CommonRG",
+            "managed_image_name": "sp-win2016-db-web-code",
+        
+            "os_type": "Windows",
+            "image_publisher": "MicrosoftWindowsServer",
+            "image_offer": "WindowsServer",
+            "image_sku": "2016-Datacenter",
+            "image_version": "latest",
+        
+            "communicator": "winrm",
+            "winrm_use_ssl": "true",
+            "winrm_insecure": "true",
+            "winrm_timeout": "30m",
+            "winrm_username": "packer",
+        
+            "location": "WestUS2",
+            "vm_size": "Standard_DS2_v2",
+            "managed_image_storage_account_type": "Premium_LRS"
         }
     ],
     "provisioners": [
@@ -56,6 +83,11 @@
             "script": "rdpenable.ps1",
             "only": ["virtualbox-iso","hyperv-iso"]
         },
+        {
+            "type": "powershell",
+            "script": "winrm.ps1",
+            "only": ["azure-arm"]
+        },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "sqlpsmodules.ps1" },
@@ -63,27 +95,69 @@
         { "type": "powershell", "script": "devpsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
         { "type": "powershell", "script": "sql2016media.ps1" },
+        {
+            "type": "powershell",
+            "script": "sql2016bin.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
+            ],
+            "only": ["azure-arm"]
+        },
+        {
+            "type": "windows-restart",
+            "only": ["azure-arm"]
+        },
+        {
+            "type": "powershell",
+            "script": "sql2016media.ps1",
+            "only": ["azure-arm"]
+        },
         { "type": "powershell", "script": "sql2016bin.ps1" },
-        { "type": "powershell", "script": "sql2016mediaclean.ps1" },
+        {
+            "type": "powershell",
+            "script": "sql2016mediaclean.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
+            ]
+        },
         { "type": "powershell", "script": "sp2016media.ps1" },
         { "type": "powershell", "script": "sp2016prebin.ps1" },
         { "type": "windows-restart" },
         { "type": "powershell", "script": "sp2016media.ps1" },
         { "type": "powershell", "script": "sp2016bin.ps1" },
-        { "type": "powershell", "script": "sp2016mediaclean.ps1" },
+        {
+            "type": "powershell",
+            "script": "sp2016mediaclean.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
+            ]
+        },
         {
             "type": "powershell",
             "script": "devmedia.ps1",
             "environment_vars": [
-                "SPDEVOPSSTARTER_LOCALVS=1"
-            ]
+                "SPDEVOPSSTARTER_LOCALVS=1",
+                "SPDEVOPSSTARTER_LOCALSSMS=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "devmedia.ps1",
+            "only": ["azure-arm"]
         },
         {
             "type": "powershell",
             "script": "devbin-1.ps1",
             "environment_vars": [
                 "SPDEVOPSSTARTER_LOCALVS=1"
-            ]
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "devbin-1.ps1",
+            "only": ["azure-arm"]
         },
         { "type": "windows-restart" },
         { "type": "powershell", "script": "devmediaclean.ps1" },
@@ -100,6 +174,11 @@
             "source": "autounattend_sysprep.xml",
             "destination": "c:\\tmp\\autounattend_sysprep.xml",
             "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "azure/sysprep.ps1",
+            "only": ["azure-arm"]
         }
     ],
     "post-processors": [
@@ -107,5 +186,11 @@
           "type": "vagrant",
           "output": "sp-win2016-db-web-code.box"
         }
-    ]
+    ],
+    "variables": {
+        "client_id": "{{env `ARM_CLIENT_ID`}}",
+        "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
+        "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
+        "tenant_id": "{{env `ARM_TENANT_ID`}}"
+    }
 }

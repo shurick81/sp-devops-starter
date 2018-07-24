@@ -42,13 +42,26 @@ try
 
             }
 
-            xRemoteFile SSMSMedia
+            if ( $env:SPDEVOPSSTARTER_LOCALVS -eq 1 )
             {
-                Uri             = "http://$env:PACKER_HTTP_ADDR/SSMS-Setup-ENU.exe"
-                DestinationPath = "C:\Install\SSMS-Setup-ENU.exe"
-                MatchSource     = $false
-            }
 
+                xRemoteFile SSMSMedia
+                {
+                    Uri             = "http://$env:PACKER_HTTP_ADDR/SSMS-Setup-ENU.exe"
+                    DestinationPath = "C:\Install\SSMS-Setup-ENU.exe"
+                    MatchSource     = $false
+                }
+
+            } else {
+
+                xRemoteFile SSMSMedia
+                {
+                    Uri             = "https://download.microsoft.com/download/C/3/D/C3DBFF11-C72E-429A-A861-4C316524368F/SSMS-Setup-ENU.exe"
+                    DestinationPath = "C:\Install\SSMS-Setup-ENU.exe"
+                    MatchSource     = $false
+                }
+
+            }
         }
     }
 }
@@ -84,22 +97,26 @@ catch
     $_.Exception.Message
     Exit 1;
 }
-Write-Host "$(Get-Date) Testing DSC"
-try {
-    $result = Test-DscConfiguration $configName -Verbose;
-    $inDesiredState = $result.InDesiredState;
-    $failed = $false;
-    $inDesiredState | % {
-        if ( !$_ ) {
-            Write-Host "$(Get-Date) Test failed"
-            Exit 1;
+if ( $env:SPDEVOPSSTARTER_NODSCTEST -ne "TRUE" )
+{
+    Write-Host "$(Get-Date) Testing DSC"
+    try {
+        $result = Test-DscConfiguration $configName -Verbose;
+        $inDesiredState = $result.InDesiredState;
+        $failed = $false;
+        $inDesiredState | % {
+            if ( !$_ ) {
+                Write-Host "$(Get-Date) Test failed"
+                Exit 1;
+            }
         }
     }
-}
-catch {
-    Write-Host "$(Get-Date) Exception in testing DCS:"
-    $_.Exception.Message
-    Exit 1;
+    catch {
+        Write-Host "$(Get-Date) Exception in testing DCS:"
+        $_.Exception.Message
+        Exit 1;
+    }
+} else {
+    Write-Host "$(Get-Date) Skipping tests"
 }
 Exit 0;
-        

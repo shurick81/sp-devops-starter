@@ -41,7 +41,7 @@ try
             SQLSetup SQLSetup
             {
                 InstanceName            = "SPIntra01"
-                SourcePath              = "F:\"
+                SourcePath              = "S:\"
                 Features                = "SQLENGINE,FULLTEXT"
                 InstallSharedDir        = "C:\Program Files\Microsoft SQL Server\SPIntra01"
                 SQLSysAdminAccounts     = "BUILTIN\Administrators"
@@ -97,21 +97,26 @@ catch
     $_.Exception.Message
     Exit 1;
 }
-Write-Host "$(Get-Date) Testing DSC"
-try {
-    $result = Test-DscConfiguration $configName -Verbose;
-    $inDesiredState = $result.InDesiredState;
-    $failed = $false;
-    $inDesiredState | % {
-        if ( !$_ ) {
-            Write-Host "$(Get-Date) Test failed"
-            Exit 1;
+if ( $env:SPDEVOPSSTARTER_NODSCTEST -ne "TRUE" )
+{
+    Write-Host "$(Get-Date) Testing DSC"
+    try {
+        $result = Test-DscConfiguration $configName -Verbose;
+        $inDesiredState = $result.InDesiredState;
+        $failed = $false;
+        $inDesiredState | % {
+            if ( !$_ ) {
+                Write-Host "$(Get-Date) Test failed"
+                Exit 1;
+            }
         }
     }
-}
-catch {
-    Write-Host "$(Get-Date) Exception in testing DCS:"
-    $_.Exception.Message
-    Exit 1;
+    catch {
+        Write-Host "$(Get-Date) Exception in testing DCS:"
+        $_.Exception.Message
+        Exit 1;
+    }
+} else {
+    Write-Host "$(Get-Date) Skipping tests"
 }
 Exit 0;
