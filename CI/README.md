@@ -20,7 +20,7 @@ choco install -y vagrant
 choco install -y git
 ```
 
-For VirtualBox, run `choco install -y virtualbox`
+For VirtualBox, run `choco install -y virtualbox --version 5.2.14`
 For Hyper-V, run:
 ```
 Enable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V -All
@@ -74,10 +74,11 @@ choco install -y packer
 choco install -y vagrant
 choco install -y git
 ```
-
+if Vagrant requires reboot, do it before proceeding further.
 
 ## Usage
 Clone the project. For example, `git clone https://github.com/shurick81/sp-devops-starter c:\projects\sp-devops-starter`
+Consider changing branch to the one you need at the moment.
 
 ### Image
 
@@ -85,13 +86,13 @@ Create a box (virtual machine image) locally:
 
 ```
 cd c:\projects\sp-devops-starter\ci\images
-packer build -only virtualbox-iso,hyperv-iso centos7-ci.json 
+packer build -only virtualbox-iso,hyperv-iso centos7-ci.json
 ```
 
 or in the cloud:
 ```
 cd c:\projects\sp-devops-starter\ci\images
-packer build -only azure-arm centos7-ci.json 
+packer build -only azure-arm centos7-ci.json
 ```
 
 ### VM
@@ -106,24 +107,39 @@ vagrant up --provider virtualbox
 Or in Azure
 ```
 cd c:\projects\sp-devops-starter\ci
+vagrant box add azure https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box --provider azure
 vagrant up --provider azure
 ```
 
 ### Rerunning
+
+Locally:
 ```
 del centos7-ci.box
-packer build centos7-ci.json
-vagrant box remove file://./images/centos7-ci.box --force
+packer build -only virtualbox-iso,hyperv-iso centos7-ci.json
+vagrant box remove file://./images/centos7-ci.box --force --provider virtualbox-iso
 ```
 ```
 vagrant destroy --force
-vagrant up
+vagrant up --provider virtualbox
 ```
+
+In Azure:
+Remove image, then
+```
+cd c:\projects\sp-devops-starter\ci\images
+packer build -only azure-arm centos7-ci.json
+```
+```
+cd c:\projects\sp-devops-starter\ci
+vagrant destroy --force
+vagrant box add azure https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box --provider azure
+vagrant up --provider azure
+```
+
 
 Updating pipelines in VirtualBox:
 `vagrant up --provision --provider virtualbox`
-
-
 
 
 # CI/CD SharePoint agent
@@ -186,6 +202,13 @@ cd c:\projects\sp-devops-starter\CI
 Remove-Item C:\sp-onprem-files\VS2017 -Recurse -Force
 ```
 2. Close the PowerShell console.
+
+### Cloud dev machine
+
+```PowerShell
+choco install -y jre8;
+```
+close the window.
 
 ## Connecting hypervisor manager slave
 It might be wise to run the following snippet in a separate console in order to continue controlling vagrant.

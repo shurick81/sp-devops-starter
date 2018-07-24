@@ -66,7 +66,7 @@ Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-All
 
 ### (alernatively) Installing VirtualBox on Windows
 ```
-choco install -y virtualbox
+choco install -y virtualbox --version 5.2.14
 ```
 For uninstalling VirtualBox, run `choco uninstall -y virtualbox`
 
@@ -81,17 +81,46 @@ For uninstalling VirtualBox, run `choco uninstall -y virtualbox`
 * ARM_SUBSCRIPTION_ID
 * ARM_TENANT_ID
 
+in admin PowerShell run:
+``` PowerShell
+Set-ExecutionPolicy Bypass -Force;
+iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+choco install -y packer
+choco install -y git
+choco install -y vagrant
+```
+If Vafrant package needs a reboot, do it before proceeding further.
+
+```PowerShell
+vagrant plugin install vagrant-azure;
+Rename-Item -Path C:\Users\vagrant\.vagrant.d\gems\2.4.4\gems\vagrant-azure-2.0.0 -NewName "vagrant-azure-2.0.0 - Copy";
+git clone https://github.com/shurick81/vagrant-azure C:\Users\vagrant\.vagrant.d\gems\2.4.4\gems\vagrant-azure-2.0.0;
+```
 
 # Cloud dev machine
 If you want to use dev environment in the cloud, it makes sense to use cloud dev machine for running this solution from the cloud and avoid interruptions when your physical development machine is offline.
+
+Before these steps, you need to prepare all Azure RM prerequisites.
 
 ## PowerShell
 
 `cd` to `images` directory and run `packer build env-win2016-dev.json`
 `vagrant box add azure https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box --provider azure`
-`cd` to `stacks/dev-env` directory and run `vagrant up` and then `vagrant rdp`
+`cd` to `stacks/dev-env` directory and run `vagrant up`
+now you can connect to this Azure VM via `vagrant` `Vagrant365` credentials.
 
-This machine has all VM-management tools and dev tools pre-installed, so clone your project on it and run further commands from it. If you work for example from a laptop, then further commands will not be interrupted when you shut it down or disconnect from the network.
+On this machine, run following commands:
+```PowerShell
+vagrant plugin install vagrant-azure;
+Rename-Item -Path C:\Users\vagrant\.vagrant.d\gems\2.4.4\gems\vagrant-azure-2.0.0 -NewName "vagrant-azure-2.0.0 - Copy";
+git clone https://github.com/shurick81/vagrant-azure C:\Users\vagrant\.vagrant.d\gems\2.4.4\gems\vagrant-azure-2.0.0;
+```
+
+This machine has all VM-management tools and dev tools pre-installed, so clone your project on it and run further commands from it.
+```
+git clone https://github.com/shurick81/sp-devops-starter c:\projects\sp-devops-starter
+```
+If you work for example from a laptop, then further commands will not be interrupted when you shut it down or disconnect from the network.
 
 # Creating a development environment
 
