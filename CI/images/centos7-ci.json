@@ -170,9 +170,8 @@
       "image_version": "latest",
       "ssh_pty": "true",
   
-      "location": "South Central US",
-      "vm_size": "Standard_F2s",
-      "managed_image_storage_account_type": "Premium_LRS"
+      "location": "WestUS2",
+      "vm_size": "Basic_A2"
     }
   ],
   "post-processors": [
@@ -195,12 +194,54 @@
         "scripts/update.sh",
         "_common/sshd.sh",
         "scripts/networking.sh",
-        "_common/vagrant.sh",
-        "_common/virtualbox.sh",
-        "_common/vmware.sh",
-        "_common/parallels.sh"
+        "_common/vagrant.sh"
       ],
       "type": "shell"
+    },
+    {
+      "environment_vars": [
+        "HOME_DIR=/home/vagrant",
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "expect_disconnect": true,
+      "scripts": [
+        "_common/virtualbox.sh"
+      ],
+      "type": "shell",
+      "only": ["virtualbox-iso"]
+    },
+    {
+      "environment_vars": [
+        "HOME_DIR=/home/vagrant",
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "expect_disconnect": true,
+      "scripts": [
+        "_common/vmware.sh"
+      ],
+      "type": "shell",
+      "only": ["vmware-iso"]
+    },
+    {
+      "environment_vars": [
+        "HOME_DIR=/home/vagrant",
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "expect_disconnect": true,
+      "scripts": [
+        "_common/parallels.sh"
+      ],
+      "type": "shell",
+      "only": ["parallels-iso"]
     },
     {
       "type": "file",
@@ -222,15 +263,14 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "expect_disconnect": true,
       "scripts": [
-        "scripts/cleanup.sh",
-        "_common/minimize.sh"
+        "scripts/cleanup.sh"
       ],
-      "type": "shell"
+      "type": "shell",
+      "only": ["virtualbox-iso", "vmware-iso", "parallels-iso", "hyperv-iso"]
     },
     {
-      "execute_command": "echo '{{user `ssh_pass`}}' | {{ .Vars }} sudo -S -E sh '{{ .Path }}'",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh '{{.Path}}'",
       "inline": [
-        "yum update -y",
         "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
       ],
       "inline_shebang": "/bin/sh -x",
@@ -257,7 +297,7 @@
     "memory": "1024",
     "mirror": "http://mirrors.kernel.org/centos",
     "mirror_directory": "7.5.1804/isos/x86_64",
-    "name": "centos-7.4",
+    "name": "centos-7.5",
     "no_proxy": "{{env `no_proxy`}}",
     "template": "centos7-ci",
     "version": "TIMESTAMP",

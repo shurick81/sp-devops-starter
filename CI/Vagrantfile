@@ -19,8 +19,9 @@ Vagrant.configure(2) do |config|
     azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
     azure.vm_managed_image_id = '/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/centos7-ci'
     azure.vm_name = 'spdvpsstrtrci'
-    azure.location = 'South Central US'
-    azure.vm_size = 'Standard_F2s'
+    azure.location = 'WestUS2'
+    azure.vm_size = 'Standard_B1s'
+    azure.vm_storage_account_type = 'Standard_LRS'
     azure.wait_for_destroy = true
     azure.tcp_endpoints = ['16080', '16081']
     override.vm.box = "azure"
