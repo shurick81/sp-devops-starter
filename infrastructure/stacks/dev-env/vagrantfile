@@ -9,7 +9,8 @@ Vagrant.configure('2') do |config|
     azure.vm_managed_image_id = '/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/env-win2016-dev'
     azure.instance_ready_timeout = 600
     azure.location = 'WestUS2'
-    azure.vm_size = 'Standard_DS1_v2'
+    azure.vm_size = 'Standard_B2s'
+    azure.vm_storage_account_type = 'Standard_LRS'
     azure.admin_username = "vagrant"
     azure.admin_password = "Vagrant365"
     override.vm.guest = :windows
