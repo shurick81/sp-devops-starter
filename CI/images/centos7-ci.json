@@ -166,7 +166,7 @@
       "os_type": "Linux",
       "image_publisher": "OpenLogic",
       "image_offer": "CentOS",
-      "image_sku": "7.4",
+      "image_sku": "7.5",
       "image_version": "latest",
       "ssh_pty": "true",
   
@@ -263,7 +263,8 @@
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "expect_disconnect": true,
       "scripts": [
-        "scripts/cleanup.sh"
+        "scripts/cleanup.sh",
+        "_common/minimize.sh"
       ],
       "type": "shell",
       "only": ["virtualbox-iso", "vmware-iso", "parallels-iso", "hyperv-iso"]
