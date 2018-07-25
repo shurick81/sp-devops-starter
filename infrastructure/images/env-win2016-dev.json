@@ -35,8 +35,6 @@
     { "type": "powershell", "script": "basepsmodules.ps1" },
     { "type": "powershell", "script": "envdevpsmodules.ps1" },
     { "type": "powershell", "script": "envdevbin-1.ps1" },
-    { "type": "windows-restart" },
-    { "type": "powershell", "script": "envdevbin-2.ps1" },
     {
       "type": "powershell",
       "script": "azure/sysprep.ps1",
