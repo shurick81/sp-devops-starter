@@ -15,7 +15,7 @@
             "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "vboxmanage": [
                 [ "modifyvm", "{{.Name}}", "--memory", "2048" ],
-                [ "modifyvm", "{{.Name}}", "--cpus", "8" ]
+                [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
             ],
             "communicator": "winrm",
             "winrm_username": "administrator",
@@ -33,7 +33,7 @@
             ],
             "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "ram_size": 2048,
-            "cpu": 8,
+            "cpu": 4,
             "switch_name": "Default Switch",
             "communicator": "winrm",
             "winrm_username": "administrator",

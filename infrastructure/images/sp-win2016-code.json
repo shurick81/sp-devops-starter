@@ -35,7 +35,7 @@
             "http_directory": "http",
             "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "ram_size": 4096,
-            "cpu": 8,
+            "cpu": 4,
             "switch_name": "Default Switch",
             "communicator": "winrm",
             "winrm_username": "administrator",

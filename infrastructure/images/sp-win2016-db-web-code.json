@@ -16,7 +16,7 @@
             "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
             "vboxmanage": [
                 [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
-                [ "modifyvm", "{{.Name}}", "--cpus", "8" ]
+                [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
             ],
             "communicator": "winrm",
             "winrm_username": "administrator",
@@ -34,6 +34,8 @@
             ],
             "http_directory": "http",
             "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
+            "ram_size": 4096,
+            "cpu": 4,
             "communicator": "winrm",
             "winrm_username": "administrator",
             "winrm_password": "Fractalsol",
