@@ -24,6 +24,7 @@ Vagrant.configure('2') do |config|
       "SPDEVOPSSTARTER_ARM_CLIENT_SECRET" => ENV['ARM_CLIENT_SECRET'],
       "SPDEVOPSSTARTER_ARM_SUBSCRIPTION_ID" => ENV['ARM_SUBSCRIPTION_ID'],
     }
+    override.vm.provision :shell, path: "../vagrantplugins.ps1"
   end
 
 end
