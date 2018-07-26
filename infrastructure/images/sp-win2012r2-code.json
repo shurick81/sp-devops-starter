@@ -79,7 +79,11 @@
             "only": ["virtualbox-iso", "hyperv-iso"]
         },
         { "type": "powershell", "script": "wmf5.ps1",
-            "elevated_user": "vagrant", "elevated_password": "Fractalsol365"
+            "elevated_user": "vagrant", "elevated_password": "Fractalsol365",
+            "only": ["virtualbox-iso", "hyperv-iso"]
+        },
+        { "type": "powershell", "script": "wmf5.ps1",
+            "only": ["azure-arm"]
         },
         {
             "type": "powershell",

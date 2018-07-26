@@ -160,7 +160,7 @@
                     <PlainText>true</PlainText>
                 </Password>
                 <Enabled>true</Enabled>
-                <Username>administrator</Username>
+                <Username>vagrant</Username>
             </AutoLogon>
             <RegisteredOwner />
             <TimeZone>Coordinated Universal Time</TimeZone>

@@ -92,7 +92,7 @@
                     <PlainText>true</PlainText>
                 </Password>
                 <Enabled>true</Enabled>
-                <Username>administrator</Username>
+                <Username>vagrant</Username>
             </AutoLogon>
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">
