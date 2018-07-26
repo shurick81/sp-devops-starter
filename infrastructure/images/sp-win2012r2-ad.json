@@ -18,8 +18,8 @@
                 [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
             ],
             "communicator": "winrm",
-            "winrm_username": "administrator",
-            "winrm_password": "Fractalsol"
+            "winrm_username": "vagrant",
+            "winrm_password": "Fractalsol365"
         },
         {
             "type": "hyperv-iso",
@@ -35,8 +35,8 @@
             "cpu": 4,
             "switch_name": "Default Switch",
             "communicator": "winrm",
-            "winrm_username": "administrator",
-            "winrm_password": "Fractalsol"
+            "winrm_username": "vagrant",
+            "winrm_password": "Fractalsol365"
         },
         {
             "type": "azure-arm",
@@ -52,7 +52,8 @@
             "os_type": "Windows",
             "image_publisher": "MicrosoftWindowsServer",
             "image_offer": "WindowsServer",
-            "image_sku": "2012-R2-Datacenter",
+            "image_sku": "2016-Datacenter-smalldisk",
+            "image_version": "latest",
         
             "communicator": "winrm",
             "winrm_use_ssl": "true",
@@ -74,15 +75,18 @@
         {
             "type": "powershell",
             "script": "rdpenable.ps1",
-            "only": ["virtualbox-iso","hyperv-iso"]
+            "only": ["virtualbox-iso", "hyperv-iso"]
         },
-        { "type": "powershell", "script": "wmf5.ps1",
-            "elevated_user": "administrator", "elevated_password": "Fractalsol"
-        },
+        { "type": "powershell", "script": "wmf5.ps1" },
         {
             "type": "powershell",
             "inline": "Write-Host 'Canary script just for pause after wmf5 installation'",
             "pause_before": "10m"
+        },
+        {
+            "type": "powershell",
+            "script": "winrm.ps1",
+            "only": ["azure-arm"]
         },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
@@ -112,5 +116,11 @@
           "type": "vagrant",
           "output": "sp-win2012r2-ad.box"
         }
-    ]
+    ],
+    "variables": {
+        "client_id": "{{env `ARM_CLIENT_ID`}}",
+        "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
+        "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
+        "tenant_id": "{{env `ARM_TENANT_ID`}}"
+    }
 }

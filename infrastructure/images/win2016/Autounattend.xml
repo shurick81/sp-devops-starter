@@ -124,13 +124,13 @@ This file automates the Windows installation.
             </OOBE>
             <UserAccounts>
                 <AdministratorPassword>
-                    <Value>Fractalsol</Value>
+                    <Value>Fractalsol365</Value>
                     <PlainText>true</PlainText>
                 </AdministratorPassword>
             </UserAccounts>
             <AutoLogon>
                 <Password>
-                    <Value>Fractalsol</Value>
+                    <Value>Fractalsol365</Value>
                     <PlainText>true</PlainText>
                 </Password>
                 <Enabled>true</Enabled>

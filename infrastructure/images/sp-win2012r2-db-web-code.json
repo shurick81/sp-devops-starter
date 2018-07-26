@@ -20,8 +20,8 @@
                 [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
             ],
             "communicator": "winrm",
-            "winrm_username": "administrator",
-            "winrm_password": "Fractalsol",
+            "winrm_username": "vagrant",
+            "winrm_password": "Fractalsol365",
             "winrm_timeout": "2h"
         },
         {
@@ -40,8 +40,8 @@
             "disk_size": 102400,
             "switch_name": "Default Switch",
             "communicator": "winrm",
-            "winrm_username": "administrator",
-            "winrm_password": "Fractalsol",
+            "winrm_username": "vagrant",
+            "winrm_password": "Fractalsol365",
             "winrm_timeout": "2h"
         }
     ],
@@ -57,7 +57,7 @@
             "only": ["virtualbox-iso","hyperv-iso"]
         },
         { "type": "powershell", "script": "wmf5.ps1",
-            "elevated_user": "administrator", "elevated_password": "Fractalsol"
+            "elevated_user": "vagrant", "elevated_password": "Fractalsol365"
         },
         {
             "type": "powershell",

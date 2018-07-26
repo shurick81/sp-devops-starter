@@ -38,7 +38,7 @@ catch
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
-$securedPassword = ConvertTo-SecureString "Fractalsol" -AsPlainText -Force
+$securedPassword = ConvertTo-SecureString "Fractalsol365" -AsPlainText -Force
 Write-Host "$(Get-Date) Compiling DSC"
 try
 {

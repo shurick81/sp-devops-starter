@@ -30,8 +30,25 @@
             ],
             "boot_wait": "2m",
             "communicator": "winrm",
-            "winrm_username": "administrator",
-            "winrm_password": "Fractalsol"
+            "winrm_username": "vagrant",
+            "winrm_password": "Fractalsol365"
+        },
+        {
+            "type": "hyperv-iso",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_url": "{{user `iso_url`}}",
+            "floppy_files": [
+                "{{user `autounattend`}}",
+                "winrm.ps1"
+            ],
+            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
+            "ram_size": "{{user `memory_size`}}",
+            "cpu": "{{user `cpus`}}",
+            "switch_name": "Default Switch",
+            "communicator": "winrm",
+            "winrm_username": "vagrant",
+            "winrm_password": "Fractalsol365"
         },
         {
             "type": "vmware-iso",
@@ -78,6 +95,33 @@
                 "{{user `autounattend`}}",
                 "winrm.ps1"
             ]
+        },
+        {
+            "type": "azure-arm",
+        
+            "client_id": "{{user `client_id`}}",
+            "client_secret": "{{user `client_secret`}}",
+            "subscription_id": "{{user `subscription_id`}}",
+            "tenant_id": "{{user `tenant_id`}}",
+        
+            "managed_image_resource_group_name": "CommonRG",
+            "managed_image_name": "sp-win10-user",
+        
+            "os_type": "Windows",
+            "image_publisher": "MicrosoftWindowsDesktop",
+            "image_offer": "Windows-10",
+            "image_sku": "RS4-Pro",
+            "image_version": "latest",
+        
+            "communicator": "winrm",
+            "winrm_use_ssl": "true",
+            "winrm_insecure": "true",
+            "winrm_timeout": "30m",
+            "winrm_username": "packer",
+        
+            "location": "WestUS2",
+            "vm_size": "Standard_F2s",
+            "managed_image_storage_account_type": "Premium_LRS"
         }
     ],
     "provisioners": [
@@ -86,7 +130,21 @@
             "script": "VirtualBox/installadditions.ps1",
             "only": ["virtualbox-iso"]
         },
-        { "type": "powershell", "script": "rdpenable.ps1" },
+        {
+            "type": "powershell",
+            "script": "HyperV/integration.ps1",
+            "only": ["hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "rdpenable.ps1",
+            "only": ["virtualbox-iso", "hyperv-iso", "vmware-iso", "parallels-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "winrm.ps1",
+            "only": ["azure-arm"]
+        },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "userpsmodules.ps1" },
@@ -96,13 +154,13 @@
             "type": "file",
             "source": "sysprep.ps1",
             "destination": "c:\\tmp\\sysprep.ps1",
-            "only": ["virtualbox-iso","hyperv-iso","parallels-iso"]
+            "only": ["virtualbox-iso", "hyperv-iso", "vmware-iso", "parallels-iso"]
         },
         {
             "type": "file",
             "source": "autounattend_sysprep.xml",
             "destination": "c:\\tmp\\autounattend_sysprep.xml",
-            "only": ["virtualbox-iso","hyperv-iso","parallels-iso"]
+            "only": ["virtualbox-iso", "hyperv-iso", "vmware-iso", "parallels-iso"]
         },
         {
             "type": "powershell",
@@ -125,6 +183,10 @@
         "headless": "true",
         "cpus": "4",
         "memory_size": "2048",
-        "disk_size": "61440"
+        "disk_size": "61440",
+        "client_id": "{{env `ARM_CLIENT_ID`}}",
+        "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
+        "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
+        "tenant_id": "{{env `ARM_TENANT_ID`}}"
     }
 }

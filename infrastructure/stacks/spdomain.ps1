@@ -42,8 +42,8 @@ $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 
-$securedPassword = ConvertTo-SecureString "Fractalsol" -AsPlainText -Force
-$ShortDomainAdminCredential = New-Object System.Management.Automation.PSCredential( "administrator", $securedPassword )
+$securedPassword = ConvertTo-SecureString "Fractalsol365" -AsPlainText -Force
+$ShortDomainAdminCredential = New-Object System.Management.Automation.PSCredential( "vagrant", $securedPassword )
 $securedPassword = ConvertTo-SecureString "sUp3rcomp1eX" -AsPlainText -Force
 $DomainSafeModeAdministratorPasswordCredential = New-Object System.Management.Automation.PSCredential( "fakeaccount", $securedPassword )
 Write-Host "$(Get-Date) Compiling DSC"
