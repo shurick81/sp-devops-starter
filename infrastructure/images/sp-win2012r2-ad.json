@@ -77,7 +77,13 @@
             "script": "rdpenable.ps1",
             "only": ["virtualbox-iso", "hyperv-iso"]
         },
-        { "type": "powershell", "script": "wmf5.ps1" },
+        { "type": "powershell", "script": "wmf5.ps1",
+            "elevated_user": "vagrant", "elevated_password": "Fractalsol365",
+            "only": ["virtualbox-iso", "hyperv-iso"]
+        },
+        { "type": "powershell", "script": "wmf5.ps1",
+            "only": ["azure-arm"]
+        },
         {
             "type": "powershell",
             "inline": "Write-Host 'Canary script just for pause after wmf5 installation'",
