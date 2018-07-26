@@ -8,8 +8,9 @@ param(
 [Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem") | Out-Null;
 
 $config = Get-Content -Raw -Path $ConFigFile | ConvertFrom-Json;
-"sql", "sp", "vs", "ssms" | % {
+@( "sql", "sp", "vs", "ssms" ) | % {
     $key = $_;
+    Write-Host "$(Get-Date) Checking $key in configuration document";
     if ( $config.$key )
     {
         Write-Host "$(Get-Date) Processing $key media";
@@ -105,5 +106,7 @@ $config = Get-Content -Raw -Path $ConFigFile | ConvertFrom-Json;
         {
             Exit 1;
         }
+    } else {
+        Write-Host "$(Get-Date) Skipping $key media because it is missing in configuration document";
     }
 }
