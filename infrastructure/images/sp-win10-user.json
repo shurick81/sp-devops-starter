@@ -6,7 +6,7 @@
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
             "iso_url": "{{user `iso_url`}}",
             "floppy_files": [
-                "win2012r2/Autounattend.xml",
+                "{{user `autounattend`}}",
                 "winrm.ps1",
                 "sysprep.bat",
                 "autounattend_sysprep.xml"
@@ -41,7 +41,7 @@
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
             "iso_url": "{{user `iso_url`}}",
             "floppy_files": [
-                "win2012r2/Autounattend.xml",
+                "{{user `autounattend`}}",
                 "winrm.ps1",
                 "sysprep.bat",
                 "autounattend_sysprep.xml"
@@ -72,7 +72,9 @@
             "vnc_port_max": 5980,
             "floppy_files": [
                 "{{user `autounattend`}}",
-                "winrm.ps1"
+                "winrm.ps1",
+                "sysprep.bat",
+                "autounattend_sysprep.xml"
             ],
             "vmx_data": {
                 "RemoteDisplay.vnc.enabled": "false",
@@ -97,7 +99,9 @@
             "disk_size": "{{user `disk_size`}}",
             "floppy_files": [
                 "{{user `autounattend`}}",
-                "winrm.ps1"
+                "winrm.ps1",
+                "sysprep.bat",
+                "autounattend_sysprep.xml"
             ]
         },
         {
@@ -159,7 +163,6 @@
             "script": "azure/sysprep.ps1",
             "only": ["azure-arm"]
         }
-
     ],
     "post-processors": [
         {
