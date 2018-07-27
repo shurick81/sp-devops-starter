@@ -49,7 +49,7 @@
             "tenant_id": "{{user `tenant_id`}}",
         
             "managed_image_resource_group_name": "CommonRG",
-            "managed_image_name": "sp-win2012r2-ad",
+            "managed_image_name": "sp-win2012r2-code",
         
             "os_type": "Windows",
             "image_publisher": "MicrosoftWindowsServer",
@@ -103,15 +103,28 @@
             "type": "powershell",
             "script": "devmedia.ps1",
             "environment_vars": [
-                "SPDEVOPSSTARTER_LOCALVS=1"
-            ]
+                "SPDEVOPSSTARTER_LOCALVS=1",
+                "SPDEVOPSSTARTER_LOCALSSMS=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "devmedia.ps1",
+            "only": ["azure-arm"]
         },
         {
             "type": "powershell",
             "script": "devbin-1.ps1",
             "environment_vars": [
                 "SPDEVOPSSTARTER_LOCALVS=1"
-            ]
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "devbin-1.ps1",
+            "only": ["azure-arm"]
         },
         { "type": "windows-restart" },
         { "type": "powershell", "script": "devmediaclean.ps1" },
@@ -128,6 +141,11 @@
             "source": "autounattend_sysprep.xml",
             "destination": "c:\\tmp\\autounattend_sysprep.xml",
             "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "azure/sysprep.ps1",
+            "only": ["azure-arm"]
         }
     ],
     "post-processors": [
@@ -135,5 +153,11 @@
           "type": "vagrant",
           "output": "sp-win2012r2-code.box"
         }
-    ]
+    ],
+    "variables": {
+        "client_id": "{{env `ARM_CLIENT_ID`}}",
+        "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
+        "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
+        "tenant_id": "{{env `ARM_TENANT_ID`}}"
+    }
 }
