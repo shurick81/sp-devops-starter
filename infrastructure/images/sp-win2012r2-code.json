@@ -7,13 +7,15 @@
             "iso_url": "https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
             "floppy_files": [
                 "win2012r2/Autounattend.xml",
-                "winrm.ps1"
+                "winrm.ps1",
+                "sysprep.bat",
+                "autounattend_sysprep.xml"
             ],
             "guest_additions_mode": "attach",
             "guest_os_type": "Windows2012_64",
             "headless": true,
             "http_directory": "http",
-            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
+            "shutdown_command": "a:/sysprep.bat",
             "vboxmanage": [
                 [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
                 [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
@@ -29,10 +31,12 @@
             "iso_url": "https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
             "floppy_files": [
                 "win2012r2/Autounattend.xml",
-                "winrm.ps1"
+                "winrm.ps1",
+                "sysprep.bat",
+                "autounattend_sysprep.xml"
             ],
             "http_directory": "http",
-            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
+            "shutdown_command": "a:/sysprep.bat",
             "ram_size": 4096,
             "cpu": 4,
             "switch_name": "Default Switch",
@@ -130,18 +134,6 @@
         { "type": "powershell", "script": "devmediaclean.ps1" },
         { "type": "powershell", "script": "devbin-2.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
-        {
-            "type": "file",
-            "source": "sysprep.ps1",
-            "destination": "c:\\tmp\\sysprep.ps1",
-            "only": ["virtualbox-iso","hyperv-iso"]
-        },
-        {
-            "type": "file",
-            "source": "autounattend_sysprep.xml",
-            "destination": "c:\\tmp\\autounattend_sysprep.xml",
-            "only": ["virtualbox-iso","hyperv-iso"]
-        },
         {
             "type": "powershell",
             "script": "azure/sysprep.ps1",

@@ -6,13 +6,15 @@
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
             "iso_url": "{{user `iso_url`}}",
             "floppy_files": [
-                "{{user `autounattend`}}",
-                "winrm.ps1"
+                "win2012r2/Autounattend.xml",
+                "winrm.ps1",
+                "sysprep.bat",
+                "autounattend_sysprep.xml"
             ],
             "guest_additions_mode": "attach",
             "guest_os_type": "Windows10_64",
             "headless": "{{user `headless`}}",
-            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
+            "shutdown_command": "a:/sysprep.bat",
             "disk_size": "{{user `disk_size`}}",
             "vboxmanage": [
                 [
@@ -39,10 +41,12 @@
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
             "iso_url": "{{user `iso_url`}}",
             "floppy_files": [
-                "{{user `autounattend`}}",
-                "winrm.ps1"
+                "win2012r2/Autounattend.xml",
+                "winrm.ps1",
+                "sysprep.bat",
+                "autounattend_sysprep.xml"
             ],
-            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
+            "shutdown_command": "a:/sysprep.bat",
             "ram_size": "{{user `memory_size`}}",
             "cpu": "{{user `cpus`}}",
             "switch_name": "Default Switch",
@@ -60,7 +64,7 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_wait_timeout": "2h",
-            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
+            "shutdown_command": "a:/sysprep.bat",
             "guest_os_type": "windows8srv-64",
             "tools_upload_flavor": "windows",
             "disk_size": "{{user `disk_size`}}",
@@ -87,7 +91,7 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_wait_timeout": "2h",
-            "shutdown_command": "powershell -File c:\\tmp\\sysprep.ps1",
+            "shutdown_command": "a:/sysprep.bat",
             "guest_os_type": "win-10",
             "parallels_tools_flavor": "win",
             "disk_size": "{{user `disk_size`}}",
@@ -150,18 +154,6 @@
         { "type": "powershell", "script": "userpsmodules.ps1" },
         { "type": "powershell", "script": "userbin.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
-        {
-            "type": "file",
-            "source": "sysprep.ps1",
-            "destination": "c:\\tmp\\sysprep.ps1",
-            "only": ["virtualbox-iso", "hyperv-iso", "vmware-iso", "parallels-iso"]
-        },
-        {
-            "type": "file",
-            "source": "autounattend_sysprep.xml",
-            "destination": "c:\\tmp\\autounattend_sysprep.xml",
-            "only": ["virtualbox-iso", "hyperv-iso", "vmware-iso", "parallels-iso"]
-        },
         {
             "type": "powershell",
             "script": "azure/sysprep.ps1",
