@@ -9,10 +9,6 @@ try
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
 
-        $SPImageLocation = $systemParameters.SPImageLocation
-        $SPInstallationMediaPath = $configParameters.SPInstallationMediaPath
-        $SPVersion = $configParameters.SPVersion;
-
         Node $AllNodes.NodeName
         {
 

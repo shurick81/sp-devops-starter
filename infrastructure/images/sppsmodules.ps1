@@ -13,15 +13,6 @@ try
         Node $AllNodes.NodeName
         {
 
-            PSModule "PSModule_xPSDesiredStateConfiguration"
-            {
-                Ensure              = "Present"
-                Name                = "xPSDesiredStateConfiguration"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "8.2.0.0"
-            }
-
             PSModule "PSModule_xPendingReboot"
             {
                 Ensure              = "Present"
@@ -40,7 +31,7 @@ try
                 RequiredVersion     = "4.0.0.0"
             }
     
-                PSModule "PSModule_xNetworking"
+            PSModule "PSModule_xNetworking"
             {
                 Ensure              = "Present"
                 Name                = "xNetworking"

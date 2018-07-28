@@ -22,15 +22,6 @@ try
                 RequiredVersion     = "8.2.0.0"
             }
 
-            PSModule "PSModule_xWindowsUpdate"
-            {
-                Ensure              = "Present"
-                Name                = "xWindowsUpdate"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "2.7.0.0"
-            }
-
         }
     }
 }

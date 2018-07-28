@@ -1,4 +1,4 @@
-$configName = "DBPSModules"
+$configName = "SQLPSModules"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
@@ -12,15 +12,6 @@ try
 
         Node $AllNodes.NodeName
         {
-
-            PSModule "PSModule_xPSDesiredStateConfiguration"
-            {
-                Ensure              = "Present"
-                Name                = "xPSDesiredStateConfiguration"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "8.2.0.0"
-            }
 
             PSModule "PSModule_xPendingReboot"
             {
