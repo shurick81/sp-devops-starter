@@ -8,7 +8,7 @@ param(
 [Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem") | Out-Null;
 
 $config = Get-Content -Raw -Path $ConFigFile | ConvertFrom-Json;
-@( "sql", "sp", "vs", "ssms" ) | % {
+@( "sql", "sp", "vs", "ssms", "oos" ) | % {
     $key = $_;
     Write-Host "$(Get-Date) Checking $key in configuration document";
     if ( $config.$key )
