@@ -31,7 +31,7 @@ pipeline {
                 '''
                 echo 'Destroying Vagrant Boxes...'
                 powershell '''cd infrastructure/images;
-                    ./removevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-web,sp-win2016-db,sp-win2016-ad,sp-win2016-code,sp-win2016-db-web,sp-win2016-db-web-code,sp-win10-user
+                    ./removevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-web,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-web,sp-win2016-db,sp-win2016-ad,sp-win2016-code,sp-win2016-db-web,sp-win2016-db-web-code,sp-win10-user
                     if ( vagrant box list | ? { $_ -like "sp-win10-user *" } ) { exit 1 }
                     if ( vagrant box list | ? { $_ -like "sp-win2016-db-web-code *" } ) { exit 1 }
                     if ( vagrant box list | ? { $_ -like "sp-win2016-db-web *" } ) { exit 1 }
@@ -41,6 +41,7 @@ pipeline {
                     if ( vagrant box list | ? { $_ -like "sp-win2016-web *" } ) { exit 1 }
                     if ( vagrant box list | ? { $_ -like "sp-win2012r2-db-web-code *" } ) { exit 1 }
                     if ( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) { exit 1 }
+                    if ( vagrant box list | ? { $_ -like "sp-win2012r2-web *" } ) { exit 1 }
                     if ( vagrant box list | ? { $_ -like "sp-win2012r2-code *" } ) { exit 1 }
                     if ( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) { exit 1 }
                 '''
@@ -64,7 +65,7 @@ pipeline {
                     exit 0;
                 '''
                 powershell '''cd infrastructure/images;
-                    ./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-web,sp-win2016-db,sp-win2016-ad,sp-win2016-code,sp-win2016-db-web,sp-win2016-db-web-code,sp-win10-user
+                    ./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-web,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-web,sp-win2016-db,sp-win2016-ad,sp-win2016-code,sp-win2016-db-web,sp-win2016-db-web-code,sp-win10-user
                     if ( !( vagrant box list | ? { $_ -like "sp-win10-user *" } ) ) { exit 1 }
                     if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-web-code *" } ) ) { exit 1 }
                     if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-web *" } ) ) { exit 1 }
@@ -74,6 +75,7 @@ pipeline {
                     if ( !( vagrant box list | ? { $_ -like "sp-win2016-web *" } ) ) { exit 1 }
                     if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web-code *" } ) ) { exit 1 }
                     if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) ) { exit 1 }
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-web *" } ) ) { exit 1 }
                     if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-code *" } ) ) { exit 1 }
                     if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) ) { exit 1 }
                 '''
