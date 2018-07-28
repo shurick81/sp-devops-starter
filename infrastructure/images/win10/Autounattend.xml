@@ -148,9 +148,9 @@
                             <PlainText>true</PlainText>
                         </Password>
                         <Group>administrators</Group>
-                        <DisplayName>Vagrant</DisplayName>
-                        <Name>vagrant</Name>
-                        <Description>Vagrant User</Description>
+                        <DisplayName>Packer</DisplayName>
+                        <Name>packer</Name>
+                        <Description>Packer User</Description>
                     </LocalAccount>
                 </LocalAccounts>
             </UserAccounts>
@@ -160,7 +160,7 @@
                     <PlainText>true</PlainText>
                 </Password>
                 <Enabled>true</Enabled>
-                <Username>vagrant</Username>
+                <Username>packer</Username>
             </AutoLogon>
             <RegisteredOwner />
             <TimeZone>Coordinated Universal Time</TimeZone>
