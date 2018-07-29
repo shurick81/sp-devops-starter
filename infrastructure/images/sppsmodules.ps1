@@ -64,7 +64,7 @@ try
                 Name                = "SharePointDSC"
                 Repository          = "PSGallery"
                 InstallationPolicy  = "Trusted"
-                RequiredVersion     = "2.2.0.0"
+                RequiredVersion     = "2.4.0.0"
             }
 
             PSModule "PSModule_xSystemSecurity"

@@ -6,8 +6,10 @@ Param(
 
 $stackPath = Join-Path (Resolve-Path ./).Path $stackName;
 Start-Process Vagrant -WorkingDirectory $stackPath -ArgumentList "up AD01 --provider azure" -Wait -NoNewWindow;
-$resourceGroupName = 'sp-devops-starter-01'
-$machineName = "ad01";
+$idContent = Get-Content ".\$stackName\.vagrant\machines\AD01\azure\id";
+$idValues = $idContent.Split(":");
+$resourceGroupName = $idValues[0];
+$machineName = $idValues[1];
 $vm = Get-AzureRmVM -ResourceGroupName $resourceGroupName -VMName $machineName
 $networkInterfaceRef = $vm.NetworkProfile[0].NetworkInterfaces[0].id;
 $networkInterface = Get-AzureRmNetworkInterface | ? { $_.Id -eq $networkInterfaceRef }

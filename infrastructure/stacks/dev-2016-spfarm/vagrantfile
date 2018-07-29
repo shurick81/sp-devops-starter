@@ -11,22 +11,39 @@ Vagrant.configure(2) do |config|
         vm_config.vm.network "forwarded_port", guest: 3389, host: 13390, auto_correct: true
         vm_config.vm.provider "virtualbox" do |vb, override|
             override.vm.network :private_network, ip: "192.168.51.128", gateway: "192.168.51.1"
-            override.vm.provision :shell, path: "../spdomain.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
-            override.vm.provision "reload"
-            override.vm.provision :shell, path: "../spdomain.ps1"
-            override.vm.provision :shell, path: "../spdomaincustomizations.ps1"
-            override.vm.provision :shell, path: "../customizations/spdomaincustomizations.ps1"
             #vb.gui = true
             vb.memory = "1024"
             vb.cpus = 2
         end
-        vm_config.vm.provider "hyperv" do |hv, override|
-            override.vm.provision :shell, path: "../spdomain.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
-            override.vm.provision "reload"
-            override.vm.provision :shell, path: "../spdomain.ps1"
-            override.vm.provision :shell, path: "../spdomaincustomizations.ps1"
-            override.vm.provision :shell, path: "../customizations/spdomaincustomizations.ps1"
+        vm_config.vm.provider :azure do |azure, override|
+            azure.tenant_id = ENV['ARM_TENANT_ID']
+            azure.client_id = ENV['ARM_CLIENT_ID']
+            azure.client_secret = ENV['ARM_CLIENT_SECRET']
+            azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
+            azure.resource_group_name = 'sp-devops-starter-dev-2016-spfarm'
+            azure.vm_managed_image_id = '/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-ad'
+            azure.instance_ready_timeout = 3600
+            azure.vm_name = 'ad01'
+            azure.location = 'WestUS2'
+            azure.vm_size = 'Standard_B2s'
+            azure.vm_storage_account_type = 'Standard_LRS'
+            azure.admin_username = "vagrant"
+            azure.admin_password = "Fractalsol365"
+            azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
+            azure.nsg_name = 'sp-devops-starter-dev-2016-spfarm'
+            azure.wait_for_destroy = true
+            override.vm.guest = :windows
+            override.vm.box = "azure"
+            override.winrm.transport = :ssl
+            override.winrm.port = 5986
+            override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
+            override.vm.synced_folder ".", "/vagrant", disabled: true
         end
+        vm_config.vm.provision :shell, path: "../spdomain.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+        vm_config.vm.provision "reload"
+        vm_config.vm.provision :shell, path: "../spdomain.ps1"
+        vm_config.vm.provision :shell, path: "../spdomaincustomizations.ps1"
+        vm_config.vm.provision :shell, path: "../customizations/spdomaincustomizations.ps1"
         vm_config.vm.boot_timeout = 1800
     end
     config.vm.define "DBWEBCODE01" do |vm_config|
@@ -44,18 +61,49 @@ Vagrant.configure(2) do |config|
             override.vm.provision :shell, path: "../../../src/spfarm_customizations.ps1"
             #vb.vm.gui = true
             vb.memory = "8192"
-            vb.cpus = 8
+            vb.cpus = 4
         end
         vm_config.vm.provider "hyperv" do |hv, override|
             override.vm.provision :shell, path: "../domainclienthvnetwork.ps1"
             override.vm.provision :shell, path: "../domainclient.ps1"
             override.vm.provision "reload"
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            override.vm.provision :shell, path: "../xcredclient.ps1"
             override.vm.provision :shell, path: "../spfarm_2016.ps1"
             override.vm.provision :shell, path: "../../../src/spfarm_customizations.ps1"
             hv.memory = "4096"
             hv.maxmemory = "8192"
-            hv.cpus = 8
+            hv.cpus = 4
+        end
+        vm_config.vm.provider :azure do |azure, override|
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            override.vm.provision :shell, path: "../xcredclient.ps1"
+            override.vm.provision :shell, path: "../spfarm_2016.ps1"
+            override.vm.provision :shell, path: "../../../src/spfarm_customizations.ps1"
+            azure.tenant_id = ENV['ARM_TENANT_ID']
+            azure.client_id = ENV['ARM_CLIENT_ID']
+            azure.client_secret = ENV['ARM_CLIENT_SECRET']
+            azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
+            azure.resource_group_name = 'sp-devops-starter-dev-2016-spfarm'
+            azure.vm_managed_image_id = '/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-db-web-code'
+            azure.instance_ready_timeout = 3600
+            azure.vm_name = 'dbwebcode01'
+            azure.location = 'WestUS2'
+            azure.vm_size = 'Standard_DS2_v2'
+            azure.admin_username = "vagrant"
+            azure.admin_password = "Fractalsol365"
+            azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
+            # azure.virtual_network_name = 'sp-devops-starter-dev-2016-spfarm'
+            azure.nsg_name = 'sp-devops-starter-dev-2016-spfarm'
+            azure.wait_for_destroy = true
+            override.vm.guest = :windows
+            override.vm.box = "azure"
+            override.winrm.transport = :ssl
+            override.winrm.port = 5986
+            override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
+            override.vm.synced_folder ".", "/vagrant", disabled: true
         end
         vm_config.vm.boot_timeout = 1800
     end

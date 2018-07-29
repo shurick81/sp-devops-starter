@@ -15,7 +15,7 @@ try
             $SPWebAppPoolAccountCredential
         )
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.2.0.0
+        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.4.0.0
 
         Node $AllNodes.NodeName
         {
