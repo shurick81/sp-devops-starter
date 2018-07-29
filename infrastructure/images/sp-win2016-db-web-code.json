@@ -21,7 +21,7 @@
                 [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
             ],
             "communicator": "winrm",
-            "winrm_username": "vagrant",
+            "winrm_username": "packer",
             "winrm_password": "Fractalsol365",
             "winrm_timeout": "2h"
         },
@@ -41,7 +41,7 @@
             "ram_size": 4096,
             "cpu": 4,
             "communicator": "winrm",
-            "winrm_username": "vagrant",
+            "winrm_username": "packer",
             "winrm_password": "Fractalsol365",
             "winrm_timeout": "2h"
         },

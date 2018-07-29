@@ -85,6 +85,18 @@
                     <Value>Fractalsol365</Value>
                     <PlainText>true</PlainText>
                 </AdministratorPassword>
+                <LocalAccounts>
+                    <LocalAccount wcm:action="add">
+                        <Password>
+                            <Value>Fractalsol365</Value>
+                            <PlainText>true</PlainText>
+                        </Password>
+                        <Group>administrators</Group>
+                        <DisplayName>Packer</DisplayName>
+                        <Name>packer</Name>
+                        <Description>Packer User</Description>
+                    </LocalAccount>
+                </LocalAccounts>
             </UserAccounts>
             <AutoLogon>
                 <Password>
@@ -92,7 +104,7 @@
                     <PlainText>true</PlainText>
                 </Password>
                 <Enabled>true</Enabled>
-                <Username>vagrant</Username>
+                <Username>packer</Username>
             </AutoLogon>
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">

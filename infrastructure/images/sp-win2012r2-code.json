@@ -21,7 +21,7 @@
                 [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
             ],
             "communicator": "winrm",
-            "winrm_username": "vagrant",
+            "winrm_username": "administrator",
             "winrm_password": "Fractalsol365"
         },
         {
@@ -41,7 +41,7 @@
             "cpu": 4,
             "switch_name": "Default Switch",
             "communicator": "winrm",
-            "winrm_username": "vagrant",
+            "winrm_username": "administrator",
             "winrm_password": "Fractalsol365"
         },
         {
@@ -83,7 +83,7 @@
             "only": ["virtualbox-iso", "hyperv-iso"]
         },
         { "type": "powershell", "script": "wmf5.ps1",
-            "elevated_user": "vagrant", "elevated_password": "Fractalsol365",
+            "elevated_user": "administrator", "elevated_password": "Fractalsol365",
             "only": ["virtualbox-iso", "hyperv-iso"]
         },
         { "type": "powershell", "script": "wmf5.ps1",
