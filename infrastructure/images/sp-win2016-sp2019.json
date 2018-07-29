@@ -107,6 +107,7 @@
             ]
         },
         { "type": "windows-restart" },
+        { "type": "powershell", "script": "sp2019media.ps1" },
         { "type": "powershell", "script": "sp2019prebin.ps1" },
         { "type": "powershell", "script": "sp2019media.ps1" },
         { "type": "powershell", "script": "sp2016bin.ps1" },
