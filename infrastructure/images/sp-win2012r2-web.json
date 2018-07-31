@@ -103,6 +103,8 @@
         },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
+        { "type": "powershell", "script": "sppsmodules.ps1" },
+        { "type": "powershell", "script": "domainclientpsmodules.ps1" },
         { "type": "powershell", "script": "spprebin-1.ps1" },
         { "type": "windows-restart" },
         { "type": "powershell", "script": "spprebin-2.ps1" },
