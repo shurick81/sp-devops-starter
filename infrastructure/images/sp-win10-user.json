@@ -63,7 +63,7 @@
             "tenant_id": "{{user `tenant_id`}}",
         
             "managed_image_resource_group_name": "CommonRG",
-            "managed_image_name": "sp-win10-user",
+            "managed_image_name": "{{user `box_name`}}",
         
             "os_type": "Windows",
             "image_publisher": "MicrosoftWindowsDesktop",
@@ -106,6 +106,7 @@
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "userpsmodules.ps1" },
+        { "type": "powershell", "script": "domainclientpsmodules.ps1" },
         { "type": "powershell", "script": "userbin.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
@@ -117,10 +118,11 @@
     "post-processors": [
         {
             "type": "vagrant",
-            "output": "sp-win10-user.box"
+            "output": "{{user `box_name`}}.box"
         }
     ],
     "variables": {
+        "box_name": "sp-win10-user",
         "iso_url": "https://download.microsoft.com/download/B/8/B/B8B452EC-DD2D-4A8F-A88C-D2180C177624/15063.0.170317-1834.RS2_RELEASE_CLIENTENTERPRISEEVAL_OEMRET_X64FRE_EN-US.ISO",
         "iso_checksum_type": "sha1",
         "iso_checksum": "6C60F91BF0AD7B20F469AB8F80863035C517F34F", 
