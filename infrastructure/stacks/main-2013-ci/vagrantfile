@@ -57,6 +57,7 @@ Vagrant.configure(2) do |config|
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
             override.vm.provision :shell, path: "../xcredclient.ps1"
             override.vm.provision :shell, path: "../spfarm_2013.ps1"
+            override.vm.provision :shell, path: "../trustedhosts.ps1"
             override.vm.provision :shell, path: "../slavepreprovisioning.ps1"
             override.vm.provision :shell, path: "../joinslave.ps1", env: {
                 "SPDEVOPSSTARTER_SPLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_SPLABEL'],
@@ -73,6 +74,7 @@ Vagrant.configure(2) do |config|
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
             override.vm.provision :shell, path: "../xcredclient.ps1"
             override.vm.provision :shell, path: "../spfarm_2013.ps1"
+            override.vm.provision :shell, path: "../trustedhosts.ps1"
             override.vm.provision :shell, path: "../slavepreprovisioning.ps1"
             override.vm.provision :shell, path: "../joinslave.ps1", env: {
                 "SPDEVOPSSTARTER_SPLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_SPLABEL'],
@@ -88,6 +90,7 @@ Vagrant.configure(2) do |config|
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
             override.vm.provision :shell, path: "../xcredclient.ps1"
             override.vm.provision :shell, path: "../spfarm_2013.ps1"
+            override.vm.provision :shell, path: "../trustedhosts.ps1"
             override.vm.provision :shell, path: "../slavepreprovisioning.ps1"
             override.vm.provision :shell, path: "../joinslave.ps1", env: {
                 "SPDEVOPSSTARTER_SPLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_SPLABEL'],
