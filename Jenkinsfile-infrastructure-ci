@@ -10,7 +10,7 @@ pipeline {
             }
             steps {
                 powershell '(Resolve-Path ./).Path'
-                powershell 'Write-Host "(Get-Date) SPDEVOPSSTARTER_JENKINSHOST: $env:SPDEVOPSSTARTER_JENKINSHOST"'
+                powershell 'Write-Host "$(Get-Date) SPDEVOPSSTARTER_JENKINSHOST: $env:SPDEVOPSSTARTER_JENKINSHOST"'
                 echo 'Copying Windows Image...'
                 powershell '''cd infrastructure;
                     if ( !( Get-Item ./images/http/SQLServer2014SP1.zip -ErrorAction Ignore ) ) {
@@ -60,7 +60,7 @@ pipeline {
                 powershell '''cd ci/images;
                     packer build -only virtualbox-iso,hyperv-iso centos7-ci.json
                     if ( !( Get-Item ./centos7-ci.box ) ) {
-                        Write-Host "(Get-Date) ./centos7-ci.box is missing";
+                        Write-Host "$(Get-Date) ./centos7-ci.box is missing";
                         exit 1;
                     }
                     exit 0;
