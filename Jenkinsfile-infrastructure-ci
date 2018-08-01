@@ -9,8 +9,9 @@ pipeline {
                 label 'win&&infrastructuretester'
             }
             steps {
-                echo 'Copying Windows Image...'
                 powershell '(Resolve-Path ./).Path'
+                powershell 'SPDEVOPSSTARTER_JENKINSHOST: $env:SPDEVOPSSTARTER_JENKINSHOST'
+                echo 'Copying Windows Image...'
                 powershell '''cd infrastructure;
                     if ( !( Get-Item ./images/http/SQLServer2014SP1.zip -ErrorAction Ignore ) ) {
                         Copy-Item C:/sp-onprem-files/SQLServer2014SP1.zip ./images/http
@@ -128,6 +129,19 @@ pipeline {
             }
             steps {
                 echo 'Running tests'
+            }
+        }
+        stage('Cleanup') {
+            agent {
+                label 'win&&infrastructuretester'
+            }
+            steps {
+                echo 'Building farms'
+                powershell '''cd infrastructure/stacks/main-2013-ci;
+                    vagrant destroy --force;
+                    if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
+                    if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* not created (*" } ) ) { Write-Host "DBWEBCODE01 is not destroyed"; exit 1 }
+                '''
             }
         }
     }

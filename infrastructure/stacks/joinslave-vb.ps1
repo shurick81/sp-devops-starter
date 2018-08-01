@@ -1,2 +1,0 @@
-[Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"; Invoke-RestMethod -Uri "https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.9/swarm-client-3.9.jar" -OutFile "swarm-client-3.9.jar";
-Start-Process -FilePath "java" -ArgumentList "-jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master http://192.168.52.80:16080 -username admin -password admin -labels `"sharepoint-auto-$($env:SPDEVOPSSTARTER_SPLABEL)`" -executors 2";

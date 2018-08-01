@@ -213,11 +213,23 @@ close the window.
 ## Connecting hypervisor manager slave
 It might be wise to run the following snippet in a separate console in order to continue controlling vagrant.
 ### Windows
+
+#### Configuring parameters
+
+Jenkins in Azure
+```PowerShell
+[System.Environment]::SetEnvironmentVariable('SPDEVOPSSTARTER_JENKINSHOST', "spdvpsstrtrci.westus2.cloudapp.azure.com", [System.EnvironmentVariableTarget]::User)
+$env:SPDEVOPSSTARTER_JENKINSHOST = "spdvpsstrtrci.westus2.cloudapp.azure.com"
+```
+Jenkins locally
+```PowerShell
+[System.Environment]::SetEnvironmentVariable('SPDEVOPSSTARTER_JENKINSHOST', "127.0.0.1", [System.EnvironmentVariableTarget]::User)
+```
 #### VirtualBox or Hyper-V
 Run in a new PowerShell:
 ```PowerShell
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"; Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.9/swarm-client-3.9.jar -OutFile swarm-client-3.9.jar
-java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:16080 -username admin -password admin -labels "hvmanager win" -executors 2
+java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master "http://$env:SPDEVOPSSTARTER_JENKINSHOST`:16080" -username admin -password admin -labels "hvmanager win" -executors 2
 ```
 
 ## Connecting hypervisor manager slave with rebuilding SharePoint machine
@@ -227,7 +239,7 @@ It might be wise to run the following snippet in a separate console in order to 
 Run in a new PowerShell:
 ```PowerShell
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"; Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.9/swarm-client-3.9.jar -OutFile swarm-client-3.9.jar
-java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:16080 -username admin -password admin -labels "hvmanager-cleanvms win" -executors 2
+java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master "http://$env:SPDEVOPSSTARTER_JENKINSHOST`:16080" -username admin -password admin -labels "hvmanager-cleanvms win" -executors 2
 ```
 
 # Connecting hypervisor manager slave for infrastructure testing
@@ -237,7 +249,7 @@ It might be wise to run the following snippet in a separate console in order to 
 Run in PowerShell:
 ```PowerShell
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"; Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.9/swarm-client-3.9.jar -OutFile swarm-client-3.9.jar
-java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:16080 -username admin -password admin -labels "infrastructuretester win" -executors 2
+java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master "http://$env:SPDEVOPSSTARTER_JENKINSHOST`:16080" -username admin -password admin -labels "infrastructuretester win" -executors 2
 ```
 
 # Cloning to other projecs

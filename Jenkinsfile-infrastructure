@@ -9,8 +9,9 @@ pipeline {
                 label 'win&&hvmanager'
             }
             steps {
-                echo 'Copying Windows Image...'
                 powershell '(Resolve-Path ./).Path'
+                powershell 'SPDEVOPSSTARTER_JENKINSHOST: $env:SPDEVOPSSTARTER_JENKINSHOST'
+                echo 'Copying Windows Image...'
                 powershell '''cd infrastructure;
                     if ( !( Get-Item ./images/http/SQLServer2014SP1.zip -ErrorAction Ignore ) ) {
                         Copy-Item C:/sp-onprem-files/SQLServer2014SP1.zip ./images/http
