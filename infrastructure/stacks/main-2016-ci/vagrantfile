@@ -65,7 +65,7 @@ Vagrant.configure(2) do |config|
                 "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']
             }   
             #vb.vm.gui = true
-            vb.memory = "11264"
+            vb.memory = "9216"
             vb.cpus = 4
         end
         vm_config.vm.provider "hyperv" do |hv, override|
@@ -81,7 +81,7 @@ Vagrant.configure(2) do |config|
                 "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']
             }   
             hv.memory = "4096"
-            hv.maxmemory = "11264"
+            hv.maxmemory = "9216"
             hv.cpus = 4
         end
         vm_config.vm.provider :azure do |azure, override|
