@@ -218,12 +218,11 @@ It might be wise to run the following snippet in a separate console in order to 
 
 Jenkins in Azure
 ```PowerShell
-[System.Environment]::SetEnvironmentVariable('SPDEVOPSSTARTER_JENKINSHOST', "spdvpsstrtrci.westus2.cloudapp.azure.com", [System.EnvironmentVariableTarget]::User)
 $env:SPDEVOPSSTARTER_JENKINSHOST = "spdvpsstrtrci.westus2.cloudapp.azure.com"
 ```
 Jenkins locally
 ```PowerShell
-[System.Environment]::SetEnvironmentVariable('SPDEVOPSSTARTER_JENKINSHOST', "127.0.0.1", [System.EnvironmentVariableTarget]::User)
+$env:SPDEVOPSSTARTER_JENKINSHOST = "127.0.0.1"
 ```
 #### VirtualBox or Hyper-V
 Run in a new PowerShell:
