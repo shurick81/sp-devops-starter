@@ -53,16 +53,15 @@ Vagrant.configure(2) do |config|
             override.vm.network :private_network, ip: "192.168.51.129", gateway: "192.168.51.1"
             override.vm.provision :shell, path: "../domainclientvbnetwork.ps1"
             override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../xcredclient.ps1"
             override.vm.provision "reload"
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
-            override.vm.provision :shell, path: "../xcredclient.ps1"
             override.vm.provision :shell, path: "../spfarm_2013.ps1"
-            override.vm.provision :shell, path: "../trustedhosts.ps1"
             override.vm.provision :shell, path: "../slavepreprovisioning.ps1"
             override.vm.provision :shell, path: "../joinslave.ps1", env: {
                 "SPDEVOPSSTARTER_SPLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_SPLABEL'],
                 "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']
-            }   
+            }
             #vb.vm.gui = true
             vb.memory = "9216"
             vb.cpus = 4
@@ -79,7 +78,7 @@ Vagrant.configure(2) do |config|
             override.vm.provision :shell, path: "../joinslave.ps1", env: {
                 "SPDEVOPSSTARTER_SPLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_SPLABEL'],
                 "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']
-            }   
+            }
             hv.memory = "4096"
             hv.maxmemory = "9216"
             hv.cpus = 4
@@ -95,7 +94,7 @@ Vagrant.configure(2) do |config|
             override.vm.provision :shell, path: "../joinslave.ps1", env: {
                 "SPDEVOPSSTARTER_SPLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_SPLABEL'],
                 "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']
-            }   
+            }
             azure.tenant_id = ENV['ARM_TENANT_ID']
             azure.client_id = ENV['ARM_CLIENT_ID']
             azure.client_secret = ENV['ARM_CLIENT_SECRET']
