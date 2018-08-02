@@ -1,4 +1,4 @@
-$configName = "SQLMedia"
+$configName = "SQLMediaClean"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {

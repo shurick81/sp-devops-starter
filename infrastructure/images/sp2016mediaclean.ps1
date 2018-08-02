@@ -1,4 +1,4 @@
-$configName = "SPMedia"
+$configName = "SPMediaClean"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
