@@ -14,7 +14,7 @@ try
                 Name                    = @( "DNS", "RSAT-DNS-Server", "AD-Domain-Services", "RSAT-ADDS" )
                 Ensure                  = 'Present'
                 IncludeAllSubFeature    = $true
-            } 
+            }
 
         }
     }
