@@ -50,8 +50,8 @@ pipeline {
             }
             steps {
                 echo 'Building farms'
-                powershell '''cd infrastructure/stacks/main-2013-ci;
-                    $env:SPDEVOPSSTARTER_VAGRANT_SPLABEL = "main-2013";
+                powershell '''cd infrastructure/stacks/ci-2013-main;
+                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "main-2013";
                     vagrant up --provider virtualbox;
                     if ( !( vagrant status | ? { $_ -like "AD01* running (*" } ) ) { Write-Host "AD01 is not running"; exit 1 }
                     if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* running (*" } ) ) { Write-Host "DBWEBCODE01 is not running"; exit 1 }

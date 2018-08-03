@@ -1,0 +1,27 @@
+pipeline {
+    agent { label 'nosharepoint' }
+
+    stages {
+        stage('Prepare') {
+            steps {
+                echo 'Waiting for infrastructure'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building the solution'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying the solution'
+                powershell './src/getcertificatetest.ps1'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Running tests'
+            }
+        }
+    }
+}

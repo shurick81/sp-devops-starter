@@ -7,7 +7,6 @@ Try
     }}
     if ( $db ) {
         Write-Host "Found dbs";
-        Exit 0
     } else {
         Write-Host "Did not find dbs";
         Exit 1

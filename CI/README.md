@@ -141,6 +141,16 @@ vagrant up --provider azure
 Updating pipelines in VirtualBox:
 `vagrant up --provision --provider virtualbox`
 
+# Configuring parameters on the agent
+
+Jenkins in Azure
+```PowerShell
+$env:SPDEVOPSSTARTER_JENKINSHOST = "spdvpsstrtrci.westus2.cloudapp.azure.com"
+```
+Jenkins locally
+```PowerShell
+$env:SPDEVOPSSTARTER_JENKINSHOST = "127.0.0.1"
+```
 
 # CI/CD SharePoint agent
 
@@ -156,15 +166,20 @@ Close the console.
 ## Connecting sharepoint client slave
 ```
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"; Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.9/swarm-client-3.9.jar -OutFile swarm-client-3.9.jar
-java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:16080 -username admin -password admin -labels "sharepoint client"
+java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master "http://$env:SPDEVOPSSTARTER_JENKINSHOST`:16080" -username admin -password admin -labels "sharepoint client" -executors 2
 ```
 
 ## Connecting sharepoint server slave
 ```
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"; Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.9/swarm-client-3.9.jar -OutFile swarm-client-3.9.jar
-java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master http://127.0.0.1:16080 -username admin -password admin -labels "sharepoint server"
+java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master "http://$env:SPDEVOPSSTARTER_JENKINSHOST`:16080" -username admin -password admin -labels "sharepoint server" -executors 2
 ```
 
+## Connecting nosp stack
+```
+[Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"; Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.9/swarm-client-3.9.jar -OutFile swarm-client-3.9.jar
+java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master "http://$env:SPDEVOPSSTARTER_JENKINSHOST`:16080" -username admin -password admin -labels "nosharepoint" -executors 2
+```
 
 
 # CI HyperVisor agent
@@ -214,16 +229,6 @@ close the window.
 It might be wise to run the following snippet in a separate console in order to continue controlling vagrant.
 ### Windows
 
-#### Configuring parameters
-
-Jenkins in Azure
-```PowerShell
-$env:SPDEVOPSSTARTER_JENKINSHOST = "spdvpsstrtrci.westus2.cloudapp.azure.com"
-```
-Jenkins locally
-```PowerShell
-$env:SPDEVOPSSTARTER_JENKINSHOST = "127.0.0.1"
-```
 #### VirtualBox or Hyper-V
 Run in a new PowerShell:
 ```PowerShell
