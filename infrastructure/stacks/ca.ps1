@@ -1,53 +1,31 @@
-$configName = "DevPSModules"
+$configName = "CertificationAuthority"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
     Configuration $configName
     {
         param(
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
+            $DomainAdminCredential
         )
-
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName PackageManagementProviderResource -ModuleVersion 1.0.3
+        Import-DscResource -ModuleName ActiveDirectoryCSDsc -ModuleVersion 3.0.0.0
+
+        $domainName = "contoso.local";
 
         Node $AllNodes.NodeName
         {
 
-            PSModule "PSModule_cChoco"
+            AdcsCertificationAuthority CertificateAuthority
             {
-                Ensure              = "Present"
-                Name                = "cChoco"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "2.3.1.0"
+                IsSingleInstance = 'Yes'
+                Ensure           = 'Present'
+                Credential       = $DomainAdminCredential
+                CAType           = 'EnterpriseRootCA'
             }
-
-            PSModule "PSModule_xSystemSecurity"
-            {
-                Ensure              = "Present"
-                Name                = "xSystemSecurity"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "1.2.0.0"
-            }
-            
-            PSModule "PSModule_xCredSSP"
-            {
-                Ensure              = "Present"
-                Name                = "xCredSSP"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "1.3.0.0"
-            }
-
-            PSModule "PSModule_PSPKI"
-            {
-                Ensure              = "Present"
-                Name                = "PSPKI"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "3.3.0.0"
-            }
+    
         }
     }
 }
@@ -60,11 +38,15 @@ catch
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
+
+$securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
+$DomainAdminCredential = New-Object System.Management.Automation.PSCredential( "contoso\dauser1", $securedPassword );
 Write-Host "$(Get-Date) Compiling DSC"
 try
 {
     &$configName `
-        -ConfigurationData $configurationData;
+        -ConfigurationData $configurationData `
+        -DomainAdminCredential $DomainAdminCredential;
 }
 catch
 {

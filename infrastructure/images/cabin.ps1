@@ -14,7 +14,7 @@ try
                 Name                    = @( "Adcs-Cert-Authority" )
                 Ensure                  = 'Present'
                 IncludeAllSubFeature    = $true
-            } 
+            }
 
         }
     }

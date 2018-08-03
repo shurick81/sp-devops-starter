@@ -14,10 +14,9 @@
             "guest_additions_mode": "attach",
             "guest_os_type": "Windows2016_64",
             "headless": true,
-            "http_directory": "http",
             "shutdown_command": "a:/sysprep.bat",
             "vboxmanage": [
-                [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
+                [ "modifyvm", "{{.Name}}", "--memory", "2048" ],
                 [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
             ],
             "communicator": "winrm",
@@ -36,9 +35,8 @@
                 "sysprep.bat",
                 "autounattend_sysprep.xml"
             ],
-            "http_directory": "http",
             "shutdown_command": "a:/sysprep.bat",
-            "ram_size": 4096,
+            "ram_size": 2048,
             "cpu": 4,
             "switch_name": "Default Switch",
             "communicator": "winrm",
@@ -60,7 +58,7 @@
             "os_type": "Windows",
             "image_publisher": "MicrosoftWindowsServer",
             "image_offer": "WindowsServer",
-            "image_sku": "2016-Datacenter",
+            "image_sku": "2016-Datacenter-smalldisk",
             "image_version": "latest",
         
             "communicator": "winrm",
@@ -97,39 +95,10 @@
         },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
-        { "type": "powershell", "script": "devpsmodules.ps1" },
+        { "type": "powershell", "script": "adpsmodules.ps1" },
+        { "type": "powershell", "script": "capsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
-        {
-            "type": "powershell",
-            "script": "devmedia.ps1",
-            "environment_vars": [
-                "SPDEVOPSSTARTER_LOCALVS=1",
-                "SPDEVOPSSTARTER_LOCALSSMS=1"
-            ],
-            "only": ["virtualbox-iso","hyperv-iso"]
-        },
-        {
-            "type": "powershell",
-            "script": "devmedia.ps1",
-            "only": ["azure-arm"]
-        },
-        {
-            "type": "powershell",
-            "script": "devbin-1.ps1",
-            "environment_vars": [
-                "SPDEVOPSSTARTER_LOCALVS=1"
-            ],
-            "only": ["virtualbox-iso","hyperv-iso"]
-        },
-        {
-            "type": "powershell",
-            "script": "devbin-1.ps1",
-            "only": ["azure-arm"]
-        },
-        { "type": "windows-restart" },
-        { "type": "powershell", "script": "devmediaclean.ps1" },
-        { "type": "powershell", "script": "devbin-2.ps1" },
-        { "type": "powershell", "script": "xcredserver.ps1" },
+        { "type": "powershell", "script": "cabin.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
             "type": "powershell",
@@ -144,7 +113,7 @@
         }
     ],
     "variables": {
-        "box_name": "sp-win2016-code",
+        "box_name": "sp-win2016-ca",
         "client_id": "{{env `ARM_CLIENT_ID`}}",
         "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
         "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",

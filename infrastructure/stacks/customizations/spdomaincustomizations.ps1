@@ -149,6 +149,13 @@ try
                 DependsOn           = "[xADUser]DomainAdminAccountUser"
             }
 
+            xADGroup EnterpriseAdminGroup
+            {
+                GroupName           = "Enterprise Admins"
+                MembersToInclude    = $DomainAdminCredential.GetNetworkCredential().UserName
+                DependsOn           = "[xADUser]DomainAdminAccountUser"
+            }
+
         }
     }
 }

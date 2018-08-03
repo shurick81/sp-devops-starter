@@ -35,10 +35,10 @@ try
 
             WindowsFeatureSet DomainFeatures
             {
-                Name                    = @( "RSAT-DNS-Server", "RSAT-ADDS" )
+                Name                    = @( "RSAT-DNS-Server", "RSAT-ADDS", "RSAT-ADCS" )
                 Ensure                  = 'Present'
                 IncludeAllSubFeature    = $true
-            } 
+            }
 
         }
     }
