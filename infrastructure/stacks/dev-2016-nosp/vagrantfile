@@ -20,7 +20,7 @@ Vagrant.configure(2) do |config|
             azure.client_id = ENV['ARM_CLIENT_ID']
             azure.client_secret = ENV['ARM_CLIENT_SECRET']
             azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
-            azure.resource_group_name = 'sp-devops-starter-dev-oos'
+            azure.resource_group_name = 'sp-devops-starter-dev-2016-nosp'
             azure.vm_managed_image_id = '/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-ad'
             azure.instance_ready_timeout = 3600
             azure.vm_name = 'ad01'
@@ -30,8 +30,8 @@ Vagrant.configure(2) do |config|
             azure.admin_username = "vagrant"
             azure.admin_password = "Fractalsol365"
             azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
-            # azure.virtual_network_name = 'sp-devops-starter-dev-oos'
-            azure.nsg_name = 'sp-devops-starter-dev-oos'
+            # azure.virtual_network_name = 'sp-devops-starter-dev-2016-nosp'
+            azure.nsg_name = 'sp-devops-starter-dev-2016-nosp'
             azure.wait_for_destroy = true
             override.vm.guest = :windows
             override.vm.box = "azure"
@@ -84,7 +84,7 @@ Vagrant.configure(2) do |config|
             azure.client_id = ENV['ARM_CLIENT_ID']
             azure.client_secret = ENV['ARM_CLIENT_SECRET']
             azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
-            azure.resource_group_name = 'sp-devops-starter-dev-oos'
+            azure.resource_group_name = 'sp-devops-starter-dev-2016-nosp'
             azure.vm_managed_image_id = '/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-ca'
             azure.instance_ready_timeout = 3600
             azure.vm_name = 'ca01'
@@ -94,8 +94,8 @@ Vagrant.configure(2) do |config|
             azure.admin_username = "vagrant"
             azure.admin_password = "Fractalsol365"
             azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
-            # azure.virtual_network_name = 'sp-devops-starter-dev-oos'
-            azure.nsg_name = 'sp-devops-starter-dev-oos'
+            # azure.virtual_network_name = 'sp-devops-starter-dev-2016-nosp'
+            azure.nsg_name = 'sp-devops-starter-dev-2016-nosp'
             azure.wait_for_destroy = true
             override.vm.guest = :windows
             override.vm.box = "azure"
@@ -149,7 +149,7 @@ Vagrant.configure(2) do |config|
             azure.client_id = ENV['ARM_CLIENT_ID']
             azure.client_secret = ENV['ARM_CLIENT_SECRET']
             azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
-            azure.resource_group_name = 'sp-devops-starter-dev-oos'
+            azure.resource_group_name = 'sp-devops-starter-dev-2016-nosp'
             azure.vm_managed_image_id = '/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-code'
             azure.instance_ready_timeout = 3600
             azure.vm_name = 'code01'
@@ -159,8 +159,8 @@ Vagrant.configure(2) do |config|
             azure.admin_username = "vagrant"
             azure.admin_password = "Fractalsol365"
             azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
-            # azure.virtual_network_name = 'sp-devops-starter-dev-oos'
-            azure.nsg_name = 'sp-devops-starter-dev-oos'
+            # azure.virtual_network_name = 'sp-devops-starter-dev-2016-nosp'
+            azure.nsg_name = 'sp-devops-starter-dev-2016-nosp'
             azure.wait_for_destroy = true
             override.vm.guest = :windows
             override.vm.box = "azure"
