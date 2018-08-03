@@ -120,8 +120,10 @@ Vagrant.configure(2) do |config|
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
             override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/projects/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
             override.vm.provision :shell, path: "../customizations/certtemplateinvoker.ps1"
-            override.vm.provision :file, source: "../../../src/certtemplateinvoker.ps1", destination: "c:/projects/sp-devops-starter/src/getcertificate.ps1"
-            override.vm.provision :shell, path: "../../../src/getcertificatetest.ps1"
+            override.vm.provision :shell, path: "../joinslave.ps1", env: {
+                "SPDEVOPSSTARTER_JENKINSLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL'],
+                "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']
+            }
             #vb.vm.gui = true
             vb.memory = "2048"
             vb.cpus = 4
@@ -135,8 +137,10 @@ Vagrant.configure(2) do |config|
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
             override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/projects/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
             override.vm.provision :shell, path: "../customizations/certtemplateinvoker.ps1"
-            override.vm.provision :file, source: "../../../src/certtemplateinvoker.ps1", destination: "c:/projects/sp-devops-starter/src/getcertificate.ps1"
-            override.vm.provision :shell, path: "../../../src/getcertificatetest.ps1"
+            override.vm.provision :shell, path: "../joinslave.ps1", env: {
+                "SPDEVOPSSTARTER_JENKINSLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL'],
+                "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']
+            }
             hv.memory = "2048"
             hv.maxmemory = "4096"
             hv.cpus = 4
@@ -149,8 +153,10 @@ Vagrant.configure(2) do |config|
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
             override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/projects/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
             override.vm.provision :shell, path: "../customizations/certtemplateinvoker.ps1"
-            override.vm.provision :file, source: "../../../src/certtemplateinvoker.ps1", destination: "c:/projects/sp-devops-starter/src/getcertificate.ps1"
-            override.vm.provision :shell, path: "../../../src/getcertificatetest.ps1"
+            override.vm.provision :shell, path: "../joinslave.ps1", env: {
+                "SPDEVOPSSTARTER_JENKINSLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL'],
+                "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']
+            }
             azure.tenant_id = ENV['ARM_TENANT_ID']
             azure.client_id = ENV['ARM_CLIENT_ID']
             azure.client_secret = ENV['ARM_CLIENT_SECRET']
