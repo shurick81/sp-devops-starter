@@ -1,5 +1,6 @@
 # Usage
 
+Run commands in PowerShell console with administrative privileges
 ## Syntax
 
 ## Examples
