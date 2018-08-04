@@ -15,7 +15,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the solution'
-                powershell './src/getcertificatetest.ps1'
+                powershell './src/certificates/getcertificatetest.ps1'
             }
         }
         stage('Test') {
