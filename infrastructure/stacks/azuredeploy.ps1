@@ -43,6 +43,6 @@ $updateDnsServersScript = {
 }
 $job = Start-Job -ScriptBlock $updateDnsServersScript -ArgumentList $resourceGroupName, 'vagrantVNET', $networkInterface.IpConfigurations[0].PrivateIpAddress
 $job
-Start-Process Vagrant -WorkingDirectory $stackPath -ArgumentList "up --provider azure" -Wait -NoNewWindow;
+Start-Process Vagrant -WorkingDirectory $stackPath -ArgumentList "up --provider azure --no-parallel" -Wait -NoNewWindow;
 Stop-Job $job
 Remove-Job $job
