@@ -57,6 +57,7 @@ Vagrant.configure(2) do |config|
             override.vm.provision "reload"
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
             override.vm.provision :shell, path: "../spfarm_2013.ps1"
+            override.vm.provision "reload"
             override.vm.provision :shell, path: "../slavepreprovisioning.ps1"
             override.vm.provision :shell, path: "../joinslave.ps1", env: {
                 "SPDEVOPSSTARTER_JENKINSLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL'],
@@ -88,7 +89,6 @@ Vagrant.configure(2) do |config|
             override.vm.provision "reload"
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
             override.vm.provision :shell, path: "../spfarm_2013.ps1"
-            override.vm.provision "reload"
             override.vm.provision :shell, path: "../slavepreprovisioning.ps1"
             override.vm.provision :shell, path: "../joinslave.ps1", env: {
                 "SPDEVOPSSTARTER_JENKINSLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL'],
