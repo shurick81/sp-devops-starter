@@ -7,7 +7,7 @@
         $pfxPass = ConvertTo-SecureString "sdpofiwojiosddf" -AsPlainText -Force
         $outputDirectory = ".";
 
-        c:/projects/sp-devops-starter/src/getcertificate.ps1 -DnsNames $dnsNames -TemplateName $templateName -FriendlyName $friendlyName -PfxPass $pfxPass -OutputDirectory $outputDirectory
+        ./getcertificate.ps1 -DnsNames $dnsNames -TemplateName $templateName -FriendlyName $friendlyName -PfxPass $pfxPass -OutputDirectory $outputDirectory
     }
     catch
     {
@@ -19,9 +19,7 @@
 # Test
     try
     {
-        $dnsNames = "oos.contoso.local", "oos1.contoso.local", "oos2.contoso.local";
         $friendlyName = "oos.contoso.local 2018-07-31";
-        $certPass = $null;
         $certFileDirectory = ".";
         if ( !( Get-Item "$certFileDirectory\$friendlyName.pfx" -ErrorAction Ignore ) )
         {
@@ -36,4 +34,22 @@
         Exit 1;
     }
 
+# Clean
+    try
+    {
+        $friendlyName = "oos.contoso.local 2018-07-31";
+        $certFileDirectory = ".";
+        Remove-Item "$certFileDirectory\$friendlyName.pfx"
+        if ( Get-Item "$certFileDirectory\$friendlyName.pfx" -ErrorAction Ignore )
+        {
+            Write-Host "$(Get-Date) Pfx file is not found";
+            Exit 1;
+        }
+    }
+    catch
+    {
+        Write-Host "$(Get-Date) Exception in getcertificate clean:";
+        $_.Exception.Message;
+        Exit 1;
+    }
 Exit 0;
