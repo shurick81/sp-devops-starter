@@ -15,12 +15,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the solution'
-                powershell './src/certificates/getcertificatetest.ps1'
             }
         }
         stage('Test') {
             steps {
                 echo 'Running tests'
+                powershell './src/certificates/getcertificatetest.ps1'
             }
         }
     }
