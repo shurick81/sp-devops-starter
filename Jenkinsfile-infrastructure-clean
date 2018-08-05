@@ -76,7 +76,7 @@ pipeline {
             }
             steps {
                 echo 'Deploying the solution'
-                powershell './src/farmtest.ps1'
+                powershell './src/spfarm/farmtest.ps1'
             }
         }
         stage('Test') {

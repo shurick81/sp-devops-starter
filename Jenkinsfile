@@ -15,8 +15,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the solution'
-                powershell './src/spfarm_customizations.ps1'
-                powershell './src/farmtest.ps1'
+                powershell './src/spfarm/spfarm_customizations.ps1'
+                powershell './src/spfarm/farmtest.ps1'
             }
         }
         stage('Test') {
