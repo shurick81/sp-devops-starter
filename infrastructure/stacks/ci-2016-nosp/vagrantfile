@@ -118,8 +118,9 @@ Vagrant.configure(2) do |config|
             override.vm.provision "reload"
             override.vm.provision :shell, path: "../domainclient.ps1"
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
-            override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/projects/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
-            override.vm.provision :shell, path: "../customizations/certtemplateinvoker.ps1"
+            override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
+            override.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplateinvoker.ps1"
+            override.vm.provision :shell, inline: "powershell -command 'cd 'c:/tmp/sp-devops-starter'; .\\infrastructure\\stacks\\certtemplateinvoker.ps1'"
             override.vm.provision :shell, path: "../joinslave.ps1", env: {
                 "SPDEVOPSSTARTER_JENKINSLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL'],
                 "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']
@@ -135,8 +136,9 @@ Vagrant.configure(2) do |config|
             override.vm.provision "reload"
             override.vm.provision :shell, path: "../domainclient.ps1"
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
-            override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/projects/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
-            override.vm.provision :shell, path: "../customizations/certtemplateinvoker.ps1"
+            override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
+            override.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplateinvoker.ps1"
+            override.vm.provision :shell, inline: "powershell -command 'cd 'c:/tmp/sp-devops-starter'; .\\infrastructure\\stacks\\certtemplateinvoker.ps1'"
             override.vm.provision :shell, path: "../joinslave.ps1", env: {
                 "SPDEVOPSSTARTER_JENKINSLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL'],
                 "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']
@@ -151,8 +153,9 @@ Vagrant.configure(2) do |config|
             override.vm.provision "reload"
             override.vm.provision :shell, path: "../domainclient.ps1"
             override.vm.provision :shell, path: "../domainclientgroups.ps1"
-            override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/projects/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
-            override.vm.provision :shell, path: "../customizations/certtemplateinvoker.ps1"
+            override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
+            override.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplateinvoker.ps1"
+            override.vm.provision :shell, inline: "powershell -command 'cd 'c:/tmp/sp-devops-starter'; .\\infrastructure\\stacks\\certtemplateinvoker.ps1'"
             override.vm.provision :shell, path: "../joinslave.ps1", env: {
                 "SPDEVOPSSTARTER_JENKINSLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL'],
                 "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']

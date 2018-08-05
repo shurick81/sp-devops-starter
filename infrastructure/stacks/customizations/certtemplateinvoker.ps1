@@ -1,9 +1,16 @@
+param(
+    [Parameter(Mandatory=$false,Position=3)]
+    [String]
+    $ScriptDirectory = ".\infrastructure\stacks"
+)
+
 # Application
 try
 {
+    Write-Host ( Resolve-Path $ScriptDirectory )
     $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
     $DomainAdminCredential = New-Object System.Management.Automation.PSCredential( "contoso\dauser1", $securedPassword );
-    Invoke-Command -FilePath "c:/projects/sp-devops-starter/infrastructure/stacks/certtemplate.ps1" $env:COMPUTERNAME -Credential $DomainAdminCredential -Authentication CredSSP
+    Invoke-Command -FilePath "$scriptDirectory\certtemplate.ps1" $env:COMPUTERNAME -Credential $DomainAdminCredential -Authentication CredSSP
 }
 catch
 {
