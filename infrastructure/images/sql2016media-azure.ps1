@@ -1,4 +1,4 @@
-$configName = "SPMedia"
+$configName = "SQLMedia"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
@@ -14,31 +14,31 @@ try
         Node $AllNodes.NodeName
         {
     
-            $spImageUrl = "https://download.microsoft.com/download/8/1/4/8144DA0D-FB9A-48B8-B56E-2C12E0C30079/en-us/16.0.10711.37301_OfficeServer_none_ship_x64_en-us_dvd/officeserver_en-us.img";
-            $SPImageUrl -match '[^/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))' | Out-Null
-            $SPImageFileName = $matches[0]
-            $SPImageDestinationPath = "C:\Install\SP2019PreviewImage\$SPImageFileName"
+            $SQLImageUrl = "https://download.microsoft.com/download/F/E/9/FE9397FA-BFAB-4ADD-8B97-91234BC774B2/SQLServer2016-x64-ENU.iso";
+            $SQLImageUrl -match '[^/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))' | Out-Null
+            $SQLImageFileName = $matches[0]
+            $SQLImageDestinationPath = "C:\Install\SQL2016RTMImage\$SQLImageFileName"
     
-            xRemoteFile SPServerImageFilePresent
+            xRemoteFile SQLServerImageFilePresent
             {
-                Uri             = $SPImageUrl
-                DestinationPath = $SPImageDestinationPath
+                Uri             = $SQLImageUrl
+                DestinationPath = $SQLImageDestinationPath
                 MatchSource     = $false
             }
     
-            MountImage SPServerImageMounted
+            MountImage SQLServerImageMounted
             {
-                ImagePath   = $SPImageDestinationPath
-                DriveLetter = 'G'
-                DependsOn   = "[xRemoteFile]SPServerImageFilePresent"
+                ImagePath   = $SQLImageDestinationPath
+                DriveLetter = 'S'
+                DependsOn   = "[xRemoteFile]SQLServerImageFilePresent"
             }
     
-            WaitForVolume SPServerImageMounted
+            WaitForVolume SQLServerImageMounted
             {
-                DriveLetter      = 'G'
-                RetryIntervalSec = 5
-                RetryCount       = 10
-                DependsOn   = "[MountImage]SPServerImageMounted"
+                DriveLetter         = 'S'
+                RetryIntervalSec    = 5
+                RetryCount          = 10
+                DependsOn           = "[MountImage]SQLServerImageMounted"
             }
             
         }
