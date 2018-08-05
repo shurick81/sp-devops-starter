@@ -1,4 +1,3 @@
-Write-Host "$(Get-Date) Test #1";
 # Application
     try
     {
@@ -6,9 +5,9 @@ Write-Host "$(Get-Date) Test #1";
         $templateName = "CustomSSLCertificateTemplate";
         $friendlyName = "oos.contoso.local 2018-07-31";
         $pfxPass = ConvertTo-SecureString "sdpofiwojiosddf" -AsPlainText -Force
-        $outputDirectory = ".";
+        $outputDirectory = "c:\tmp";
 
-        .\src\certificates\getcertificate.ps1 -DnsNames $dnsNames -TemplateName $templateName -FriendlyName $friendlyName -PfxPass $pfxPass -OutputDirectory $outputDirectory
+        $result = .\src\certificates\getcertificate.ps1 -DnsNames $dnsNames -TemplateName $templateName -FriendlyName $friendlyName -PfxPass $pfxPass -OutputDirectory $outputDirectory
     }
     catch
     {
@@ -21,9 +20,18 @@ Write-Host "$(Get-Date) Test #1";
     try
     {
         $friendlyName = "oos.contoso.local 2018-07-31";
-        $certFileDirectory = ".";
-        if ( !( Get-Item "$certFileDirectory\$friendlyName.pfx" -ErrorAction Ignore ) )
+        $pfxPass = ConvertTo-SecureString "sdpofiwojiosddf" -AsPlainText -Force
+        $outputDirectory = "c:\tmp";
+        if ( Get-Item "$outputDirectory\$friendlyName.pfx" -ErrorAction Ignore )
         {
+            $cert = Import-PfxCertificate -FilePath "$outputDirectory\$friendlyName.pfx" -CertStoreLocation Cert:\LocalMachine\My -Password $pfxPass;
+            if ( $cert ) {
+                $cert | Remove-Item -Force;
+            } else {
+                Write-Host "$(Get-Date) Certificate could not be imported";
+                Exit 1;
+            }
+        } else {
             Write-Host "$(Get-Date) Pfx file is not found";
             Exit 1;
         }
@@ -39,9 +47,9 @@ Write-Host "$(Get-Date) Test #1";
     try
     {
         $friendlyName = "oos.contoso.local 2018-07-31";
-        $certFileDirectory = ".";
-        Remove-Item "$certFileDirectory\$friendlyName.pfx"
-        if ( Get-Item "$certFileDirectory\$friendlyName.pfx" -ErrorAction Ignore )
+        $outputDirectory = "c:\tmp";
+        Remove-Item "$outputDirectory\$friendlyName.pfx"
+        if ( Get-Item "$outputDirectory\$friendlyName.pfx" -ErrorAction Ignore )
         {
             Write-Host "$(Get-Date) Pfx file is not found";
             Exit 1;
@@ -53,9 +61,9 @@ Write-Host "$(Get-Date) Test #1";
         $_.Exception.Message;
         Exit 1;
     }
+Write-Host "$(Get-Date) Test #1 is complete";
 
 
-Write-Host "$(Get-Date) Test #2";
 # Application
 try
 {
@@ -65,7 +73,7 @@ try
     $pfxPass = ConvertTo-SecureString "sdpofiwojiosddf" -AsPlainText -Force
     $outputDirectory = ".";
 
-    .\src\certificates\getcertificate.ps1 -DnsNames $dnsNames -TemplateName $templateName -FriendlyName $friendlyName -PfxPass $pfxPass -OutputDirectory $outputDirectory
+    $result = .\src\certificates\getcertificate.ps1 -DnsNames $dnsNames -TemplateName $templateName -FriendlyName $friendlyName -PfxPass $pfxPass -OutputDirectory $outputDirectory
 }
 catch
 {
@@ -78,8 +86,8 @@ catch
 try
 {
     $friendlyName = "sh01test.contoso.local 2018-07-31";
-    $certFileDirectory = ".";
-    if ( !( Get-Item "$certFileDirectory\$friendlyName.pfx" -ErrorAction Ignore ) )
+    $outputDirectory = ".";
+    if ( !( Get-Item "$outputDirectory\$friendlyName.pfx" -ErrorAction Ignore ) )
     {
         Write-Host "$(Get-Date) Pfx file is not found";
         Exit 1;
@@ -96,9 +104,9 @@ catch
 try
 {
     $friendlyName = "sh01test.contoso.local 2018-07-31";
-    $certFileDirectory = ".";
-    Remove-Item "$certFileDirectory\$friendlyName.pfx"
-    if ( Get-Item "$certFileDirectory\$friendlyName.pfx" -ErrorAction Ignore )
+    $outputDirectory = ".";
+    Remove-Item "$outputDirectory\$friendlyName.pfx"
+    if ( Get-Item "$outputDirectory\$friendlyName.pfx" -ErrorAction Ignore )
     {
         Write-Host "$(Get-Date) Pfx file detected";
         Exit 1;
@@ -111,15 +119,16 @@ catch
     Exit 1;
 }
 
+Write-Host "$(Get-Date) Test #2 is complete";
 
-Write-Host "$(Get-Date) Test #3";
+
 # Application
 try
 {
     $dnsNames = "sh02test.contoso.local";
     $templateName = "CustomSSLCertificateTemplate";
 
-    .\src\certificates\getcertificate.ps1 -DnsNames $dnsNames -TemplateName $templateName
+    $result = .\src\certificates\getcertificate.ps1 -DnsNames $dnsNames -TemplateName $templateName
 }
 catch
 {
@@ -132,8 +141,8 @@ catch
 try
 {
     $friendlyName = "sh02test.contoso.local $( Get-Date -Format 'yyyy-MM-dd' )";
-    $certFileDirectory = ".";
-    if ( !( Get-Item "$certFileDirectory\$friendlyName.pfx" -ErrorAction Ignore ) )
+    $outputDirectory = ".";
+    if ( !( Get-Item "$outputDirectory\$friendlyName.pfx" -ErrorAction Ignore ) )
     {
         Write-Host "$(Get-Date) Pfx file is not found";
         Exit 1;
@@ -150,9 +159,9 @@ catch
 try
 {
     $friendlyName = "sh02test.contoso.local $( Get-Date -Format 'yyyy-MM-dd' )";
-    $certFileDirectory = ".";
-    Remove-Item "$certFileDirectory\$friendlyName.pfx"
-    if ( Get-Item "$certFileDirectory\$friendlyName.pfx" -ErrorAction Ignore )
+    $outputDirectory = ".";
+    Remove-Item "$outputDirectory\$friendlyName.pfx"
+    if ( Get-Item "$outputDirectory\$friendlyName.pfx" -ErrorAction Ignore )
     {
         Write-Host "$(Get-Date) Pfx file detected";
         Exit 1;
@@ -165,15 +174,16 @@ catch
     Exit 1;
 }
 
+Write-Host "$(Get-Date) Test #3 is complete";
 
-Write-Host "$(Get-Date) Test #4";
+
 # Application
 try
 {
     $dnsNames = "oos.contoso.local", "OOS01.CONTOSO.LOCAL", "OOS02.CONTOSO.LOCAL";
     $templateName = "CustomSSLCertificateTemplate";
 
-    .\src\certificates\getcertificate.ps1 -DnsNames $dnsNames -TemplateName $templateName
+    $result = .\src\certificates\getcertificate.ps1 -DnsNames $dnsNames -TemplateName $templateName
 }
 catch
 {
@@ -186,8 +196,8 @@ catch
 try
 {
     $friendlyName = "oos.contoso.local $( Get-Date -Format 'yyyy-MM-dd' )";
-    $certFileDirectory = ".";
-    if ( !( Get-Item "$certFileDirectory\$friendlyName.pfx" -ErrorAction Ignore ) )
+    $outputDirectory = ".";
+    if ( !( Get-Item "$outputDirectory\$friendlyName.pfx" -ErrorAction Ignore ) )
     {
         Write-Host "$(Get-Date) Pfx file is not found";
         Exit 1;
@@ -204,9 +214,9 @@ catch
 try
 {
     $friendlyName = "oos.contoso.local $( Get-Date -Format 'yyyy-MM-dd' )";
-    $certFileDirectory = ".";
-    Remove-Item "$certFileDirectory\$friendlyName.pfx"
-    if ( Get-Item "$certFileDirectory\$friendlyName.pfx" -ErrorAction Ignore )
+    $outputDirectory = ".";
+    Remove-Item "$outputDirectory\$friendlyName.pfx"
+    if ( Get-Item "$outputDirectory\$friendlyName.pfx" -ErrorAction Ignore )
     {
         Write-Host "$(Get-Date) Pfx file detected";
         Exit 1;
@@ -218,6 +228,8 @@ catch
     $_.Exception.Message;
     Exit 1;
 }
+
+Write-Host "$(Get-Date) Test #4 is complete";
 
 
 Exit 0;
