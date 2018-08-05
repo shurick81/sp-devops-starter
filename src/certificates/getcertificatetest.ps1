@@ -141,9 +141,18 @@ catch
 try
 {
     $friendlyName = "sh02test.contoso.local $( Get-Date -Format 'yyyy-MM-dd' )";
+    $pfxPass = ConvertTo-SecureString $result.Password -AsPlainText -Force
     $outputDirectory = ".";
-    if ( !( Get-Item "$outputDirectory\$friendlyName.pfx" -ErrorAction Ignore ) )
+    if ( Get-Item "$outputDirectory\$friendlyName.pfx" -ErrorAction Ignore )
     {
+        $cert = Import-PfxCertificate -FilePath "$outputDirectory\$friendlyName.pfx" -CertStoreLocation Cert:\LocalMachine\My -Password $pfxPass;
+        if ( $cert ) {
+            $cert | Remove-Item -Force;
+        } else {
+            Write-Host "$(Get-Date) Certificate could not be imported";
+            Exit 1;
+        }
+    } else {
         Write-Host "$(Get-Date) Pfx file is not found";
         Exit 1;
     }

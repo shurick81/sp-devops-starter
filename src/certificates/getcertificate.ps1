@@ -1,13 +1,13 @@
 param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory=$true,Position=1)]
     [ValidateNotNullorEmpty()]
     [String[]]
     $DnsNames,
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory=$true,Position=2)]
     [ValidateNotNullorEmpty()]
     [String]
     $TemplateName,
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory=$false,Position=3)]
     [String]
     $FriendlyName,
     [Parameter(Mandatory=$false)]
@@ -18,14 +18,14 @@ param(
     $OutputDirectory = "."
 )
 
-$certFileInfo = @{}
+$certFileInfo = New-Object -TypeName psobject;
 if ( !$friendlyName ) {
     $friendlyName = $DnsNames[0] + " " + ( Get-Date -Format 'yyyy-MM-dd' );
 }
 if ( !$PfxPass ) {
     $plainPass = -join ((65..90) + (97..122) | Get-Random -Count 12 | % {[char]$_})
-    $certFileInfo.Password = $plainPass;
-    $pfxPass = ConvertTo-SecureString $plainPass -AsPlainText -Force
+    $certFileInfo | Add-Member -MemberType NoteProperty -Name Password -Value $plainPass;
+    $pfxPass = ConvertTo-SecureString $plainPass -AsPlainText -Force;
 }
 $pfxFileName = "$outputDirectory\$friendlyName.pfx";
 #Write-Host "$(Get-Date) Checking $pfxFileName file";
@@ -38,11 +38,11 @@ if ( !( Get-Item $pfxFileName -ErrorAction Ignore ) )
     {
         #Write-Host "$(Get-Date) certificate is issued";
         $cert = $enrollmentResponse.Certificate;
-        $certFileInfo.Thumbprint = $cert.Thumbprint;
+        $certFileInfo | Add-Member -MemberType NoteProperty -Name Thumbprint -Value $cert.Thumbprint;
         $cert.FriendlyName = $friendlyName;
         #Write-Host "Thumbprint: $($cert.Thumbprint)";
         $cert | Export-PfxCertificate -FilePath $pfxFileName -Password $pfxPass -Force | Out-Null
-        $certFileInfo.Path = ( Resolve-Path $pfxFileName ).Path;
+        $certFileInfo | Add-Member -MemberType NoteProperty -Name Path -Value ( Resolve-Path $pfxFileName )
         $cert | Remove-Item -Force;
     } else {
         throw "Enrollment status is $enrollmentStatus";
@@ -50,4 +50,4 @@ if ( !( Get-Item $pfxFileName -ErrorAction Ignore ) )
 } else {
     throw "File already exists";
 }
-return $certFileInfo;
+Write-Output $certFileInfo;
