@@ -1,0 +1,303 @@
+Vagrant.configure(2) do |config|
+    config.vm.communicator = "winrm"
+    config.winrm.username = "vagrant"
+    config.winrm.password = "Fractalsol365"
+    config.winrm.transport = :plaintext
+    config.winrm.basic_auth_only = true
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+    config.vm.define "AD01" do |vm_config|
+        vm_config.vm.hostname = "AD01"
+        vm_config.vm.box = "sp-win2016-ad"
+        vm_config.vm.network "forwarded_port", guest: 3389, host: 13390, auto_correct: true
+        vm_config.vm.provider "virtualbox" do |vb, override|
+            override.vm.network :private_network, ip: "192.168.51.128", gateway: "192.168.51.1"
+            #vb.gui = true
+            vb.memory = "1024"
+            vb.cpus = 2
+        end
+        vm_config.vm.provider :azure do |azure, override|
+            azure.tenant_id = ENV['ARM_TENANT_ID']
+            azure.client_id = ENV['ARM_CLIENT_ID']
+            azure.client_secret = ENV['ARM_CLIENT_SECRET']
+            azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
+            azure.resource_group_name = 'sp-devops-starter-dev-2016-oos'
+            azure.vm_managed_image_id = "/subscriptions/#{ENV['ARM_SUBSCRIPTION_ID']}/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-ad"
+            azure.instance_ready_timeout = 3600
+            azure.vm_name = 'ad01'
+            azure.location = 'WestUS2'
+            azure.vm_size = 'Standard_B2s'
+            azure.vm_storage_account_type = 'Standard_LRS'
+            azure.admin_username = "vagrant"
+            azure.admin_password = "Fractalsol365"
+            azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
+            # azure.virtual_network_name = 'sp-devops-starter-dev-2016-oos'
+            azure.nsg_name = 'sp-devops-starter-dev-2016-oos'
+            azure.wait_for_destroy = true
+            override.vm.guest = :windows
+            override.vm.box = "azure"
+            override.winrm.transport = :ssl
+            override.winrm.port = 5986
+            override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
+            override.vm.synced_folder ".", "/vagrant", disabled: true
+        end
+        # vm_config.vm.provision :shell, path: "../spdomain.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+        # vm_config.vm.provision "reload"
+        # vm_config.vm.provision :shell, path: "../spdomain.ps1"
+        # vm_config.vm.provision :shell, path: "../spdomaincustomizations.ps1"
+        # vm_config.vm.provision :shell, path: "../customizations/spdomaincustomizations.ps1"
+        vm_config.vm.provision :shell, path: "../oosdns.ps1"
+        vm_config.vm.boot_timeout = 1800
+    end
+    config.vm.define "CA01" do |vm_config|
+        vm_config.vm.hostname = "CA01"
+        vm_config.vm.box = "sp-win2016-ca"
+        vm_config.vm.network "forwarded_port", guest: 3389, host: 13395, auto_correct: true
+        vm_config.vm.provider "virtualbox" do |vb, override|
+            override.vm.network :private_network, ip: "192.168.51.133", gateway: "192.168.51.1"
+            override.vm.provision :shell, path: "../domainclientvbnetwork.ps1"
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            override.vm.provision :shell, path: "../ca.ps1"
+            #vb.vm.gui = true
+            vb.memory = "1536"
+            vb.cpus = 2
+        end
+        vm_config.vm.provider "hyperv" do |hv, override|
+            override.vm.provision :shell, path: "../domainclienthvnetwork.ps1"
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            override.vm.provision :shell, path: "../ca.ps1"
+            hv.memory = "1024"
+            hv.maxmemory = "2048"
+            hv.cpus = 2
+        end
+        vm_config.vm.provider :azure do |azure, override|
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            override.vm.provision :shell, path: "../ca.ps1"
+            azure.tenant_id = ENV['ARM_TENANT_ID']
+            azure.client_id = ENV['ARM_CLIENT_ID']
+            azure.client_secret = ENV['ARM_CLIENT_SECRET']
+            azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
+            azure.resource_group_name = 'sp-devops-starter-dev-2016-oos'
+            azure.vm_managed_image_id = "/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-ca"
+            azure.instance_ready_timeout = 3600
+            azure.vm_name = 'ca01'
+            azure.location = 'WestUS2'
+            azure.vm_size = 'Standard_B2s'
+            azure.vm_storage_account_type = 'Standard_LRS'
+            azure.admin_username = "vagrant"
+            azure.admin_password = "Fractalsol365"
+            azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
+            # azure.virtual_network_name = 'sp-devops-starter-dev-2016-oos'
+            azure.nsg_name = 'sp-devops-starter-dev-2016-oos'
+            azure.wait_for_destroy = true
+            override.vm.guest = :windows
+            override.vm.box = "azure"
+            override.winrm.transport = :ssl
+            override.winrm.port = 5986
+            override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
+            override.vm.synced_folder ".", "/vagrant", disabled: true
+        end
+        vm_config.vm.boot_timeout = 1800
+    end
+    config.vm.define "OOS01" do |vm_config|
+        vm_config.vm.hostname = "OOS01"
+        vm_config.vm.box = "oos-win2016-web"
+        vm_config.vm.network "forwarded_port", guest: 3389, host: 13396, auto_correct: true
+        vm_config.vm.provider "virtualbox" do |vb, override|
+            override.vm.network :private_network, ip: "192.168.51.135", gateway: "192.168.51.1"
+            override.vm.provision :shell, path: "../domainclientvbnetwork.ps1"
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            #vb.vm.gui = true
+            vb.memory = "3072"
+            vb.cpus = 2
+        end
+        vm_config.vm.provider "hyperv" do |hv, override|
+            override.vm.provision :shell, path: "../domainclienthvnetwork.ps1"
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            hv.memory = "2048"
+            hv.maxmemory = "3072"
+            hv.cpus = 2
+        end
+        vm_config.vm.provider :azure do |azure, override|
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            azure.tenant_id = ENV['ARM_TENANT_ID']
+            azure.client_id = ENV['ARM_CLIENT_ID']
+            azure.client_secret = ENV['ARM_CLIENT_SECRET']
+            azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
+            azure.resource_group_name = 'sp-devops-starter-dev-2016-oos'
+            azure.vm_managed_image_id = "/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/oos-win2016-web"
+            azure.instance_ready_timeout = 3600
+            azure.vm_name = 'oos01'
+            azure.location = 'WestUS2'
+            azure.vm_size = 'Standard_B2ms'
+            azure.vm_storage_account_type = 'Standard_LRS'
+            azure.admin_username = "vagrant"
+            azure.admin_password = "Fractalsol365"
+            azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
+            # azure.virtual_network_name = 'sp-devops-starter-dev-2016-oos'
+            azure.nsg_name = 'sp-devops-starter-dev-2016-oos'
+            azure.wait_for_destroy = true
+            override.vm.guest = :windows
+            override.vm.box = "azure"
+            override.winrm.transport = :ssl
+            override.winrm.port = 5986
+            override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
+            override.vm.synced_folder ".", "/vagrant", disabled: true
+        end
+        vm_config.vm.boot_timeout = 1800
+    end
+    config.vm.define "OOS02" do |vm_config|
+        vm_config.vm.hostname = "OOS02"
+        vm_config.vm.box = "oos-win2016-web"
+        vm_config.vm.network "forwarded_port", guest: 3389, host: 13396, auto_correct: true
+        vm_config.vm.provider "virtualbox" do |vb, override|
+            override.vm.network :private_network, ip: "192.168.51.136", gateway: "192.168.51.1"
+            override.vm.provision :shell, path: "../domainclientvbnetwork.ps1"
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            #vb.vm.gui = true
+            vb.memory = "3072"
+            vb.cpus = 2
+        end
+        vm_config.vm.provider "hyperv" do |hv, override|
+            override.vm.provision :shell, path: "../domainclienthvnetwork.ps1"
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            hv.memory = "2048"
+            hv.maxmemory = "3072"
+            hv.cpus = 2
+        end
+        vm_config.vm.provider :azure do |azure, override|
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            azure.tenant_id = ENV['ARM_TENANT_ID']
+            azure.client_id = ENV['ARM_CLIENT_ID']
+            azure.client_secret = ENV['ARM_CLIENT_SECRET']
+            azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
+            azure.resource_group_name = 'sp-devops-starter-dev-2016-oos'
+            azure.vm_managed_image_id = "/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/oos-win2016-web"
+            azure.instance_ready_timeout = 3600
+            azure.vm_name = 'oos02'
+            azure.location = 'WestUS2'
+            azure.vm_size = 'Standard_B2ms'
+            azure.vm_storage_account_type = 'Standard_LRS'
+            azure.admin_username = "vagrant"
+            azure.admin_password = "Fractalsol365"
+            azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
+            # azure.virtual_network_name = 'sp-devops-starter-dev-2016-oos'
+            azure.nsg_name = 'sp-devops-starter-dev-2016-oos'
+            azure.wait_for_destroy = true
+            override.vm.guest = :windows
+            override.vm.box = "azure"
+            override.winrm.transport = :ssl
+            override.winrm.port = 5986
+            override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
+            override.vm.synced_folder ".", "/vagrant", disabled: true
+        end
+        vm_config.vm.boot_timeout = 1800
+    end
+    config.vm.define "CODE01" do |vm_config|
+        vm_config.vm.hostname = "CODE01"
+        vm_config.vm.box = "sp-win2016-code"
+        vm_config.vm.network "forwarded_port", guest: 3389, host: 13396, auto_correct: true
+        vm_config.vm.provider "virtualbox" do |vb, override|
+            override.vm.network :private_network, ip: "192.168.51.134", gateway: "192.168.51.1"
+            override.vm.provision :shell, path: "../domainclientvbnetwork.ps1"
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision :shell, path: "../xcredclient.ps1"
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            override.vm.provision :shell, path: "../fakesmbshare.ps1"
+            # override.vm.provision :file, source: "../oos.contoso.local.pfx", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/oos.contoso.local.pfx"
+            # override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
+            # override.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplateinvoker.ps1"
+            # override.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; .\\infrastructure\\stacks\\certtemplateinvoker.ps1'"
+            # override.vm.provision :file, source: "../../../src/certificates/getcertificate.ps1", destination: "c:/tmp/sp-devops-starter/src/certificates/getcertificate.ps1"
+            # override.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; $pfxPass = ConvertTo-SecureString \"sdpofiwojiosddf\" -AsPlainText -Force; .\\src\\certificates\\getcertificate.ps1 \"oos.contoso.local\", \"OOS01.CONTOSO.LOCAL\", \"OOS02.CONTOSO.LOCAL\" \"CustomSSLCertificateTemplate\" -PfxPass $pfxPass -OutputDirectory \"c:\\tmp\" -FriendlyName \"oos.contoso.local 2018-07-31\"'"
+            #vb.vm.gui = true
+            vb.memory = "2048"
+            vb.cpus = 4
+        end
+        vm_config.vm.provider "hyperv" do |hv, override|
+            override.vm.provision :shell, path: "../domainclienthvnetwork.ps1"
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision :shell, path: "../xcredclient.ps1"
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            override.vm.provision :shell, path: "../fakesmbshare.ps1"
+            # override.vm.provision :file, source: "../oos.contoso.local.pfx", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/oos.contoso.local.pfx"
+            # override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
+            # override.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplateinvoker.ps1"
+            # override.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; .\\infrastructure\\stacks\\certtemplateinvoker.ps1'"
+            # override.vm.provision :file, source: "../../../src/certificates/getcertificate.ps1", destination: "c:/tmp/sp-devops-starter/src/certificates/getcertificate.ps1"
+            # override.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; $pfxPass = ConvertTo-SecureString \"sdpofiwojiosddf\" -AsPlainText -Force; .\\src\\certificates\\getcertificate.ps1 \"oos.contoso.local\", \"OOS01.CONTOSO.LOCAL\", \"OOS02.CONTOSO.LOCAL\" \"CustomSSLCertificateTemplate\" -PfxPass $pfxPass -OutputDirectory \"c:\\tmp\" -FriendlyName \"oos.contoso.local 2018-07-31\"'"
+            hv.memory = "2048"
+            hv.maxmemory = "4096"
+            hv.cpus = 4
+        end
+        vm_config.vm.provider :azure do |azure, override|
+            override.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+            override.vm.provision :shell, path: "../xcredclient.ps1"
+            override.vm.provision "reload"
+            override.vm.provision :shell, path: "../domainclient.ps1"
+            override.vm.provision :shell, path: "../domainclientgroups.ps1"
+            override.vm.provision :shell, path: "../fakesmbshare.ps1"
+            # override.vm.provision :file, source: "../oos.contoso.local.pfx", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/oos.contoso.local.pfx"
+            # override.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
+            # override.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplateinvoker.ps1"
+            # override.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; .\\infrastructure\\stacks\\certtemplateinvoker.ps1'"
+            # override.vm.provision :file, source: "../../../src/certificates/getcertificate.ps1", destination: "c:/tmp/sp-devops-starter/src/certificates/getcertificate.ps1"
+            # override.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; $pfxPass = ConvertTo-SecureString \"sdpofiwojiosddf\" -AsPlainText -Force; .\\src\\certificates\\getcertificate.ps1 \"oos.contoso.local\", \"OOS01.CONTOSO.LOCAL\", \"OOS02.CONTOSO.LOCAL\" \"CustomSSLCertificateTemplate\" -PfxPass $pfxPass -OutputDirectory \"c:\\tmp\" -FriendlyName \"oos.contoso.local 2018-07-31\"'"
+            azure.tenant_id = ENV['ARM_TENANT_ID']
+            azure.client_id = ENV['ARM_CLIENT_ID']
+            azure.client_secret = ENV['ARM_CLIENT_SECRET']
+            azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
+            azure.resource_group_name = 'sp-devops-starter-dev-2016-oos'
+            azure.vm_managed_image_id = "/subscriptions/7bff593e-4ee7-40bb-9d2b-522f196626e5/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-code"
+            azure.instance_ready_timeout = 3600
+            azure.vm_name = 'code01'
+            azure.location = 'WestUS2'
+            azure.vm_size = 'Basic_A2'
+            azure.vm_storage_account_type = 'Standard_LRS'
+            azure.admin_username = "vagrant"
+            azure.admin_password = "Fractalsol365"
+            azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
+            # azure.virtual_network_name = 'sp-devops-starter-dev-2016-oos'
+            azure.nsg_name = 'sp-devops-starter-dev-2016-oos'
+            azure.wait_for_destroy = true
+            override.vm.guest = :windows
+            override.vm.box = "azure"
+            override.winrm.transport = :ssl
+            override.winrm.port = 5986
+            override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
+            override.vm.synced_folder ".", "/vagrant", disabled: true
+        end
+        vm_config.vm.boot_timeout = 1800
+    end
+end

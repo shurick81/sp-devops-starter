@@ -1,32 +1,28 @@
-$configName = "OOSMediaClean"
+$configName = "OOSDNSRecords"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
     Configuration $configName
     {
         param(
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
+            $OOSPfxCredential
         )
 
-        Import-DscResource -ModuleName PSDesiredStateConfiguration
-
-        $SPImageLocation = $systemParameters.SPImageLocation
-        $SPInstallationMediaPath = $configParameters.SPInstallationMediaPath
-        $SPVersion = $configParameters.SPVersion;
+        Import-DscResource -ModuleName PSDesiredStateConfiguration 
+        Import-DscResource -ModuleName xDnsServer -ModuleVersion 1.9.0.0
 
         Node $AllNodes.NodeName
-        {
+        {        
 
-            File OOSNoLocalMediaEnsure {
-                DestinationPath = "C:\Install\OOSInstall"
-                Recurse = $true
-                Type = "Directory"
-                Ensure = "Absent"
-                Force = $true
-            }
-
-            File OOSNoLocalMediaArchiveEnsure {
-                DestinationPath = "C:\Install\OOS.zip"
-                Ensure = "Absent"
+            xDnsRecord "xDnsCNAMERecordOOS"
+            {
+                Name    = "oos"
+                Type    = "CName"
+                Target  = "OOS01.contoso.local"
+                Zone    = "contoso.local"
             }
 
         }
@@ -41,11 +37,15 @@ catch
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
+
+$securedPassword = ConvertTo-SecureString "Fractalsol365" -AsPlainText -Force
+$OOSPfxCredential = New-Object System.Management.Automation.PSCredential( "contoso\vagrant", $securedPassword )
 Write-Host "$(Get-Date) Compiling DSC"
 try
 {
     &$configName `
-        -ConfigurationData $configurationData;
+        -ConfigurationData $configurationData `
+        -OOSPfxCredential $OOSPfxCredential;
 }
 catch
 {

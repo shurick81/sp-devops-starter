@@ -1,4 +1,4 @@
-$configName = "OOSMediaClean"
+$configName = "FakeSMBShare"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
@@ -8,25 +8,22 @@ try
         )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-
-        $SPImageLocation = $systemParameters.SPImageLocation
-        $SPInstallationMediaPath = $configParameters.SPInstallationMediaPath
-        $SPVersion = $configParameters.SPVersion;
+        Import-DscResource -ModuleName xSmbShare -ModuleVersion 2.1.0.0
 
         Node $AllNodes.NodeName
-        {
+        {        
 
-            File OOSNoLocalMediaEnsure {
-                DestinationPath = "C:\Install\OOSInstall"
-                Recurse = $true
+            File FakeSMBSharedDirectory {
+                DestinationPath = "c:\fakesmbshare"
                 Type = "Directory"
-                Ensure = "Absent"
-                Force = $true
             }
 
-            File OOSNoLocalMediaArchiveEnsure {
-                DestinationPath = "C:\Install\OOS.zip"
-                Ensure = "Absent"
+            xSmbShare FakeSMBShare
+            {
+                Ensure = "Present" 
+                Name   = "fakesmbshare"
+                Path = "c:\fakesmbshare"  
+                Description = "This is a fake SMB Share"          
             }
 
         }
@@ -41,6 +38,7 @@ catch
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
+
 Write-Host "$(Get-Date) Compiling DSC"
 try
 {
