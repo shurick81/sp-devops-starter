@@ -1,25 +1,29 @@
-$configName = "DomainClientHyperVNetwork"
+$configName = "OOSFirstServer"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
     Configuration $configName
     {
         param(
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
+            $OOSPfxCredential
         )
 
-        Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
+        Import-DscResource -ModuleName PSDesiredStateConfiguration 
+        Import-DscResource -ModuleName CertificateDsc -ModuleVersion 4.1.0.0
 
-        $resolved = Resolve-DnsName AD01 -Type A;
         Node $AllNodes.NodeName
         {        
-            
-            xDnsServerAddress DnsServerAddress
+
+            PfxImport CompanyCert
             {
-                InterfaceAlias = 'Ethernet'
-                AddressFamily  = 'IPv4'
-                Address        = $resolved.IPAddress
-                Validate       = $false
+                Thumbprint = '7cb9be6b05d7c8aabe02d9f9c9cd27a801c4b438'
+                Path       = 'c:/tmp/sp-devops-starter/infrastructure/stacks/oos.contoso.local.pfx'
+                Location   = 'LocalMachine'
+                Store      = 'WebHosting'
+                Credential = $OOSPfxCredential
             }
 
         }
@@ -35,11 +39,14 @@ $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
 
+$securedPassword = ConvertTo-SecureString "Fractalsol365" -AsPlainText -Force
+$OOSPfxCredential = New-Object System.Management.Automation.PSCredential( "contoso\vagrant", $securedPassword )
 Write-Host "$(Get-Date) Compiling DSC"
 try
 {
     &$configName `
-        -ConfigurationData $configurationData;
+        -ConfigurationData $configurationData `
+        -OOSPfxCredential $OOSPfxCredential;
 }
 catch
 {

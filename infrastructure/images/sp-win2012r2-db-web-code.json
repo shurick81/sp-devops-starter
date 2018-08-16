@@ -95,7 +95,7 @@
         },
         {
             "type": "powershell",
-            "inline": "Write-Host 'Canary script just for pause after wmf5 installation'",
+            "inline": "Write-Host 'Fake script just for pause after wmf5 installation'",
             "pause_before": "10m"
         },
         {

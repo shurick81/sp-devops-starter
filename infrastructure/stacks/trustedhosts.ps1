@@ -1,1 +1,1 @@
-winrm s winrm/config/client '@{TrustedHosts="AD01,DBWEBCODE01,CODE01"}'
+winrm s winrm/config/client '@{TrustedHosts="AD01,DBWEB01,CODE01"}'

@@ -29,7 +29,7 @@ try
             {
                 Ensure              = 'Present'
                 Name                = 'SPDB'
-                ServerName          = 'DBWEBCODE01\SPIntra01'
+                ServerName          = 'DBWEB01\SPIntra01'
                 UseDynamicTcpPort   = $true
             }
 

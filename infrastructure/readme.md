@@ -150,7 +150,7 @@ if you encounter `The box is not able to report an address for WinRM to connect 
 ### Resetting SP machine
 
 ```
-vagrant destroy DBWEBCODE01 --force
+vagrant destroy DBWEB01 --force
 vagrant up
 ```
 

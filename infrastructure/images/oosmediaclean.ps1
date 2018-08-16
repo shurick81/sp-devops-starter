@@ -27,6 +27,7 @@ try
             File OOSNoLocalMediaArchiveEnsure {
                 DestinationPath = "C:\Install\OOS.zip"
                 Ensure = "Absent"
+                Force = $true
             }
 
         }

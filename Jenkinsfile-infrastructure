@@ -1,12 +1,12 @@
 pipeline {
     agent {
-        label 'sharepoint-auto||hvmanager'
+        label 'sharepoint-auto||infrastructuretester'
     }
 
     stages {
         stage('Infrastructure - Prepare') {
             agent {
-                label 'win&&hvmanager'
+                label 'win&&infrastructuretester'
             }
             steps {
                 powershell '(Resolve-Path ./).Path'
@@ -30,59 +30,106 @@ pipeline {
                     }
                     if ( !( Get-Item ./images/http/SSMS-Setup-ENU.exe -ErrorAction Ignore ) ) { Write-Host "SQL Management Studio media missing"; exit 1 }
                 '''
+                echo 'Removing Vagrant Boxes...'
+                powershell '''cd infrastructure/images;
+                    #./removevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-web,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-web,sp-win2016-db,sp-win2016-ca,sp-win2016-ad,sp-win2016-code,sp-win2016-db-web,sp-win2016-db-web-code,sp-win2016-db-sp2019-code,sp-win2016-ad-db-sp2019-code,sp-win10-user
+                    ./removevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web-code
+                    #if ( vagrant box list | ? { $_ -like "sp-win10-user *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2016-ad-db-sp2019-code *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2016-db-sp2019-code *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2016-db-web-code *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2016-db-web *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2016-ad *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2016-code *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2016-ca *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2016-db *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2016-web *" } ) { exit 1 }
+                    if ( vagrant box list | ? { $_ -like "sp-win2012r2-db-web-code *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2012r2-web *" } ) { exit 1 }
+                    #if ( vagrant box list | ? { $_ -like "sp-win2012r2-code *" } ) { exit 1 }
+                    if ( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) { exit 1 }
+                '''
+                powershell '''cd ci;
+                    if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { Remove-Item ./images/centos7-ci.box }
+                    if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { exit 1 };
+                '''
             }
         }
         stage('Infrastructure - Build') {
             agent {
-                label 'win&&hvmanager'
+                label 'win&&infrastructuretester'
             }
             steps {
-                powershell 'cd infrastructure/images; ./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web,sp-win2016-ad,sp-win2016-db-web'
-                powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) ) { exit 1 }'
-                powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) ) { exit 1 }'
-                powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2016-ad *" } ) ) { exit 1 }'
-                powershell 'if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-web *" } ) ) { exit 1 }'
+                powershell '''cd ci/images;
+                    packer build -only virtualbox-iso,hyperv-iso centos7-ci.json
+                    if ( !( Get-Item ./centos7-ci.box ) ) {
+                        Write-Host "$(Get-Date) ./centos7-ci.box is missing";
+                        exit 1;
+                    }
+                    exit 0;
+                '''
+                powershell '''cd infrastructure/images;
+                    #./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-web,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-web,sp-win2016-db,sp-win2016-ca,sp-win2016-ad,sp-win2016-code,sp-win2016-db-web,sp-win2016-db-web-code,sp-win10-user
+                    ./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web-code
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win10-user *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2016-ad-db-sp2019-code *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-sp2019-code *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-web-code *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-web *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2016-code *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2016-ad *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2016-ca *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2016-db *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2016-web *" } ) ) { exit 1 }
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web-code *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-db-web *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-web *" } ) ) { exit 1 }
+                    #if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-code *" } ) ) { exit 1 }
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) ) { exit 1 }
+                '''
             }
         }
         stage('Infrastructure - Deploy') {
             agent {
-                label 'win&&hvmanager'
+                label 'win&&infrastructuretester'
             }
             steps {
                 echo 'Building farms'
-                powershell '''cd infrastructure/stacks/ci-2013-main;
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "main-2013";
+                powershell '''cd ci
+                    vagrant box remove file://./images/centos7-ci.box --force; vagrant up --provider virtualbox
+                    if ( !( vagrant status | ? { $_ -like "default* running (*" } ) ) { exit 1 }
+                    vagrant destroy --force
+                    if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }
+                '''
+                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
+                    vagrant destroy --force;
+                    if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
+                    if ( !( vagrant status | ? { $_ -like "DBWEB01* not created (*" } ) ) { Write-Host "DBWEB01 is not destroyed"; exit 1 }
+                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
+                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
                     vagrant up --provider virtualbox;
                     if ( !( vagrant status | ? { $_ -like "AD01* running (*" } ) ) { Write-Host "AD01 is not running"; exit 1 }
-                    if ( !( vagrant status | ? { $_ -like "DBWEBCODE01* running (*" } ) ) { Write-Host "DBWEBCODE01 is not running"; exit 1 }
+                    if ( !( vagrant status | ? { $_ -like "DBWEB01* running (*" } ) ) { Write-Host "DBWEB01 is not running"; exit 1 }
+                    vagrant destroy --force;
+                    if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
+                    if ( !( vagrant status | ? { $_ -like "DBWEB01* not created (*" } ) ) { Write-Host "DBWEB01 is not destroyed"; exit 1 }
                 '''
             }
         }
-        stage('Build') {
-            agent {
-                label 'sharepoint-auto-main-2013'
-            }
-            steps {
-                echo 'Building the solution'
-            }
-        }
-        stage('Deploy') {
-            agent {
-                label 'sharepoint-auto-main-2013'
-            }
-            steps {
-                echo 'Deploying the solution'
-                powershell './src/spfarm/spfarm_customizations.ps1'
-                powershell './src/spfarm/farmtest.ps1'
-            }
-        }
-        stage('Test') {
-            agent {
-                label 'sharepoint-auto-main-2013'
-            }
-            steps {
-                echo 'Running tests'
-            }
+    }
+    post { 
+        always { 
+            powershell '''cd ci
+                vagrant box remove file://./images/centos7-ci.box --force; vagrant up --provider virtualbox
+                vagrant destroy --force
+                if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }
+            '''
+            powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
+                vagrant destroy --force;
+                if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
+                if ( !( vagrant status | ? { $_ -like "DBWEB01* not created (*" } ) ) { Write-Host "DBWEB01 is not destroyed"; exit 1 }
+            '''
         }
     }
 }

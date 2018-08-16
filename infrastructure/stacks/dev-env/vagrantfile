@@ -18,13 +18,13 @@ Vagrant.configure('2') do |config|
     override.winrm.port = 5986
     override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
     override.vm.synced_folder ".", "/vagrant", disabled: true
-    override.vm.provision :shell, path: "../setazurevariables.ps1", env: {
+    vm_config.vm.provision :shell, path: "../setazurevariables.ps1", env: {
       "SPDEVOPSSTARTER_ARM_TENANT_ID" => ENV['ARM_TENANT_ID'],
       "SPDEVOPSSTARTER_ARM_CLIENT_ID" => ENV['ARM_CLIENT_ID'],
       "SPDEVOPSSTARTER_ARM_CLIENT_SECRET" => ENV['ARM_CLIENT_SECRET'],
       "SPDEVOPSSTARTER_ARM_SUBSCRIPTION_ID" => ENV['ARM_SUBSCRIPTION_ID'],
     }
-    override.vm.provision :shell, path: "../vagrantplugins.ps1"
+    vm_config.vm.provision :shell, path: "../vagrantplugins.ps1"
   end
 
 end

@@ -17,7 +17,7 @@
             "http_directory": "http",
             "shutdown_command": "a:/sysprep.bat",
             "vboxmanage": [
-                [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
+                [ "modifyvm", "{{.Name}}", "--memory", "3072" ],
                 [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
             ],
             "communicator": "winrm",
@@ -100,6 +100,7 @@
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
         { "type": "powershell", "script": "oosmedia.ps1" },
         { "type": "powershell", "script": "oosbin.ps1" },
+        { "type": "windows-restart" },
         { "type": "powershell", "script": "oosmediaclean.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
