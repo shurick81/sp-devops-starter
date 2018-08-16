@@ -11,8 +11,7 @@ pipeline {
             steps {
                 powershell '(Resolve-Path ./).Path'
                 powershell '''cd ci;
-                    ./waitfornodeisready.ps1
-                    Set-Content "c:\\sp-devops-starter.busy.txt" ""
+                    ./booknode.ps1
                     if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { Remove-Item ./images/centos7-ci.box }
                     if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { exit 1 };
                 '''
@@ -142,7 +141,7 @@ pipeline {
                 if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
                 if ( !( vagrant status | ? { $_ -like "DBWEB01* not created (*" } ) ) { Write-Host "DBWEB01 is not destroyed"; exit 1 }
             '''
-            powershell 'Remove-Item "c:\\sp-devops-starter.busy.txt" -Force'
+            powershell 'cd ci;./releasenode.ps1'
         }
     }
 }

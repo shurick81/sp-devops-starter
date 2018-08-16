@@ -253,7 +253,7 @@ It might be wise to run the following snippet in a separate console in order to 
 Run in PowerShell:
 ```PowerShell
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"; Invoke-RestMethod -Uri https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/3.9/swarm-client-3.9.jar -OutFile swarm-client-3.9.jar
-java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master "http://$env:SPDEVOPSSTARTER_JENKINSHOST`:16080" -username admin -password admin -labels "infrastructuretester win" -executors 2
+java -jar swarm-client-3.9.jar -name $env:computername -disableSslVerification -master "http://$env:SPDEVOPSSTARTER_JENKINSHOST`:16080" -username admin -password admin -labels "infrastructuretester win"
 ```
 
 # Cloning to other projecs
