@@ -119,6 +119,13 @@ pipeline {
                     vagrant destroy --force;
                     if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
                     if ( !( vagrant status | ? { $_ -like "DBWEB01* not created (*" } ) ) { Write-Host "DBWEB01 is not destroyed"; exit 1 }
+                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
+                    vagrant up --provider virtualbox;
+                    if ( !( vagrant status | ? { $_ -like "AD01* running (*" } ) ) { Write-Host "AD01 is not running"; exit 1 }
+                    if ( !( vagrant status | ? { $_ -like "DBWEB01* running (*" } ) ) { Write-Host "DBWEB01 is not running"; exit 1 }
+                    vagrant destroy --force;
+                    if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
+                    if ( !( vagrant status | ? { $_ -like "DBWEB01* not created (*" } ) ) { Write-Host "DBWEB01 is not destroyed"; exit 1 }
                 '''
             }
         }
