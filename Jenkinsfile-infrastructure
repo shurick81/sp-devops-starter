@@ -9,13 +9,12 @@ pipeline {
                 label 'win&&infrastructuretester'
             }
             steps {
-                powershell '(Resolve-Path ./).Path'
                 powershell '''cd ci;
                     ./booknode.ps1
                 '''
             }
         }
-        stage('Infrastructure - Prepare') {
+        stage('Infrastructure - Clean') {
             agent {
                 label 'win&&infrastructuretester'
             }
