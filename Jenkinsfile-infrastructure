@@ -4,7 +4,7 @@ pipeline {
     }
 
     stages {
-        stage('Infrastructure - Prepare') {
+        stage('Infrastructure - Book') {
             agent {
                 label 'win&&infrastructuretester'
             }
@@ -12,29 +12,22 @@ pipeline {
                 powershell '(Resolve-Path ./).Path'
                 powershell '''cd ci;
                     ./booknode.ps1
-                    if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { Remove-Item ./images/centos7-ci.box }
-                    if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { exit 1 };
                 '''
-                echo 'Copying Windows Image...'
-                powershell '''cd infrastructure;
-                    if ( !( Get-Item ./images/http/SQLServer2014SP1.zip -ErrorAction Ignore ) ) {
-                        Copy-Item C:/sp-onprem-files/SQLServer2014SP1.zip ./images/http
-                    }
-                    if ( !( Get-Item ./images/http/SQLServer2014SP1.zip -ErrorAction Ignore ) ) { Write-Host "SQL Server media missing"; exit 1 }
-                    if ( !( Get-Item ./images/http/SPServer2013SP1.zip -ErrorAction Ignore ) ) {
-                        Copy-Item C:/sp-onprem-files/SPServer2013SP1.zip ./images/http
-                    }
-                    if ( !( Get-Item ./images/http/SPServer2013SP1.zip -ErrorAction Ignore ) ) { Write-Host "SharePoint Server media missing"; exit 1 }
-                    if ( !( Get-Item ./images/http/VS2017.zip -ErrorAction Ignore ) ) {
-                        Copy-Item C:/sp-onprem-files/VS2017.zip ./images/http
-                    }
-                    if ( !( Get-Item ./images/http/VS2017.zip -ErrorAction Ignore ) ) { Write-Host "Visual Studio media missing"; exit 1 }
-                    if ( !( Get-Item ./images/http/SSMS-Setup-ENU.exe -ErrorAction Ignore ) ) {
-                        Copy-Item C:/sp-onprem-files/SSMS-Setup-ENU.exe ./images/http
-                    }
-                    if ( !( Get-Item ./images/http/SSMS-Setup-ENU.exe -ErrorAction Ignore ) ) { Write-Host "SQL Management Studio media missing"; exit 1 }
-                '''
+            }
+        }
+        stage('Infrastructure - Prepare') {
+            agent {
+                label 'win&&infrastructuretester'
+            }
+            steps {
                 echo 'Removing Vagrant Boxes...'
+                powershell '''cd ci/images;
+                    ./../../infrastructure/images/removevmimages.ps1 centos7-ci
+                    if ( vagrant box list | ? { $_ -like "centos7-ci *" } ) { exit 1 }
+                    #if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { Remove-Item ./images/centos7-ci.box }
+                    #if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { exit 1 };
+                    exit 0;
+                '''
                 powershell '''cd infrastructure/images;
                     #./removevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-web,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-web,sp-win2016-db,sp-win2016-ca,sp-win2016-ad,sp-win2016-code,sp-win2016-db-web,sp-win2016-db-web-code,sp-win2016-db-sp2019-code,sp-win2016-ad-db-sp2019-code,sp-win10-user
                     ./removevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web,sp-win2012r2-db-web-code
@@ -53,10 +46,7 @@ pipeline {
                     #if ( vagrant box list | ? { $_ -like "sp-win2012r2-web *" } ) { exit 1 }
                     #if ( vagrant box list | ? { $_ -like "sp-win2012r2-code *" } ) { exit 1 }
                     if ( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) { exit 1 }
-                '''
-                powershell '''cd ci;
-                    if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { Remove-Item ./images/centos7-ci.box }
-                    if ( Get-Item ./images/centos7-ci.box -ErrorAction Ignore ) { exit 1 };
+                    exit 0;
                 '''
             }
         }
@@ -65,12 +55,30 @@ pipeline {
                 label 'win&&infrastructuretester'
             }
             steps {
-                powershell '''cd ci/images;
-                    packer build -only virtualbox-iso,hyperv-iso centos7-ci.json
-                    if ( !( Get-Item ./centos7-ci.box ) ) {
-                        Write-Host "$(Get-Date) ./centos7-ci.box is missing";
-                        exit 1;
+                echo 'Copying software media...'
+                powershell '''cd infrastructure;
+                    if ( !( Get-Item ./images/http/SQLServer2014SP1.zip -ErrorAction Ignore ) ) {
+                        Copy-Item C:/sp-onprem-files/SQLServer2014SP1.zip ./images/http
                     }
+                    if ( !( Get-Item ./images/http/SQLServer2014SP1.zip -ErrorAction Ignore ) ) { Write-Host "SQL Server media missing"; exit 1 }
+                    if ( !( Get-Item ./images/http/SPServer2013SP1.zip -ErrorAction Ignore ) ) {
+                        Copy-Item C:/sp-onprem-files/SPServer2013SP1.zip ./images/http
+                    }
+                    if ( !( Get-Item ./images/http/SPServer2013SP1.zip -ErrorAction Ignore ) ) { Write-Host "SharePoint Server media missing"; exit 1 }
+                    if ( !( Get-Item ./images/http/VS2017.zip -ErrorAction Ignore ) ) {
+                        Copy-Item C:/sp-onprem-files/VS2017.zip ./images/http
+                    }
+                    if ( !( Get-Item ./images/http/VS2017.zip -ErrorAction Ignore ) ) { Write-Host "Visual Studio media missing"; exit 1 }
+                    if ( !( Get-Item ./images/http/SSMS-Setup-ENU.exe -ErrorAction Ignore ) ) {
+                        Copy-Item C:/sp-onprem-files/SSMS-Setup-ENU.exe ./images/http
+                    }
+                    if ( !( Get-Item ./images/http/SSMS-Setup-ENU.exe -ErrorAction Ignore ) ) { Write-Host "SQL Management Studio media missing"; exit 1 }
+                    exit 0;
+                '''
+                echo 'Building images...'
+                powershell '''cd ci/images;
+                    ./../../infrastructure/images/preparevmimages.ps1 centos7-ci
+                    if ( !( vagrant box list | ? { $_ -like "centos7-ci *" } ) ) { exit 1 }
                     exit 0;
                 '''
                 powershell '''cd infrastructure/images;
@@ -91,6 +99,7 @@ pipeline {
                     #if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-web *" } ) ) { exit 1 }
                     #if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-code *" } ) ) { exit 1 }
                     if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) ) { exit 1 }
+                    exit 0;
                 '''
             }
         }
@@ -101,10 +110,11 @@ pipeline {
             steps {
                 echo 'Building farms'
                 powershell '''cd ci
-                    vagrant box remove file://./images/centos7-ci.box --force; vagrant up --provider virtualbox
+                    vagrant up --provider virtualbox
                     if ( !( vagrant status | ? { $_ -like "default* running (*" } ) ) { exit 1 }
                     vagrant destroy --force
                     if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }
+                    exit 0;
                 '''
                 powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
                     vagrant destroy --force;
@@ -125,6 +135,7 @@ pipeline {
                     vagrant destroy --force;
                     if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
                     if ( !( vagrant status | ? { $_ -like "DBWEB01* not created (*" } ) ) { Write-Host "DBWEB01 is not destroyed"; exit 1 }
+                    exit 0;
                 '''
             }
         }
@@ -132,14 +143,15 @@ pipeline {
     post { 
         always { 
             powershell '''cd ci
-                vagrant box remove file://./images/centos7-ci.box --force; vagrant up --provider virtualbox
                 vagrant destroy --force
                 if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }
+                exit 0;
             '''
             powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
                 vagrant destroy --force;
                 if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
                 if ( !( vagrant status | ? { $_ -like "DBWEB01* not created (*" } ) ) { Write-Host "DBWEB01 is not destroyed"; exit 1 }
+                exit 0;
             '''
             powershell 'cd ci;./releasenode.ps1'
         }
