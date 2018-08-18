@@ -36,20 +36,25 @@ if ( !$ADSI.Guid ) {
     $NewTempl.pKIExpirationPeriod = $WATempl.pKIExpirationPeriod
     $NewTempl.pKIOverlapPeriod = $WATempl.pKIOverlapPeriod
     $NewTempl.SetInfo()
-
+} else {
+    Write-Host "$(Get-Date) Template already exists";
+}
+$ADSI = [ADSI]"LDAP://$templateCnName,CN=Certificate Templates,CN=Public Key Services,CN=Services,$ConfigContext";
+if ( $ADSI.Guid ) {
     $ADSI = [ADSI]"LDAP://CN=$templateName,CN=Certificate Templates,CN=Public Key Services,CN=Services,$configContext";
-    $rules = $ADSI.psbase.ObjectSecurity.Access | ? { ( $_.IdentityReference -eq "contoso\CODE01$" ) -and ( $_.ActiveDirectoryRights -band [System.DirectoryServices.ActiveDirectoryRights]::ExtendedRight ) }
+    $rules = $ADSI.psbase.ObjectSecurity.Access | ? { ( $_.IdentityReference -eq "contoso\OPS01$" ) -and ( $_.ActiveDirectoryRights -band [System.DirectoryServices.ActiveDirectoryRights]::ExtendedRight ) }
     if ( !$rules ) {
-        $AdObj = New-Object System.Security.Principal.NTAccount("CODE01$")
+        $AdObj = New-Object System.Security.Principal.NTAccount("OPS01$")
         $identity = $AdObj.Translate([System.Security.Principal.SecurityIdentifier])
         $adRights = "ExtendedRight"
         $type = "Allow"
         $ACE = New-Object System.DirectoryServices.ActiveDirectoryAccessRule($identity,$adRights,$type)
         $ADSI.psbase.ObjectSecurity.SetAccessRule($ACE)
         $ADSI.psbase.commitchanges()
+    } else {
+        Write-Host "$(Get-Date) Permissions are already set";
     }
+    #Import-Module PSPKI;
     $certTemplate = Get-CertificateTemplate -Name $templateName
     Get-CertificationAuthority | Get-CATemplate | Add-CATemplate -Template $certTemplate | Set-CATemplate
-} else {
-    Write-Host "$(Get-Date) Template already exists";
 }

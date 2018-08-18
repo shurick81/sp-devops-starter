@@ -99,6 +99,7 @@
         { "type": "powershell", "script": "capsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
         { "type": "powershell", "script": "cabin.ps1" },
+        { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
             "type": "powershell",

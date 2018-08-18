@@ -22,6 +22,24 @@ try
                 RequiredVersion     = "3.0.0.0"
             }
 
+            PSModule "PSModule_xCredSSP"
+            {
+                Ensure              = "Present"
+                Name                = "xCredSSP"
+                Repository          = "PSGallery"
+                InstallationPolicy  = "Trusted"
+                RequiredVersion     = "1.3.0.0"
+            }
+
+            PSModule "PSModule_PSPKI"
+            {
+                Ensure              = "Present"
+                Name                = "PSPKI"
+                Repository          = "PSGallery"
+                InstallationPolicy  = "Trusted"
+                RequiredVersion     = "3.3.0.0"
+            }
+            
         }
     }
 }

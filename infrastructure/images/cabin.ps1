@@ -9,7 +9,7 @@ try
         Node $AllNodes.NodeName
         {
 
-            WindowsFeatureSet DomainFeatures
+            WindowsFeatureSet CAFeatures
             {
                 Name                    = @( "Adcs-Cert-Authority" )
                 Ensure                  = 'Present'
