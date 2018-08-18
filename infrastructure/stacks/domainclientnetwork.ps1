@@ -1,19 +1,25 @@
-$configName = "DomainClientNetwork"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
     $provider = $null
     $computerSystem = Get-WmiObject -Class Win32_ComputerSystem;
+    $computerSystem;
     if ( $computerSystem.Model -eq "VirtualBox" ) {
-        $provider = "virtualbox"
+        Write-Host "Model is VirtualBox";
+        $provider = "virtualbox";
     }
     if ( $computerSystem.Manufacturer -eq "Microsoft" ) {
-        $provider = "hyperv"
-        Get-DnsClient | % { if ( $_.ConnectionSpecificSuffix -like "*.cloudapp.net" ) { $provider = "azure" } }
+        Write-Host "Manufacturer is Microsoft";
+        $provider = "hyperv";
+        Get-DnsClient | % { if ( $_.ConnectionSpecificSuffix -like "*.cloudapp.net" ) {
+            Write-Host "Found cloudapp.net interface";
+            $provider = "azure";
+        } }
     }
-
+    Write-Host "Detected provider is $provider"
     switch ( $provider ) {
         "virtualbox" { 
+            $configName = "DomainClientVBNetwork"
             Configuration $configName
             {
                 param(
@@ -45,8 +51,10 @@ try
         
                 }
             }
+            break;
         }
         "hyperv" { 
+            $configName = "DomainClientHVNetwork"
             Configuration $configName
             {
                 param(
@@ -69,8 +77,10 @@ try
         
                 }
             }
+            break;
         }
         Default {
+            $configName = "DomainClientDefaultNetwork"
             Configuration $configName
             {
                 param(
@@ -96,28 +106,6 @@ try
             
                 }
             }
-        }
-    }
-    Configuration $configName
-    {
-        param(
-        )
-
-        Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
-
-        $resolved = Resolve-DnsName AD01 -Type A;
-        Node $AllNodes.NodeName
-        {        
-            
-            xDnsServerAddress DnsServerAddress
-            {
-                InterfaceAlias = 'Ethernet'
-                AddressFamily  = 'IPv4'
-                Address        = $resolved.IPAddress
-                Validate       = $false
-            }
-
         }
     }
 }
