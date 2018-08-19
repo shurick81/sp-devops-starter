@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'sharepoint-auto||infrastructuretester'
+        label 'infrastructuretester'
     }
 
     stages {
@@ -136,14 +136,9 @@ pipeline {
         always { 
             powershell '''cd ci
                 vagrant destroy --force
-                if ( !( vagrant status | ? { $_ -like "default* not created (*" } ) ) { exit 1 }
-                exit 0;
             '''
             powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
                 vagrant destroy --force;
-                if ( !( vagrant status | ? { $_ -like "AD01* not created (*" } ) ) { Write-Host "AD01 is not destroyed"; exit 1 }
-                if ( !( vagrant status | ? { $_ -like "DBWEB01* not created (*" } ) ) { Write-Host "DBWEB01 is not destroyed"; exit 1 }
-                exit 0;
             '''
             powershell 'cd ci;./releasenode.ps1'
         }

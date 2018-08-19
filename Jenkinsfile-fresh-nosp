@@ -1,0 +1,95 @@
+pipeline {
+    agent {
+        label 'sharepoint-auto||fresh-nosp'
+    }
+
+    stages {
+        stage('Infrastructure - Book') {
+            agent {
+                label 'win&&fresh-nosp'
+            }
+            steps {
+                powershell '''cd ci;
+                    ./booknode.ps1
+                '''
+            }
+        }
+        stage('Infrastructure - Build') {
+            agent {
+                label 'win&&fresh-nosp'
+            }
+            steps {
+                echo 'Copying software media...'
+                powershell '''cd infrastructure;
+                    if ( !( Get-Item ./images/http/VS2017.zip -ErrorAction Ignore ) ) {
+                        Copy-Item C:/sp-onprem-files/VS2017.zip ./images/http
+                    }
+                    if ( !( Get-Item ./images/http/VS2017.zip -ErrorAction Ignore ) ) { Write-Host "Visual Studio media missing"; exit 1 }
+                    if ( !( Get-Item ./images/http/SSMS-Setup-ENU.exe -ErrorAction Ignore ) ) {
+                        Copy-Item C:/sp-onprem-files/SSMS-Setup-ENU.exe ./images/http
+                    }
+                    if ( !( Get-Item ./images/http/SSMS-Setup-ENU.exe -ErrorAction Ignore ) ) { Write-Host "SQL Management Studio media missing"; exit 1 }
+                    exit 0;
+                '''
+                echo 'Building images...'
+                powershell '''cd infrastructure/images;
+                    ./preparevmimages.ps1 sp-win2016-code,sp-win2016-ca,sp-win2016-ad
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2016-code *" } ) ) { exit 1 }
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2016-ca *" } ) ) { exit 1 }
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2016-ad *" } ) ) { exit 1 }
+                    exit 0;
+                '''
+            }
+        }
+        stage('Infrastructure - Deploy') {
+            agent {
+                label 'win&&fresh-nosp'
+            }
+            steps {
+                echo 'Building farms'
+                powershell '''cd infrastructure/stacks/dev-ad-ca-ops;
+                    vagrant destroy --force;
+                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
+                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "fresh-nosp";
+                    vagrant up --provider virtualbox;
+                '''
+                powershell '''cd infrastructure/stacks/dev-ad-ca-ops;
+                    vagrant destroy --force;
+                '''
+            }
+        }
+        stage('Build') {
+            agent {
+                label 'vm-fresh-nosp'
+            }
+            steps {
+                echo 'Building the solution'
+            }
+        }
+        stage('Deploy') {
+            agent {
+                label 'vm-fresh-nosp'
+            }
+            steps {
+                echo 'Deploying the solution'
+            }
+        }
+        stage('Test') {
+            agent {
+                label 'vm-fresh-nosp'
+            }
+            steps {
+                echo 'Running tests'
+                powershell './src/certificates/getcertificatetest.ps1'
+            }
+        }
+    }
+    post { 
+        always { 
+            powershell '''cd infrastructure/stacks/dev-ad-ca-ops;
+                vagrant destroy --force;
+            '''
+            powershell 'cd ci;./releasenode.ps1'
+        }
+    }
+}
