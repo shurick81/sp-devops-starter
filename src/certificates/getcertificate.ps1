@@ -19,8 +19,10 @@ param(
 )
 
 $certFileInfo = New-Object -TypeName psobject;
+$firstDnsName = $DnsNames[0];
+$subjectName = "CN=$firstDnsName";
 if ( !$friendlyName ) {
-    $friendlyName = $DnsNames[0] + " " + ( Get-Date -Format 'yyyy-MM-dd' );
+    $friendlyName = $firstDnsName + " " + ( Get-Date -Format 'yyyy-MM-dd' );
 }
 if ( !$PfxPass ) {
     $plainPass = -join ((65..90) + (97..122) | Get-Random -Count 12 | % {[char]$_})
@@ -32,7 +34,7 @@ $pfxFileName = "$outputDirectory\$friendlyName.pfx";
 if ( !( Get-Item $pfxFileName -ErrorAction Ignore ) )
 {
     #Write-Host "$(Get-Date) File is to be generated"
-    $enrollmentResponse = Get-Certificate -Template $templateName -DnsName $dnsNames -CertStoreLocation cert:\LocalMachine\My
+    $enrollmentResponse = Get-Certificate -Template $templateName -DnsName $dnsNames -CertStoreLocation cert:\LocalMachine\My -SubjectName $subjectName;
     $enrollmentStatus = $enrollmentResponse.Status;
     if ( $enrollmentStatus -band [Microsoft.CertificateServices.Commands.EnrollmentStatus]::Issued )
     {
