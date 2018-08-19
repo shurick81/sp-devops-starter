@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'sharepoint-auto||fresh-nosp'
+        label 'fresh-nosp||vm-fresh-nosp'
     }
 
     stages {
