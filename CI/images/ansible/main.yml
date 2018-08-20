@@ -14,10 +14,10 @@
       - envinject
       - envinject-api
       - authentication-tokens
-    #  - blueocean
-    #  - bouncycastle-api
-    #  - branch-api
-    #  - cloudbees-folder
+      - blueocean
+      - bouncycastle-api
+      - branch-api
+      - cloudbees-folder
       - credentials-binding
       - credentials
       - display-url-api
@@ -72,6 +72,7 @@
       - workflow-step-api
       - workflow-support
       - swarm
+    jenkins_plugin_timeout: 120
     firewall_allowed_tcp_ports:
       - 22
       - "{{ jenkins_http_port }}"
