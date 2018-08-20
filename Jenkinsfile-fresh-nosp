@@ -53,9 +53,6 @@ pipeline {
                     $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "fresh-nosp";
                     vagrant up --provider virtualbox;
                 '''
-                powershell '''cd infrastructure/stacks/dev-ad-ca-ops;
-                    vagrant destroy --force;
-                '''
             }
         }
         stage('Build') {
