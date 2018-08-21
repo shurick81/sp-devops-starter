@@ -100,7 +100,7 @@
         { "type": "powershell", "script": "sppsmodules.ps1" },
         { "type": "powershell", "script": "devpsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
-        { "type": "powershell", "script": "sql2016media.ps1" },
+        { "type": "powershell", "script": "sql2016media-azure.ps1" },
         {
             "type": "powershell",
             "script": "sql2016bin.ps1",
@@ -115,7 +115,7 @@
         },
         {
             "type": "powershell",
-            "script": "sql2016media.ps1",
+            "script": "sql2016media-azure.ps1",
             "only": ["azure-arm"]
         },
         { "type": "powershell", "script": "sql2016bin.ps1" },
@@ -127,10 +127,22 @@
             ]
         },
         { "type": "powershell", "script": "sp2019media.ps1" },
-        { "type": "powershell", "script": "sp2019prebin.ps1" },
+        {
+            "type": "powershell",
+            "script": "sp2016prebin.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
+            ]
+        },
         { "type": "windows-restart" },
         { "type": "powershell", "script": "sp2019media.ps1" },
-        { "type": "powershell", "script": "sp2019bin.ps1" },
+        {
+            "type": "powershell",
+            "script": "sp2019bin.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
+            ]
+        },
         {
             "type": "powershell",
             "script": "sp2019mediaclean.ps1",

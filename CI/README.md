@@ -86,7 +86,7 @@ Create a box (virtual machine image) locally:
 
 ```
 cd c:\projects\sp-devops-starter\ci\images
-packer build -only virtualbox-iso,hyperv-iso centos7-ci.json
+./../../infrastructure/images/preparevmimages.ps1 centos7-ci
 ```
 
 or in the cloud:
@@ -115,11 +115,10 @@ vagrant up --provider azure
 
 Locally:
 ```
-del centos7-ci.box
-packer build -only virtualbox-iso,hyperv-iso centos7-ci.json
-vagrant box remove file://./images/centos7-ci.box --force --provider virtualbox-iso
-```
-```
+cd c:\projects\sp-devops-starter\ci\images
+./../../infrastructure/images/prepare removevmimages.ps1 centos7-ci
+./../../infrastructure/images/prepare preparevmimages.ps1 centos7-ci
+cd c:\projects\sp-devops-starter\ci
 vagrant destroy --force
 vagrant up --provider virtualbox
 ```

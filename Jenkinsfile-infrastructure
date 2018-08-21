@@ -29,9 +29,9 @@ pipeline {
                 '''
                 powershell '''cd infrastructure/images;
                     #./removevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-web,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-web,sp-win2016-db,sp-win2016-ca,sp-win2016-ad,sp-win2016-code,sp-win2016-db-web,sp-win2016-db-web-code,sp-win2016-db-sp2019-code,sp-win2016-ad-db-sp2019-code,sp-win10-user
-                    ./removevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-ad,sp-win2016-ca,sp-win2016-code
+                    ./removevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-ad,sp-win2016-ca,sp-win2016-code,sp-win2016-ad-db-sp2019-code
                     #if ( vagrant box list | ? { $_ -like "sp-win10-user *" } ) { exit 1 }
-                    #if ( vagrant box list | ? { $_ -like "sp-win2016-ad-db-sp2019-code *" } ) { exit 1 }
+                    if ( vagrant box list | ? { $_ -like "sp-win2016-ad-db-sp2019-code *" } ) { exit 1 }
                     #if ( vagrant box list | ? { $_ -like "sp-win2016-db-sp2019-code *" } ) { exit 1 }
                     #if ( vagrant box list | ? { $_ -like "sp-win2016-db-web-code *" } ) { exit 1 }
                     #if ( vagrant box list | ? { $_ -like "sp-win2016-db-web *" } ) { exit 1 }
@@ -82,9 +82,9 @@ pipeline {
                 '''
                 powershell '''cd infrastructure/images;
                     #./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-code,sp-win2012r2-web,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-web,sp-win2016-db,sp-win2016-ca,sp-win2016-ad,sp-win2016-code,sp-win2016-db-web,sp-win2016-db-web-code,sp-win10-user
-                    ./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-ad,sp-win2016-ca,sp-win2016-code
+                    ./preparevmimages.ps1 sp-win2012r2-ad,sp-win2012r2-db-web,sp-win2012r2-db-web-code,sp-win2016-ad,sp-win2016-ca,sp-win2016-code,sp-win2016-ad-db-sp2019-code
                     #if ( !( vagrant box list | ? { $_ -like "sp-win10-user *" } ) ) { exit 1 }
-                    #if ( !( vagrant box list | ? { $_ -like "sp-win2016-ad-db-sp2019-code *" } ) ) { exit 1 }
+                    if ( !( vagrant box list | ? { $_ -like "sp-win2016-ad-db-sp2019-code *" } ) ) { exit 1 }
                     #if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-sp2019-code *" } ) ) { exit 1 }
                     #if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-web-code *" } ) ) { exit 1 }
                     #if ( !( vagrant box list | ? { $_ -like "sp-win2016-db-web *" } ) ) { exit 1 }
@@ -136,6 +136,12 @@ pipeline {
                 '''
                 powershell '''cd infrastructure/stacks/dev-ad-ca-ops;
                     vagrant destroy --force;
+                '''
+                powershell '''cd infrastructure/stacks/dev-adsql2016sp2019code-spfarm;
+                    vagrant destroy --force;
+                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
+                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                    vagrant up --provider virtualbox;
                 '''
             }
         }

@@ -157,7 +157,11 @@
         { "type": "powershell", "script": "devmediaclean.ps1" },
         { "type": "powershell", "script": "devbin-2.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
-        { "type": "powershell", "script": "azure/sysprep.ps1" }
+        {
+            "type": "powershell",
+            "script": "azure/sysprep.ps1",
+            "only": ["azure-arm"]
+        }
     ],
     "post-processors": [
         {
