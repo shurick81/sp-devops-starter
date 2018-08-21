@@ -13,18 +13,18 @@
 
 - name: Check if seed job exists
   set_fact:
-    jenkins_seed_job_exists: "{{ 'infrastructure-clean' in (jenkins_jobs.content|from_json).jobs|map(attribute='name')|list }}"
+    jenkins_seed_job_exists: "{{ 'fresh-sp2013' in (jenkins_jobs.content|from_json).jobs|map(attribute='name')|list }}"
 
 - name: Create seed job
   uri:
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:16080/createItem?name=infrastructure-clean&{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:16080/createItem?name=fresh-sp2013&{{ jenkins_crumb_token }}"
     method: POST
     headers:
       Content-Type: "application/xml"
-    body: "{{ lookup('template', '../../templates/seed-config-infrastructure-clean.xml.j2') }}"
+    body: "{{ lookup('template', '../../templates/seed-config-fresh-sp2013.xml.j2') }}"
   register: jenkins_seed_job_created
   when: not jenkins_seed_job_exists
 
@@ -33,11 +33,11 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:16080/job/infrastructure-clean/config.xml?{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:16080/job/fresh-sp2013/config.xml?{{ jenkins_crumb_token }}"
     method: POST
     headers:
       Content-Type: "application/xml"
-    body: "{{ lookup('template', '../../templates/seed-config-infrastructure-clean.xml.j2') }}"
+    body: "{{ lookup('template', '../../templates/seed-config-fresh-sp2013.xml.j2') }}"
   register: jenkins_seed_job_updated
   when: jenkins_seed_job_exists
 
@@ -46,7 +46,7 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:16080/job/infrastructure-clean/build?{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:16080/job/fresh-sp2013/build?{{ jenkins_crumb_token }}"
     method: POST
     status_code: 302
   register: jenkins_seed_job_started
@@ -57,7 +57,7 @@
     user: admin
     password: admin
     force_basic_auth: yes
-    url: "http://127.0.0.1:16080/job/infrastructure-clean/lastBuild/buildNumber?{{ jenkins_crumb_token }}"
+    url: "http://127.0.0.1:16080/job/fresh-sp2013/lastBuild/buildNumber?{{ jenkins_crumb_token }}"
     method: GET
     status_code: 302
   register: jenkins_seed

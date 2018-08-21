@@ -114,6 +114,21 @@ pipeline {
                 powershell '''cd ci
                     vagrant destroy --force
                 '''
+                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
+                    vagrant destroy --force;
+                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
+                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                    vagrant up --provider virtualbox;
+                '''
+                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
+                    vagrant destroy --force;
+                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
+                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                    vagrant up --provider virtualbox;
+                '''
+                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
+                    vagrant destroy --force;
+                '''
                 powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
                     vagrant destroy --force;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
@@ -150,6 +165,9 @@ pipeline {
         always { 
             powershell '''cd ci
                 vagrant destroy --force
+            '''
+            powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
+                vagrant destroy --force;
             '''
             powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
                 vagrant destroy --force;
