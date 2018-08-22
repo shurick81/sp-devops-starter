@@ -1,4 +1,4 @@
-$configName = "OOSDNSRecords"
+$configName = "DNSRecords"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {

@@ -48,6 +48,7 @@ Vagrant.configure(2) do |config|
         vm_config.vm.provision :shell, path: "../spdomain.ps1"
         vm_config.vm.provision :shell, path: "../spdomaincustomizations.ps1"
         vm_config.vm.provision :shell, path: "../spdomainlocalinstall.ps1"
+        vm_config.vm.provision :shell, path: "../dns.ps1"
         vm_config.vm.provision :shell, path: "../customizations/spdomaincustomizations.ps1"
         vm_config.vm.provision :shell, path: "../spfarm_2019.ps1"
         vm_config.vm.provision :shell, path: "../../../src/spfarm/spfarm_customizations.ps1"
