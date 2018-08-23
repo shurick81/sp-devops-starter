@@ -80,7 +80,7 @@ This file automates the Windows installation.
                 <OSImage>
                     <InstallFrom>
                         <MetaData wcm:action="add">
-                            <Key>/IMAGE/NAME </Key>
+                            <Key>/IMAGE/NAME</Key>
                             <Value>Windows Server 2016 ServerStandard</Value>
                         </MetaData>
                     </InstallFrom>

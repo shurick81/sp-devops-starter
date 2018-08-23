@@ -51,8 +51,8 @@ Stop-Process -Name Explorer
 
 ### Installing Hyper-V on Windows Server or Windows Pro
 ```PowerShell
-Enable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V -All
 New-NetFirewallRule -DisplayName 'Packer HTTP ports' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8000-9000 | Out-Null
+Enable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V -All
 ```
 You will need to reboot the machine for changes to apply
 Using Hyper-V Manager, configure network switch with external access.

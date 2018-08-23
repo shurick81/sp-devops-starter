@@ -1,0 +1,171 @@
+{
+    "builders": [
+        {
+            "type": "virtualbox-iso",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_url": "{{user `iso_url`}}",
+            "floppy_files": [
+                "{{user `autounattend`}}",
+                "winrm.ps1",
+                "sysprep.bat",
+                "autounattend_sysprep.xml"
+            ],
+            "http_directory": "http",
+            "guest_additions_mode": "attach",
+            "guest_os_type": "Windows10_64",
+            "headless": "{{user `headless`}}",
+            "shutdown_command": "a:/sysprep.bat",
+            "disk_size": "{{user `disk_size`}}",
+            "vboxmanage": [
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--memory",
+                    "{{user `memory_size`}}"
+                ],
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--cpus",
+                    "{{user `cpus`}}"
+                ]
+            ],
+            "boot_wait": "2m",
+            "communicator": "winrm",
+            "winrm_username": "packer",
+            "winrm_password": "Fractalsol365"
+        },
+        {
+            "type": "hyperv-iso",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_url": "{{user `iso_url`}}",
+            "floppy_files": [
+                "{{user `autounattend`}}",
+                "winrm.ps1",
+                "sysprep.bat",
+                "autounattend_sysprep.xml"
+            ],
+            "http_directory": "http",
+            "shutdown_command": "a:/sysprep.bat",
+            "ram_size": "{{user `memory_size`}}",
+            "cpu": "{{user `cpus`}}",
+            "switch_name": "Default Switch",
+            "communicator": "winrm",
+            "winrm_username": "packer",
+            "winrm_password": "Fractalsol365"
+        },
+        {
+            "type": "azure-arm",
+        
+            "client_id": "{{user `client_id`}}",
+            "client_secret": "{{user `client_secret`}}",
+            "subscription_id": "{{user `subscription_id`}}",
+            "tenant_id": "{{user `tenant_id`}}",
+        
+            "managed_image_resource_group_name": "CommonRG",
+            "managed_image_name": "{{user `box_name`}}",
+        
+            "os_type": "Windows",
+            "image_publisher": "MicrosoftWindowsDesktop",
+            "image_offer": "Windows-10",
+            "image_sku": "RS3-Pro",
+            "image_version": "latest",
+        
+            "communicator": "winrm",
+            "winrm_use_ssl": "true",
+            "winrm_insecure": "true",
+            "winrm_timeout": "30m",
+            "winrm_username": "packer",
+        
+            "location": "WestUS2",
+            "vm_size": "Standard_F2s",
+            "managed_image_storage_account_type": "Premium_LRS"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "powershell",
+            "script": "VirtualBox/installadditions.ps1",
+            "only": ["virtualbox-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "HyperV/integration.ps1",
+            "only": ["hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "rdpenable.ps1",
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "winrm.ps1",
+            "only": ["azure-arm"]
+        },
+        { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
+        { "type": "powershell", "script": "basepsmodules.ps1" },
+        { "type": "powershell", "script": "devpsmodules.ps1" },
+        { "type": "powershell", "script": "domainclientpsmodules.ps1" },
+        {
+            "type": "powershell",
+            "script": "devmedia.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_LOCALVS=1",
+                "SPDEVOPSSTARTER_LOCALSSMS=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "devmedia.ps1",
+            "only": ["azure-arm"]
+        },
+        {
+            "type": "powershell",
+            "script": "devbin-1.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_LOCALVS=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "devbin-1.ps1",
+            "only": ["azure-arm"]
+        },
+        { "type": "windows-restart" },
+        { "type": "powershell", "script": "devmediaclean.ps1" },
+        { "type": "powershell", "script": "devbin-client.ps1" },
+        { "type": "powershell", "script": "xcredserver.ps1" },
+        { "type": "powershell", "script": "waitforcpucalm.ps1" },
+        {
+            "type": "powershell",
+            "script": "azure/sysprep.ps1",
+            "only": ["azure-arm"]
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "vagrant",
+            "output": "{{user `box_name`}}.box"
+        }
+    ],
+    "variables": {
+        "box_name": "sp-win10-code",
+        "iso_url": "https://tb.rg-adguard.net/dl.php?go=11e91ad4",
+        "iso_checksum_type": "sha1",
+        "iso_checksum": "08FBB24627FA768F869C09F44C5D6C1E53A57A6F", 
+        "autounattend": "win10_pro/Autounattend.xml",
+        "headless": "true",
+        "cpus": "4",
+        "memory_size": "2048",
+        "disk_size": "61440",
+        "client_id": "{{env `ARM_CLIENT_ID`}}",
+        "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
+        "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
+        "tenant_id": "{{env `ARM_TENANT_ID`}}"
+    }
+}

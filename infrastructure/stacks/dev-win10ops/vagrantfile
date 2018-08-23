@@ -5,19 +5,19 @@ Vagrant.configure(2) do |config|
     config.winrm.transport = :plaintext
     config.winrm.basic_auth_only = true
     config.vm.synced_folder ".", "/vagrant", disabled: true
-    config.vm.define "DEV01" do |vm_config|
-        vm_config.vm.hostname = "DEV01"
-        vm_config.vm.box = "sp-win2016-code"
-        vm_config.vm.network "forwarded_port", guest: 3389, host: 13392, auto_correct: true
+    config.vm.define "OPS01" do |vm_config|
+        vm_config.vm.hostname = "OPS01"
+        vm_config.vm.box = "sp-win10-code"
+        vm_config.vm.network "forwarded_port", guest: 3389, host: 13396, auto_correct: true
         vm_config.vm.provider "virtualbox" do |vb, override|
-            override.vm.network :private_network, ip: "192.168.51.130", gateway: "192.168.51.1"
+            override.vm.network :private_network, ip: "192.168.51.134", gateway: "192.168.51.1"
             #vb.vm.gui = true
-            vb.memory = "4096"
+            vb.memory = "2048"
             vb.cpus = 4
         end
         vm_config.vm.provider "hyperv" do |hv, override|
             hv.memory = "2048"
-            hv.maxmemory = "11264"
+            hv.maxmemory = "4096"
             hv.cpus = 4
             hv.ip_address_timeout = 1800
         end
@@ -26,17 +26,18 @@ Vagrant.configure(2) do |config|
             azure.client_id = ENV['ARM_CLIENT_ID']
             azure.client_secret = ENV['ARM_CLIENT_SECRET']
             azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
-            # azure.resource_group_name = 'sp-devops-starter-dev-2016-clientonly'
-            azure.vm_managed_image_id = "/subscriptions/#{ENV['ARM_SUBSCRIPTION_ID']}/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-code"
+            azure.resource_group_name = 'sp-devops-starter-dev-2016-nosp'
+            azure.vm_managed_image_id = "/subscriptions/#{ENV['ARM_SUBSCRIPTION_ID']}/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win10-code"
             azure.instance_ready_timeout = 3600
-            # azure.vm_name = 'sp-win2016-code'
+            azure.vm_name = 'ops01'
             azure.location = 'WestUS2'
             azure.vm_size = 'Basic_A2'
             azure.vm_storage_account_type = 'Standard_LRS'
             azure.admin_username = "vagrant"
             azure.admin_password = "Fractalsol365"
             azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
-            # azure.nsg_name = 'sp-devops-starter-dev-2016-clientonly'
+            # azure.virtual_network_name = 'sp-devops-starter-dev-2016-nosp'
+            azure.nsg_name = 'sp-devops-starter-dev-2016-nosp'
             azure.wait_for_destroy = true
             override.vm.guest = :windows
             override.vm.box = "azure"
@@ -44,6 +45,13 @@ Vagrant.configure(2) do |config|
             override.winrm.port = 5986
             override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
             override.vm.synced_folder ".", "/vagrant", disabled: true
+        end
+        if ENV['SPDEVOPSSTARTER_VAGRANT_RUNJENKINS'] === 'TRUE'
+            vm_config.vm.provision :shell, path: "../slavepreprovisioning.ps1"
+            vm_config.vm.provision :shell, path: "../joinslave.ps1", env: {
+                "SPDEVOPSSTARTER_JENKINSLABEL" => ENV['SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL'],
+                "SPDEVOPSSTARTER_JENKINSHOST" => ENV['SPDEVOPSSTARTER_JENKINSHOST']
+            }
         end
         vm_config.vm.boot_timeout = 1800
     end
