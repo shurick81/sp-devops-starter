@@ -36,10 +36,12 @@
                 "sysprep.bat",
                 "autounattend_sysprep.xml"
             ],
+            "headless": true,
             "http_directory": "http",
             "shutdown_command": "a:/sysprep.bat",
             "ram_size": 4096,
             "cpu": 4,
+            "switch_name": "Default Switch",
             "communicator": "winrm",
             "winrm_username": "packer",
             "winrm_password": "Fractalsol365",

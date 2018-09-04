@@ -46,6 +46,7 @@
                 "sysprep.bat",
                 "autounattend_sysprep.xml"
             ],
+            "headless": true,
             "shutdown_command": "a:/sysprep.bat",
             "ram_size": "{{user `memory_size`}}",
             "cpu": "{{user `cpus`}}",

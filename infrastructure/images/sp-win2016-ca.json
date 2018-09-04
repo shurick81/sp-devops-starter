@@ -35,6 +35,7 @@
                 "sysprep.bat",
                 "autounattend_sysprep.xml"
             ],
+            "headless": true,
             "shutdown_command": "a:/sysprep.bat",
             "ram_size": 2048,
             "cpu": 4,

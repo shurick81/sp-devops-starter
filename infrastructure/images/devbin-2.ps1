@@ -16,28 +16,24 @@ try
             cChocoInstaller ChocoInstalled
             {
                 InstallDir              = "c:\choco"
-                PsDscRunAsCredential    = $UserCredential
             }
 
             cChocoPackageInstaller VSCodeInstalled
             {
                 Name                    = "visualstudiocode"
                 DependsOn               = "[cChocoInstaller]ChocoInstalled"
-                PsDscRunAsCredential    = $UserCredential
             }
 
             cChocoPackageInstaller GitInstalled
             {
                 Name                    = "git"
                 DependsOn               = "[cChocoInstaller]ChocoInstalled"
-                PsDscRunAsCredential    = $UserCredential
             }
 
             WindowsFeatureSet DomainFeatures
             {
                 Name                    = @( "RSAT-DNS-Server", "RSAT-ADDS", "RSAT-ADCS" )
                 Ensure                  = 'Present'
-                IncludeAllSubFeature    = $true
             }
 
         }
@@ -52,7 +48,6 @@ catch
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
-$securedPassword = ConvertTo-SecureString "Fractalsol365" -AsPlainText -Force
 Write-Host "$(Get-Date) Compiling DSC"
 try
 {
@@ -82,7 +77,6 @@ if ( $env:SPDEVOPSSTARTER_NODSCTEST -ne "TRUE" )
     try {
         $result = Test-DscConfiguration $configName -Verbose;
         $inDesiredState = $result.InDesiredState;
-        $failed = $false;
         $inDesiredState | % {
             if ( !$_ ) {
                 Write-Host "$(Get-Date) Test failed"

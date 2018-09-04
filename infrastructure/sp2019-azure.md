@@ -1,9 +1,10 @@
-# No-brainer SP 2019 sandbox installation
+# No-brainer SP 2019 sandbox installation in Azure
 
 Tested on Windows but you can use it across any platform that is supported by Vagrant.
 
 ## Prerequisites
 
+### Common prerequisites
 First of all, you will need Git, Packer and Vagrant installed. Here is example how you can install them in Windows PowerShell.
 
 ```PowerShell
@@ -71,7 +72,9 @@ cd c:\projects\sp-devops-starter\infrastructure\images
 ```
 packer build sp-win2016-ad-db-sp2019-code.json
 ```
+
 This operation may take about 2 hours. Make sure that the end of output contains `==> azure-arm: Capturing image ...`. For example, it may look like this:
+
 ```
 ==> azure-arm: Capturing image ...
 ==> azure-arm:  -> Compute ResourceGroupName : 'packer-Resource-Group-z2r45yt9gl'

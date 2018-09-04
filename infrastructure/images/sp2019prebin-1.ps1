@@ -1,4 +1,4 @@
-$configName = "SPPrereqs"
+$configName = "SPPreBin"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
@@ -8,14 +8,37 @@ try
         )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.4.0.0
 
-        SPInstallPrereqs SPPrereqsInstalled
+        $featureNames = @(
+            "Web-Server"
+        )
+
+        Node $AllNodes.NodeName
         {
-            InstallerPath   = "G:\Prerequisiteinstaller.exe"
-            OnlineMode      = $true
-        }
+            
+            if ( $env:SPDEVOPSSTARTER_LOCALSOURCE -eq 1 )
+            {
 
+                WindowsFeatureSet SPFeatures
+                {
+                    Name                    = $featureNames
+                    Ensure                  = 'Present'
+                    Source                  = "D:\sources\sxs"
+                    IncludeAllSubFeature    = $true
+                }
+
+            } else {
+
+                WindowsFeatureSet SPFeatures
+                {
+                    Name                    = $featureNames
+                    Ensure                  = 'Present'
+                    IncludeAllSubFeature    = $true
+                }
+
+            }
+
+        }
     }
 }
 catch

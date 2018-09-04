@@ -36,10 +36,12 @@
                 "sysprep.bat",
                 "autounattend_sysprep.xml"
             ],
+            "headless": true,
             "http_directory": "http",
             "shutdown_command": "a:/sysprep.bat",
             "ram_size": 4096,
             "cpu": 4,
+            "switch_name": "Default Switch",
             "communicator": "winrm",
             "winrm_username": "packer",
             "winrm_password": "Fractalsol365",
@@ -78,11 +80,6 @@
             "type": "powershell",
             "script": "VirtualBox/installadditions.ps1",
             "only": ["virtualbox-iso"]
-        },
-        {
-            "type": "powershell",
-            "script": "HyperV/integration.ps1",
-            "only": ["hyperv-iso"]
         },
         {
             "type": "powershell",
@@ -126,6 +123,47 @@
                 "SPDEVOPSSTARTER_NODSCTEST=TRUE"
             ]
         },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-1.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_LOCALSOURCE=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-1.ps1",
+            "only": ["azure-arm"]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-2.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_LOCALSOURCE=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-2.ps1",
+            "only": ["azure-arm"]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-3.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_LOCALSOURCE=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-3.ps1",
+            "only": ["azure-arm"]
+        },
+        { "type": "windows-restart" },
+        { "type": "powershell", "script": "spprebin-2.ps1" },
         { "type": "powershell", "script": "sp2019media.ps1" },
         {
             "type": "powershell",
@@ -135,7 +173,19 @@
             ]
         },
         { "type": "windows-restart" },
-        { "type": "powershell", "script": "sp2019media.ps1" },
+        {
+            "type": "powershell",
+            "script": "sp2019media.ps1",
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019media.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_NODSCWAIT=TRUE"
+            ],
+            "only": ["azure-arm"]
+        },
         {
             "type": "powershell",
             "script": "sp2019bin.ps1",

@@ -9,24 +9,51 @@ try
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
 
-        $featureResourceNames = @(
-            "Windows-Identity-Foundation",
-            "PowerShell-V2",
-            "WAS",
-            "WAS-Process-Model",
-            "WAS-NET-Environment",
-            "WAS-Config-APIs",
-            "XPS-Viewer"
+        $featureNames = @(
+            "Web-WebServer",
+            "Web-Common-Http",
+            "Web-Default-Doc",
+            "Web-Dir-Browsing",
+            "Web-Http-Errors",
+            "Web-Static-Content",
+            "Web-Health",
+            "Web-Http-Logging",
+            "Web-Log-Libraries",
+            "Web-Request-Monitor",
+            "Web-Http-Tracing",
+            "Web-Performance",
+            "Web-Stat-Compression",
+            "Web-Dyn-Compression",
+            "Web-Security",
+            "Web-Filtering",
+            "Web-Basic-Auth",
+            "Web-Digest-Auth",
+            "Web-Windows-Auth",
+            "Web-App-Dev",
+            "Web-Net-Ext",
+            "Web-Net-Ext45",
+            "Web-Asp-Net",
+            "Web-Asp-Net45",
+            "Web-ISAPI-Ext",
+            "Web-ISAPI-Filter",
+            "Web-Mgmt-Tools",
+            "Web-Mgmt-Console",
+            "Web-Mgmt-Compat",
+            "Web-Metabase",
+            "Web-Lgcy-Scripting",
+            "Web-WMI",
+            "NET-Framework-Features"
         )
 
         Node $AllNodes.NodeName
         {
+            
             if ( $env:SPDEVOPSSTARTER_LOCALSOURCE -eq 1 )
             {
 
                 WindowsFeatureSet SPFeatures
                 {
-                    Name                    = $featureResourceNames
+                    Name                    = $featureNames
                     Ensure                  = 'Present'
                     Source                  = "D:\sources\sxs"
                     IncludeAllSubFeature    = $true
@@ -36,12 +63,13 @@ try
 
                 WindowsFeatureSet SPFeatures
                 {
-                    Name                    = $featureResourceNames
+                    Name                    = $featureNames
                     Ensure                  = 'Present'
                     IncludeAllSubFeature    = $true
                 }
 
             }
+
         }
     }
 }
@@ -52,27 +80,24 @@ catch
     Exit 1;
 }
 $configurationData = @{ AllNodes = @(
-    @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
-) }
+        @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
+    ) 
+}
 Write-Host "$(Get-Date) Compiling DSC"
-try
-{
+try {
     &$configName `
         -ConfigurationData $configurationData;
 }
-catch
-{
+catch {
     Write-Host "$(Get-Date) Exception in compiling DCS:";
     $_.Exception.Message
     Exit 1;
 }
 Write-Host "$(Get-Date) Starting DSC"
-try
-{
+try {
     Start-DscConfiguration $configName -Verbose -Wait -Force;
 }
-catch
-{
+catch {
     Write-Host "$(Get-Date) Exception in starting DCS:"
     $_.Exception.Message
     Exit 1;
