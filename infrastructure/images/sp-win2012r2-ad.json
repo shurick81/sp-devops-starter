@@ -57,7 +57,7 @@
             "os_type": "Windows",
             "image_publisher": "MicrosoftWindowsServer",
             "image_offer": "WindowsServer",
-            "image_sku": "2016-Datacenter-smalldisk",
+            "image_sku": "2012-R2-Datacenter-smalldisk",
             "image_version": "latest",
         
             "communicator": "winrm",
