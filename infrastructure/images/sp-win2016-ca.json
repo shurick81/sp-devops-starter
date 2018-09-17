@@ -96,7 +96,6 @@
         },
         { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
         { "type": "powershell", "script": "basepsmodules.ps1" },
-        { "type": "powershell", "script": "adpsmodules.ps1" },
         { "type": "powershell", "script": "capsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
         { "type": "powershell", "script": "cabin.ps1" },

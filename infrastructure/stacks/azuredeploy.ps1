@@ -10,6 +10,11 @@ $idContent = Get-Content ".\$stackName\.vagrant\machines\AD01\azure\id";
 $idValues = $idContent.Split(":");
 $resourceGroupName = $idValues[0];
 $machineName = $idValues[1];
+$appId = $env:ARM_CLIENT_ID;
+$appPass = $env:ARM_CLIENT_SECRET;
+$securedPassword = ConvertTo-SecureString $appPass -AsPlainText -Force;
+$azureCredential = New-Object System.Management.Automation.PSCredential( $appId, $securedPassword );
+Connect-AzureRmAccount -Credential $azureCredential -ServicePrincipal -TenantId $env:ARM_TENANT_ID | Out-Null;
 $vm = Get-AzureRmVM -ResourceGroupName $resourceGroupName -VMName $machineName
 $networkInterfaceRef = $vm.NetworkProfile[0].NetworkInterfaces[0].id;
 $networkInterface = Get-AzureRmNetworkInterface | ? { $_.Id -eq $networkInterfaceRef }

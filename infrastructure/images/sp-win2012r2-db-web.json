@@ -85,17 +85,32 @@
             "script": "rdpenable.ps1",
             "only": ["virtualbox-iso", "hyperv-iso"]
         },
-        { "type": "powershell", "script": "wmf5.ps1",
+        {
+            "type": "powershell",
+            "script": "wmf5.ps1",
             "elevated_user": "administrator", "elevated_password": "Fractalsol365",
             "only": ["virtualbox-iso", "hyperv-iso"]
         },
-        { "type": "powershell", "script": "wmf5.ps1",
+        {
+            "type": "powershell",
+            "script": "wmf5_azure.ps1",
+            "elevated_user": "packer", "elevated_password": "{{.WinRMPassword}}",
             "only": ["azure-arm"]
         },
         {
             "type": "powershell",
             "inline": "Write-Host 'Fake script just for pause after wmf5 installation'",
             "pause_before": "10m"
+        },
+        {
+            "type": "windows-restart",
+            "only": ["azure-arm"]
+        },
+        {
+            "type": "powershell",
+            "inline": "Write-Host 'Fake script just for pause after restart'",
+            "pause_before": "1m",
+            "only": ["azure-arm"]
         },
         {
             "type": "powershell",

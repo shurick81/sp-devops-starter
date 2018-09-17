@@ -34,6 +34,7 @@ Vagrant.configure(2) do |config|
             azure.admin_password = "Fractalsol365"
             azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
             azure.nsg_name = 'sp-devops-starter-dev-2013'
+            azure.wait_for_destroy = true
             override.vm.guest = :windows
             override.vm.box = "azure"
             override.winrm.transport = :ssl

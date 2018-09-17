@@ -1,4 +1,4 @@
-$configName = "SQLBin"
+$configName = "SQLConfig"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
@@ -6,25 +6,38 @@ try
     {
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
+        Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
         Import-DscResource -ModuleName SqlServerDsc -ModuleVersion 11.1.0.0
 
         Node $AllNodes.NodeName
         {
             
-            SQLSetup SQLSetup
+            xFireWall AllowSQLService
             {
-                InstanceName            = "SPIntra01"
-                SourcePath              = "C:\Install\SQLInstall"
-                Features                = "SQLENGINE,FULLTEXT"
-                InstallSharedDir        = "C:\Program Files\Microsoft SQL Server\SPIntra01"
-                SQLSysAdminAccounts     = "BUILTIN\Administrators"
-                UpdateEnabled           = "False"
-                UpdateSource            = "MU"
-                SQMReporting            = "False"
-                ErrorReporting          = "True"
-                BrowserSvcStartupType   = "Automatic"
+                Name        = "AllowSQLService"
+                DisplayName = "Allow SQL Service"
+                Ensure      = "Present"
+                Enabled     = "True"
+                Profile     = "Domain"
+                Direction   = "InBound"
+                Program     = 'C:\Program Files\Microsoft SQL Server\MSSQL12.SPINTRA01\MSSQL\Binn\sqlservr.exe'
+                Protocol    = "TCP"
+                Description = "Firewall rule to allow SQL communication"
             }
-
+            
+            xFireWall AllowSQLBrowser
+            {
+                Name        = "AllowSQLBrowser"
+                DisplayName = "Allow SQL Browser"
+                Ensure      = "Present"
+                Enabled     = "True"
+                Profile     = "Domain"
+                Direction   = "InBound"
+                LocalPort   = 1434
+                Protocol    = "UDP"
+                Description = "Firewall rule to allow SQL communication"
+            }
+            
             SqlServerMemory SQLServerMaxMemoryIs2GB
             {
                 ServerName      = $NodeName
@@ -32,7 +45,6 @@ try
                 MinMemory       = 1024
                 MaxMemory       = 2048
                 InstanceName    = "SPIntra01"
-                DependsOn       = "[SQLSetup]SQLSetup"
             }
             
         }
