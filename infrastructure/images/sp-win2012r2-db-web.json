@@ -133,7 +133,19 @@
         { "type": "powershell", "script": "sqlmediaclean.ps1" },
         { "type": "powershell", "script": "spprebin-1.ps1" },
         { "type": "windows-restart" },
-        { "type": "powershell", "script": "spprebin-2.ps1" },
+        {
+            "type": "powershell",
+            "script": "spprebin-2.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_LOCALVS=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "spprebin-2.ps1",
+            "only": ["azure-arm"]
+        },
         { "type": "powershell", "script": "spmedia.ps1" },
         { "type": "powershell", "script": "spprebin-3.ps1" },
         { "type": "windows-restart" },
