@@ -127,7 +127,7 @@
             "type": "powershell",
             "script": "spprebin-2.ps1",
             "environment_vars": [
-                "SPDEVOPSSTARTER_LOCALVS=1"
+                "SPDEVOPSSTARTER_LOCALSOURCE=1"
             ],
             "only": ["virtualbox-iso","hyperv-iso"]
         },
