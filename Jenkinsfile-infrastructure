@@ -126,7 +126,7 @@ pipeline {
                     $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
                     vagrant up --provider virtualbox;
                 '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
+                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
                     vagrant destroy --force;
                 '''
                 powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
