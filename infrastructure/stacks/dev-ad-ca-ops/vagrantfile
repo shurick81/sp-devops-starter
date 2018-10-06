@@ -154,9 +154,9 @@ Vagrant.configure(2) do |config|
         vm_config.vm.provision "reload"
         vm_config.vm.provision :shell, path: "../domainclient.ps1"
         vm_config.vm.provision :shell, path: "../domainclientgroups.ps1"
-        vm_config.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
-        vm_config.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplateinvoker.ps1"
-        vm_config.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; .\\infrastructure\\stacks\\certtemplateinvoker.ps1'"
+        vm_config.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/customizations/certtemplate.ps1"
+        vm_config.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/customizations/certtemplateinvoker.ps1"
+        vm_config.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; .\\infrastructure\\stacks\\customizations\\certtemplateinvoker.ps1'"
         if ENV['SPDEVOPSSTARTER_VAGRANT_RUNJENKINS'] === 'TRUE'
             vm_config.vm.provision :shell, path: "../slavepreprovisioning.ps1"
             vm_config.vm.provision :shell, path: "../joinslave.ps1", env: {
