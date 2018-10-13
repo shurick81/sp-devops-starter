@@ -125,6 +125,7 @@
         { "type": "powershell", "script": "sppsmodules.ps1" },
         { "type": "powershell", "script": "devpsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
+        { "type": "powershell", "script": "win2012r2updatesdownloading.ps1" },
         { "type": "powershell", "script": "sqlmedia.ps1" },
         {
             "type": "powershell",
@@ -159,7 +160,6 @@
         { "type": "windows-restart" },
         { "type": "powershell", "script": "spbin.ps1" },
         { "type": "powershell", "script": "spmediaclean.ps1" },
-        { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "windows-restart" },
         {
             "type": "powershell",
@@ -191,6 +191,7 @@
         { "type": "windows-restart" },
         { "type": "powershell", "script": "devmediaclean.ps1" },
         { "type": "powershell", "script": "devbin-2.ps1" },
+        { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
             "type": "powershell",

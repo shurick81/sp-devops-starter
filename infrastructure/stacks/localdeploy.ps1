@@ -2,15 +2,15 @@ $complete = $false;
 $retries = 5
 While ( !$complete -and $retries -gt 0 )
 {
-    Write-Host "Trying vagrant up, retries left: $retries"
+    Write-Host "$(Get-Date) Trying vagrant up, retries left: $retries"
     vagrant up
     if ( $LASTEXITCODE -eq 0 )
     {
         $complete = $true;
-        Write-Host "Succeeded with vagrant up"
+        Write-Host "$(Get-Date) Succeeded with vagrant up"
         Exit 0;
     } else {
-        Write-Host "Failed with vagrant up, running vagrant destroy"
+        Write-Host "$(Get-Date) Failed with vagrant up, running vagrant destroy"
         vagrant destroy --force
     }
     $retries--;

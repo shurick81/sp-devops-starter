@@ -1,7 +1,7 @@
 param(
     [Parameter(Mandatory=$false,Position=3)]
     [String]
-    $ScriptDirectory = ".\infrastructure\stacks"
+    $ScriptDirectory = ".\infrastructure\stacks\customizations"
 )
 
 # Application
