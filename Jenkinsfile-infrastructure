@@ -109,7 +109,7 @@ pipeline {
             steps {
                 echo 'Building farms'
                 powershell '''cd ci
-                    vagrant up --provider virtualbox
+                    ..\localdeploy.ps1
                 '''
                 powershell '''cd ci
                     vagrant destroy --force
@@ -118,13 +118,13 @@ pipeline {
                     vagrant destroy --force;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
                     $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    vagrant up --provider virtualbox;
+                    ..\localdeploy.ps1;
                 '''
                 powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
                     vagrant destroy --force;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
                     $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    vagrant up --provider virtualbox;
+                    ..\localdeploy.ps1;
                 '''
                 powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
                     vagrant destroy --force;
@@ -133,13 +133,13 @@ pipeline {
                     vagrant destroy --force;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
                     $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    vagrant up --provider virtualbox;
+                    ..\localdeploy.ps1;
                 '''
                 powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
                     vagrant destroy --force;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
                     $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    vagrant up --provider virtualbox;
+                    ..\localdeploy.ps1;
                 '''
                 powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
                     vagrant destroy --force;
@@ -147,7 +147,7 @@ pipeline {
                 powershell '''cd infrastructure/stacks/dev-ad-ca-ops;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
                     $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    vagrant up --provider virtualbox;
+                    ..\localdeploy.ps1;
                 '''
                 powershell '''cd infrastructure/stacks/dev-ad-ca-ops;
                     vagrant destroy --force;
@@ -156,7 +156,7 @@ pipeline {
                     vagrant destroy --force;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
                     $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    vagrant up --provider virtualbox;
+                    ..\localdeploy.ps1;
                 '''
             }
         }
