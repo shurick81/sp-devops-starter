@@ -175,6 +175,9 @@ pipeline {
             powershell '''cd infrastructure/stacks/dev-ad-ca-ops;
                 vagrant destroy --force;
             '''
+            powershell '''cd infrastructure/stacks/dev-adsql2016sp2019code-spfarm;
+                vagrant destroy --force;
+            '''
             powershell 'cd ci;./releasenode.ps1'
         }
     }

@@ -78,6 +78,7 @@ pipeline {
             steps {
                 echo 'Deploying the solution'
                 powershell './infrastructure/stacks/spfarm_2013.ps1'
+                powershell './src/spfarm/spserviceinstances.ps1'
                 powershell './src/spfarm/spfarm_customizations.ps1'
             }
         }
