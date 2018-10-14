@@ -148,6 +148,11 @@
             "only": ["azure-arm"]
         },
         { "type": "windows-restart" },
+        {
+            "type": "powershell",
+            "inline": "Write-Host 'Fake script just for pause while restart is installing software'",
+            "pause_before": "2m"
+        },
         { "type": "powershell", "script": "devmediaclean.ps1" },
         { "type": "powershell", "script": "devbin-2.ps1" },
         { "type": "powershell", "script": "xcredserver.ps1" },
