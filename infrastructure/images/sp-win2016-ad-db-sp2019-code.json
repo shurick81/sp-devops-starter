@@ -195,6 +195,11 @@
         { "type": "windows-restart" },
         {
             "type": "powershell",
+            "inline": "Write-Host 'Fake script just for pause while restart is installing software'",
+            "pause_before": "2m"
+        },
+        {
+            "type": "powershell",
             "script": "sp2019media.ps1",
             "only": ["virtualbox-iso","hyperv-iso"]
         },
