@@ -164,7 +164,7 @@ pipeline {
     post { 
         always { 
             powershell '''cd ci
-                vagrant destroy --force
+                vagrant destroy --force;
             '''
             powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
                 vagrant destroy --force;

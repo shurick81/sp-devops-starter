@@ -1,29 +1,25 @@
-$configName = "DomainClient"
+$configName = "Win2012R2Updates"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
     Configuration $configName
     {
         param(
-            [Parameter(Mandatory=$true)]
-            [ValidateNotNullorEmpty()]
-            [PSCredential]
-            $DomainAdminCredential
         )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DSCResource -ModuleName ComputerManagementDsc -ModuleVersion 5.2.0.0
+        Import-DscResource -ModuleName xWindowsUpdate -ModuleVersion 2.7.0.0
 
         Node $AllNodes.NodeName
-        {        
+        {
 
-            Computer JoinDomain
+            xHotfix HotfixInstall
             {
-                Name        = $NodeName
-                DomainName  = "contoso.local"
-                Credential  = $DomainAdminCredential
+                Ensure = "Present"
+                Path = "C:\Install\windows8.1-kb4103715-x64_43bebfcb5be43876fb6a13a4eb840174ecb1790c.msu"
+                Id = "KB4103715"
             }
-
+            
         }
     }
 }
@@ -36,15 +32,11 @@ catch
 $configurationData = @{ AllNodes = @(
     @{ NodeName = $env:COMPUTERNAME; PSDscAllowPlainTextPassword = $True; PsDscAllowDomainUser = $True }
 ) }
-
-$securedPassword = ConvertTo-SecureString "Fractalsol365" -AsPlainText -Force
-$DomainAdminCredential = New-Object System.Management.Automation.PSCredential( "contoso\vagrant", $securedPassword )
 Write-Host "$(Get-Date) Compiling DSC"
 try
 {
     &$configName `
-        -ConfigurationData $configurationData `
-        -DomainAdminCredential $DomainAdminCredential;
+        -ConfigurationData $configurationData;
 }
 catch
 {

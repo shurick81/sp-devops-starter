@@ -52,36 +52,55 @@ catch
     Exit 1;
 }
 Write-Host "$(Get-Date) Starting DSC"
-try
-{
-    Start-DscConfiguration $configName -Verbose -Wait -Force;
+if ( $env:SPDEVOPSSTARTER_TRIALS ) {
+    $trialsLeft = [int]$env:SPDEVOPSSTARTER_TRIALS;
+} else {
+    $trialsLeft = 1;
 }
-catch
-{
-    Write-Host "$(Get-Date) Exception in starting DCS:"
-    $_.Exception.Message
-    Exit 1;
-}
-if ( $env:SPDEVOPSSTARTER_NODSCTEST -ne "TRUE" )
-{
-    Write-Host "$(Get-Date) Testing DSC"
-    try {
-        $result = Test-DscConfiguration $configName -Verbose;
-        $inDesiredState = $result.InDesiredState;
-        $failed = $false;
-        $inDesiredState | % {
-            if ( !$_ ) {
-                Write-Host "$(Get-Date) Test failed"
-                Exit 1;
-            }
-        }
+$complete = $false;
+while ( !$complete -and ( $trialsLeft -gt 0 ) ) {
+    Write-Host "$(Get-Date) Trials left: $trialsLeft"
+    try
+    {
+        Start-DscConfiguration $configName -Verbose -Wait -Force;
     }
-    catch {
-        Write-Host "$(Get-Date) Exception in testing DCS:"
+    catch
+    {
+        Write-Host "$(Get-Date) Exception in starting DCS:"
         $_.Exception.Message
         Exit 1;
     }
-} else {
-    Write-Host "$(Get-Date) Skipping tests"
+    $trialsLeft--;
+    if ( $env:SPDEVOPSSTARTER_NODSCTEST -ne "TRUE" )
+    {
+        $failed = $false;
+        Write-Host "$(Get-Date) Testing DSC"
+        try {
+            $result = Test-DscConfiguration $configName -Verbose;
+            $inDesiredState = $result.InDesiredState;
+            $inDesiredState | % {
+                if ( !$_ ) {
+                    Write-Host "$(Get-Date) Test failed"
+                    $failed = $true;
+                }
+            }
+        }
+        catch {
+            Write-Host "$(Get-Date) Exception in testing DCS:"
+            $_.Exception.Message
+            Exit 1;
+        }
+        $complete = !$failed;
+        Sleep 15;
+    } else {
+        Write-Host "$(Get-Date) Skipping tests"
+        $complete = ( $trialsLeft -eq 0 )
+    }
 }
-Exit 0;
+if ( $complete ) {
+    Write-Host "$(Get-Date) Configuration is applied successfully"
+    Exit 0;
+} else {
+    Write-Host "$(Get-Date) Configuration is not applied"
+    Exit 1;
+}
