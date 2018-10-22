@@ -109,7 +109,7 @@ pipeline {
             steps {
                 echo 'Building farms'
                 powershell '''cd ci
-                    ../localdeploy.ps1
+                    ./localdeploy.ps1
                 '''
                 powershell '''cd ci
                     vagrant destroy --force
