@@ -158,6 +158,9 @@ pipeline {
                     $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
                     ../localdeploy.ps1;
                 '''
+                powershell '''cd infrastructure/stacks/dev-adsql2016sp2019code-spfarm;
+                    vagrant destroy --force;
+                '''
             }
         }
     }
