@@ -109,6 +109,7 @@
                 "SPDEVOPSSTARTER_NODSCTEST=TRUE"
             ]
         },
+        { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
             "type": "powershell",

@@ -12,6 +12,10 @@ try
             [Parameter(Mandatory=$true)]
             [ValidateNotNullorEmpty()]
             [PSCredential]
+            $SPServicesAccountCredential,
+            [Parameter(Mandatory=$true)]
+            [ValidateNotNullorEmpty()]
+            [PSCredential]
             $SPWebAppPoolAccountCredential
         )
         Import-DscResource -ModuleName PSDesiredStateConfiguration
@@ -20,6 +24,41 @@ try
         Node $AllNodes.NodeName
         {
 
+            SPManagedAccount SharePointServicesPoolAccount
+            {
+                AccountName             = $SPServicesAccountCredential.UserName
+                Account                 = $SPServicesAccountCredential
+                PsDscRunAsCredential    = $SPInstallAccountCredential
+            }
+
+            SPServiceAppPool SharePointServicesAppPool
+            {
+                Name                    = "SharePoint Services App Pool"
+                ServiceAccount          = $SPServicesAccountCredential.UserName
+                PsDscRunAsCredential    = $SPInstallAccountCredential
+                DependsOn               = "[SPManagedAccount]SharePointServicesPoolAccount"
+            }
+
+            SPManagedMetaDataServiceApp ManagedMetadataServiceApp
+            {
+                DatabaseName            = "SP_Intra_Metadata";
+                ApplicationPool         = "SharePoint Services App Pool";
+                ProxyName               = "Managed Metadata Service Application";
+                Name                    = "Managed Metadata Service Application";
+                Ensure                  = "Present";
+                TermStoreAdministrators = @( $SPInstallAccountCredential.UserName, "contoso\OG SharePoint2016 Server Admin Prod" );
+                PsDscRunAsCredential    = $SPInstallAccountCredential
+                DependsOn               = "[SPServiceAppPool]SharePointServicesAppPool"
+            }
+
+            SPManagedMetaDataServiceAppDefault ManagedMetadataServiceAppDefault
+            {
+                IsSingleInstance                = "Yes"
+                DefaultSiteCollectionProxyName  = "Managed Metadata Service Application"
+                DefaultKeywordProxyName         = "Managed Metadata Service Application"
+                PsDscRunAsCredential            = $SPInstallAccountCredential
+            }
+            
             SPManagedAccount ApplicationWebPoolAccount
             {
                 AccountName             = $SPWebAppPoolAccountCredential.UserName
@@ -60,6 +99,7 @@ catch
 }
 $securedPassword = ConvertTo-SecureString "c0mp1Expa~~" -AsPlainText -Force
 $SPInstallAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spadm16", $securedPassword );
+$SPServicesAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spsrv16", $securedPassword );
 $SPWebAppPoolAccountCredential = New-Object System.Management.Automation.PSCredential( "contoso\_spwebapppool16", $securedPassword );
 
 $configurationData = @{ AllNodes = @(
@@ -71,6 +111,7 @@ try
     &$configName `
         -ConfigurationData $configurationData `
         -SPInstallAccountCredential $SPInstallAccountCredential `
+        -SPServicesAccountCredential $SPServicesAccountCredential `
         -SPWebAppPoolAccountCredential $SPWebAppPoolAccountCredential;
 }
 catch

@@ -6,38 +6,11 @@ try
     {
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
         Import-DscResource -ModuleName SqlServerDsc -ModuleVersion 11.1.0.0
 
         Node $AllNodes.NodeName
         {
             
-            xFireWall SQLFirewallRuleTCP
-            {
-                Name        = "AllowSQLConnection"
-                DisplayName = "Allow SQL Connection"
-                Ensure      = "Present"
-                Enabled     = "True"
-                Profile     = ("Domain")
-                Direction   = "InBound"
-                LocalPort   = ("1433")
-                Protocol    = "TCP"
-                Description = "Firewall rule to allow SQL communication"
-            }
-
-            xFireWall SQLFirewallRuleBrowser
-            {
-                Name        = "AllowSQLBrowser"
-                DisplayName = "Allow SQL Browser"
-                Ensure      = "Present"
-                Enabled     = "True"
-                Profile     = ("Domain")
-                Direction   = "InBound"
-                LocalPort   = ("1434")
-                Protocol    = "UDP"
-                Description = "Firewall rule to allow SQL Browser"
-            }
-
             SQLSetup SQLSetup
             {
                 InstanceName            = "SPIntra01"

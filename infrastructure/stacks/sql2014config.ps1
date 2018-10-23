@@ -1,45 +1,52 @@
-$configName = "BasePSModules"
+$configName = "SQLConfig"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
     Configuration $configName
     {
-        param(
-        )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName PackageManagementProviderResource -ModuleVersion 1.0.3
+        Import-DscResource -ModuleName xNetworking -ModuleVersion 5.6.0.0
+        Import-DscResource -ModuleName SqlServerDsc -ModuleVersion 11.1.0.0
 
         Node $AllNodes.NodeName
         {
-
-            PSModule "PSModule_xPSDesiredStateConfiguration"
+            
+            xFireWall AllowSQLService
             {
-                Ensure              = "Present"
-                Name                = "xPSDesiredStateConfiguration"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "8.2.0.0"
+                Name        = "AllowSQLService"
+                DisplayName = "Allow SQL Service"
+                Ensure      = "Present"
+                Enabled     = "True"
+                Profile     = "Domain"
+                Direction   = "InBound"
+                Program     = 'C:\Program Files\Microsoft SQL Server\MSSQL12.SPINTRA01\MSSQL\Binn\sqlservr.exe'
+                Protocol    = "TCP"
+                Description = "Firewall rule to allow SQL communication"
             }
-
-            PSModule "PSModule_xWindowsUpdate"
+            
+            xFireWall AllowSQLBrowser
             {
-                Ensure              = "Present"
-                Name                = "xWindowsUpdate"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "2.7.0.0"
+                Name        = "AllowSQLBrowser"
+                DisplayName = "Allow SQL Browser"
+                Ensure      = "Present"
+                Enabled     = "True"
+                Profile     = "Domain"
+                Direction   = "InBound"
+                LocalPort   = 1434
+                Protocol    = "UDP"
+                Description = "Firewall rule to allow SQL communication"
             }
-
-            PSModule "PSModule_xCredSSP"
+            
+            SqlServerMemory SQLServerMaxMemoryIs2GB
             {
-                Ensure              = "Present"
-                Name                = "xCredSSP"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "1.3.0.0"
+                ServerName      = $NodeName
+                DynamicAlloc    = $false
+                MinMemory       = 1024
+                MaxMemory       = 2048
+                InstanceName    = "SPIntra01"
             }
-
+            
         }
     }
 }

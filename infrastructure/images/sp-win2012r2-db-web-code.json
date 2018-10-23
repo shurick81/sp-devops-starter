@@ -87,17 +87,32 @@
             "script": "rdpenable.ps1",
             "only": ["virtualbox-iso", "hyperv-iso"]
         },
-        { "type": "powershell", "script": "wmf5.ps1",
+        {
+            "type": "powershell",
+            "script": "wmf5.ps1",
             "elevated_user": "administrator", "elevated_password": "Fractalsol365",
             "only": ["virtualbox-iso", "hyperv-iso"]
         },
-        { "type": "powershell", "script": "wmf5.ps1",
+        {
+            "type": "powershell",
+            "script": "wmf5_azure.ps1",
+            "elevated_user": "packer", "elevated_password": "{{.WinRMPassword}}",
             "only": ["azure-arm"]
         },
         {
             "type": "powershell",
             "inline": "Write-Host 'Fake script just for pause after wmf5 installation'",
             "pause_before": "10m"
+        },
+        {
+            "type": "windows-restart",
+            "only": ["azure-arm"]
+        },
+        {
+            "type": "powershell",
+            "inline": "Write-Host 'Fake script just for pause after restart'",
+            "pause_before": "1m",
+            "only": ["azure-arm"]
         },
         {
             "type": "powershell",
@@ -110,6 +125,7 @@
         { "type": "powershell", "script": "sppsmodules.ps1" },
         { "type": "powershell", "script": "devpsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
+        { "type": "powershell", "script": "win2012r2updatesdownloading.ps1" },
         { "type": "powershell", "script": "sqlmedia.ps1" },
         {
             "type": "powershell",
@@ -121,13 +137,29 @@
         { "type": "powershell", "script": "sqlmediaclean.ps1" },
         { "type": "powershell", "script": "spprebin-1.ps1" },
         { "type": "windows-restart" },
-        { "type": "powershell", "script": "spprebin-2.ps1" },
+        {
+            "type": "powershell",
+            "inline": "Write-Host 'Fake script just for pause while restart is installing software'",
+            "pause_before": "2m"
+        },
+        {
+            "type": "powershell",
+            "script": "spprebin-2.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_LOCALSOURCE=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "spprebin-2.ps1",
+            "only": ["azure-arm"]
+        },
         { "type": "powershell", "script": "spmedia.ps1" },
         { "type": "powershell", "script": "spprebin-3.ps1" },
         { "type": "windows-restart" },
         { "type": "powershell", "script": "spbin.ps1" },
         { "type": "powershell", "script": "spmediaclean.ps1" },
-        { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "windows-restart" },
         {
             "type": "powershell",
@@ -157,8 +189,14 @@
             "only": ["azure-arm"]
         },
         { "type": "windows-restart" },
+        {
+            "type": "powershell",
+            "inline": "Write-Host 'Fake script just for pause while restart is installing software'",
+            "pause_before": "2m"
+        },
         { "type": "powershell", "script": "devmediaclean.ps1" },
         { "type": "powershell", "script": "devbin-2.ps1" },
+        { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
             "type": "powershell",

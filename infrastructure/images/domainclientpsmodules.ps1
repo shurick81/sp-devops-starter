@@ -22,13 +22,13 @@ try
                 RequiredVersion     = "5.6.0.0"
             }
 
-            PSModule "PSModule_xComputerManagement"
+            PSModule "PSModule_ComputerManagementDsc"
             {
                 Ensure              = "Present"
-                Name                = "xComputerManagement"
+                Name                = "ComputerManagementDsc"
                 Repository          = "PSGallery"
                 InstallationPolicy  = "Trusted"
-                RequiredVersion     = "3.2.0.0"
+                RequiredVersion     = "5.2.0.0"
             }
 
         }

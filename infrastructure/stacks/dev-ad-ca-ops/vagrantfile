@@ -43,6 +43,8 @@ Vagrant.configure(2) do |config|
             override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
             override.vm.synced_folder ".", "/vagrant", disabled: true
         end
+        vm_config.vm.provision :shell, path: "../../images/basepsmodules.ps1"
+        vm_config.vm.provision :shell, path: "../../images/adpsmodules.ps1"
         vm_config.vm.provision :shell, path: "../spdomain.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
         vm_config.vm.provision "reload"
         vm_config.vm.provision :shell, path: "../spdomain.ps1"
@@ -92,11 +94,12 @@ Vagrant.configure(2) do |config|
             override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
             override.vm.synced_folder ".", "/vagrant", disabled: true
         end
+        vm_config.vm.provision :shell, path: "../../images/basepsmodules.ps1"
+        vm_config.vm.provision :shell, path: "../../images/capsmodules.ps1"
         vm_config.vm.provision :shell, path: "../domainclientnetwork.ps1"
-        vm_config.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
-        vm_config.vm.provision "reload"
         vm_config.vm.provision :shell, path: "../domainclient.ps1"
-        vm_config.vm.provision :shell, path: "../domainclientgroups.ps1"
+        vm_config.vm.provision "reload"
+        vm_config.vm.provision :shell, path: "../domainclientgroups.ps1", env: { "SPDEVOPSSTARTER_TRIALS" => 100 }
         vm_config.vm.provision :shell, path: "../ca.ps1"
         vm_config.vm.boot_timeout = 1800
     end
@@ -141,15 +144,17 @@ Vagrant.configure(2) do |config|
             override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
             override.vm.synced_folder ".", "/vagrant", disabled: true
         end
+        vm_config.vm.provision :shell, path: "../../images/basepsmodules.ps1"
+        vm_config.vm.provision :shell, path: "../../images/devpsmodules.ps1"
+        vm_config.vm.provision :shell, path: "../../images/domainclientpsmodules.ps1"
         vm_config.vm.provision :shell, path: "../domainclientnetwork.ps1"
-        vm_config.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
+        vm_config.vm.provision :shell, path: "../domainclient.ps1"
         vm_config.vm.provision :shell, path: "../xcredclient.ps1"
         vm_config.vm.provision "reload"
-        vm_config.vm.provision :shell, path: "../domainclient.ps1"
-        vm_config.vm.provision :shell, path: "../domainclientgroups.ps1"
-        vm_config.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
-        vm_config.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplateinvoker.ps1"
-        vm_config.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; .\\infrastructure\\stacks\\certtemplateinvoker.ps1'"
+        vm_config.vm.provision :shell, path: "../domainclientgroups.ps1", env: { "SPDEVOPSSTARTER_TRIALS" => 100 }
+        vm_config.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/customizations/certtemplate.ps1"
+        vm_config.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/customizations/certtemplateinvoker.ps1"
+        vm_config.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; .\\infrastructure\\stacks\\customizations\\certtemplateinvoker.ps1'"
         if ENV['SPDEVOPSSTARTER_VAGRANT_RUNJENKINS'] === 'TRUE'
             vm_config.vm.provision :shell, path: "../slavepreprovisioning.ps1"
             vm_config.vm.provision :shell, path: "../joinslave.ps1", env: {

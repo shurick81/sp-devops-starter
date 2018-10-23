@@ -34,6 +34,7 @@ Vagrant.configure(2) do |config|
             azure.admin_password = "Fractalsol365"
             azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
             azure.nsg_name = 'sp-devops-starter-dev-2013'
+            azure.wait_for_destroy = true
             override.vm.guest = :windows
             override.vm.box = "azure"
             override.winrm.transport = :ssl
@@ -41,6 +42,8 @@ Vagrant.configure(2) do |config|
             override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
             override.vm.synced_folder ".", "/vagrant", disabled: true
         end
+        vm_config.vm.provision :shell, path: "../../images/basepsmodules.ps1"
+        vm_config.vm.provision :shell, path: "../../images/adpsmodules.ps1"
         vm_config.vm.provision :shell, path: "../spdomain.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
         vm_config.vm.provision "reload"
         vm_config.vm.provision :shell, path: "../spdomain.ps1"
@@ -97,11 +100,15 @@ Vagrant.configure(2) do |config|
             override.winrm.ssl_peer_verification = false # must be false if using a self signed cert
             override.vm.synced_folder ".", "/vagrant", disabled: true
         end
+        vm_config.vm.provision :shell, path: "../../images/basepsmodules.ps1"
+        vm_config.vm.provision :shell, path: "../../images/sqlpsmodules.ps1"
+        vm_config.vm.provision :shell, path: "../../images/sppsmodules.ps1"
+        vm_config.vm.provision :shell, path: "../../images/devpsmodules.ps1"
+        vm_config.vm.provision :shell, path: "../../images/domainclientpsmodules.ps1"
         vm_config.vm.provision :shell, path: "../domainclientnetwork.ps1"
         vm_config.vm.provision :shell, path: "../domainclient.ps1"
-        vm_config.vm.provision :shell, path: "../xcredclient.ps1"
         vm_config.vm.provision "reload"
-        vm_config.vm.provision :shell, path: "../domainclientgroups.ps1"
+        vm_config.vm.provision :shell, path: "../domainclientgroups.ps1", env: { "SPDEVOPSSTARTER_TRIALS" => 100 }
         if ENV['SPDEVOPSSTARTER_VAGRANT_RUNJENKINS'] === 'TRUE'
             vm_config.vm.provision :shell, path: "../slavepreprovisioning.ps1"
             vm_config.vm.provision :shell, path: "../joinslave.ps1", env: {

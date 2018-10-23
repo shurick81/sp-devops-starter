@@ -42,7 +42,7 @@ try
 
             }
 
-            if ( $env:SPDEVOPSSTARTER_LOCALVS -eq 1 )
+            if ( $env:SPDEVOPSSTARTER_LOCALSSMS -eq 1 )
             {
 
                 xRemoteFile SSMSMedia

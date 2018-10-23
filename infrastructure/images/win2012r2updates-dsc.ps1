@@ -1,4 +1,4 @@
-$configName = "BasePSModules"
+$configName = "Win2012R2Updates"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
@@ -8,38 +8,18 @@ try
         )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DscResource -ModuleName PackageManagementProviderResource -ModuleVersion 1.0.3
+        Import-DscResource -ModuleName xWindowsUpdate -ModuleVersion 2.7.0.0
 
         Node $AllNodes.NodeName
         {
 
-            PSModule "PSModule_xPSDesiredStateConfiguration"
+            xHotfix HotfixInstall
             {
-                Ensure              = "Present"
-                Name                = "xPSDesiredStateConfiguration"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "8.2.0.0"
+                Ensure = "Present"
+                Path = "C:\Install\windows8.1-kb4103715-x64_43bebfcb5be43876fb6a13a4eb840174ecb1790c.msu"
+                Id = "KB4103715"
             }
-
-            PSModule "PSModule_xWindowsUpdate"
-            {
-                Ensure              = "Present"
-                Name                = "xWindowsUpdate"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "2.7.0.0"
-            }
-
-            PSModule "PSModule_xCredSSP"
-            {
-                Ensure              = "Present"
-                Name                = "xCredSSP"
-                Repository          = "PSGallery"
-                InstallationPolicy  = "Trusted"
-                RequiredVersion     = "1.3.0.0"
-            }
-
+            
         }
     }
 }

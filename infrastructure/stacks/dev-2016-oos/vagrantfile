@@ -194,9 +194,9 @@ Vagrant.configure(2) do |config|
         vm_config.vm.provision :shell, path: "../domainclientgroups.ps1"
         vm_config.vm.provision :shell, path: "../fakesmbshare.ps1"
         # vm_config.vm.provision :file, source: "../oos.contoso.local.pfx", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/oos.contoso.local.pfx"
-        # vm_config.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplate.ps1"
-        # vm_config.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/certtemplateinvoker.ps1"
-        # vm_config.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; .\\infrastructure\\stacks\\certtemplateinvoker.ps1'"
+        # vm_config.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/customizations/certtemplate.ps1"
+        # vm_config.vm.provision :file, source: "../customizations/certtemplateinvoker.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/customizations/certtemplateinvoker.ps1"
+        # vm_config.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; .\\infrastructure\\stacks\\customizations\\certtemplateinvoker.ps1'"
         # vm_config.vm.provision :file, source: "../../../src/certificates/getcertificate.ps1", destination: "c:/tmp/sp-devops-starter/src/certificates/getcertificate.ps1"
         # vm_config.vm.provision :shell, inline: "powershell -command 'cd c:/tmp/sp-devops-starter; $pfxPass = ConvertTo-SecureString \"sdpofiwojiosddf\" -AsPlainText -Force; .\\src\\certificates\\getcertificate.ps1 \"oos.contoso.local\", \"OOS01.CONTOSO.LOCAL\", \"OOS02.CONTOSO.LOCAL\" \"CustomSSLCertificateTemplate\" -PfxPass $pfxPass -OutputDirectory \"c:\\tmp\" -FriendlyName \"oos.contoso.local 2018-07-31\"'"
         vm_config.vm.boot_timeout = 1800

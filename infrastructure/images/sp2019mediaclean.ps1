@@ -13,7 +13,7 @@ try
         Node $AllNodes.NodeName
         {
 
-            $spImageUrl = "https://download.microsoft.com/download/8/1/4/8144DA0D-FB9A-48B8-B56E-2C12E0C30079/en-us/16.0.10711.37301_OfficeServer_none_ship_x64_en-us_dvd/officeserver_en-us.img";
+            $spImageUrl = "https://download.microsoft.com/download/C/B/A/CBA01793-1C8A-4671-BE0D-38C9E5BBD0E9/officeserver.img";
             $SPImageUrl -match '[^/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))' | Out-Null
             $SPImageFileName = $matches[0]
             $SPImageDestinationPath = "C:\Install\SP2019PreviewImage\$SPImageFileName"

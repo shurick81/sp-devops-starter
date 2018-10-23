@@ -12,12 +12,12 @@ try
         )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DSCResource -ModuleName xComputerManagement -ModuleVersion 3.2.0.0
+        Import-DSCResource -ModuleName ComputerManagementDsc -ModuleVersion 5.2.0.0
 
         Node $AllNodes.NodeName
         {        
 
-            xComputer JoinDomain
+            Computer JoinDomain
             {
                 Name        = $NodeName
                 DomainName  = "contoso.local"
