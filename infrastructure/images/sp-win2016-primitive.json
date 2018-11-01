@@ -2,17 +2,17 @@
     "builders": [
         {
             "type": "virtualbox-iso",
-            "iso_checksum": "5b5e08c490ad16b59b1d9fab0def883a",
+            "iso_checksum": "18a4f00a675b0338f3c7c93c4f131beb",
             "iso_checksum_type": "md5",
-            "iso_url": "https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
+            "iso_url": "https://download.microsoft.com/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
             "floppy_files": [
-                "win2012r2/Autounattend.xml",
+                "win2016/Autounattend.xml",
                 "winrm.ps1",
                 "sysprep.bat",
                 "autounattend_sysprep.xml"
             ],
             "guest_additions_mode": "attach",
-            "guest_os_type": "Windows2012_64",
+            "guest_os_type": "Windows2016_64",
             "headless": true,
             "http_directory": "http",
             "shutdown_command": "a:/sysprep.bat",
@@ -21,16 +21,17 @@
                 [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
             ],
             "communicator": "winrm",
-            "winrm_username": "administrator",
-            "winrm_password": "Fractalsol365"
+            "winrm_username": "packer",
+            "winrm_password": "Fractalsol365",
+            "winrm_timeout": "2h"
         },
         {
             "type": "hyperv-iso",
-            "iso_checksum": "5b5e08c490ad16b59b1d9fab0def883a",
+            "iso_checksum": "18a4f00a675b0338f3c7c93c4f131beb",
             "iso_checksum_type": "md5",
-            "iso_url": "https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
+            "iso_url": "https://download.microsoft.com/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
             "floppy_files": [
-                "win2012r2/Autounattend.xml",
+                "win2016/Autounattend.xml",
                 "winrm.ps1",
                 "sysprep.bat",
                 "autounattend_sysprep.xml"
@@ -42,8 +43,9 @@
             "cpu": 4,
             "switch_name": "Default Switch",
             "communicator": "winrm",
-            "winrm_username": "administrator",
-            "winrm_password": "Fractalsol365"
+            "winrm_username": "packer",
+            "winrm_password": "Fractalsol365",
+            "winrm_timeout": "2h"
         },
         {
             "type": "azure-arm",
@@ -59,7 +61,8 @@
             "os_type": "Windows",
             "image_publisher": "MicrosoftWindowsServer",
             "image_offer": "WindowsServer",
-            "image_sku": "2012-R2-Datacenter",
+            "image_sku": "2016-Datacenter",
+            "image_version": "latest",
         
             "communicator": "winrm",
             "winrm_use_ssl": "true",
@@ -80,46 +83,19 @@
         },
         {
             "type": "powershell",
+            "script": "HyperV/integration.ps1",
+            "only": ["hyperv-iso"]
+        },
+        {
+            "type": "powershell",
             "script": "rdpenable.ps1",
             "only": ["virtualbox-iso", "hyperv-iso"]
-        },
-        {
-            "type": "powershell",
-            "script": "wmf5.ps1",
-            "elevated_user": "administrator", "elevated_password": "Fractalsol365",
-            "only": ["virtualbox-iso", "hyperv-iso"]
-        },
-        {
-            "type": "powershell",
-            "script": "wmf5_azure.ps1",
-            "elevated_user": "packer", "elevated_password": "{{.WinRMPassword}}",
-            "only": ["azure-arm"]
-        },
-        {
-            "type": "powershell",
-            "inline": "Write-Host 'Fake script just for pause after wmf5 installation'",
-            "pause_before": "10m"
-        },
-        {
-            "type": "windows-restart",
-            "only": ["azure-arm"]
-        },
-        {
-            "type": "powershell",
-            "inline": "Write-Host 'Fake script just for pause after restart'",
-            "pause_before": "1m",
-            "only": ["azure-arm"]
         },
         {
             "type": "powershell",
             "script": "winrm.ps1",
             "only": ["azure-arm"]
         },
-        { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
-        { "type": "powershell", "script": "basepsmodules.ps1" },
-        { "type": "powershell", "script": "domainclientpsmodules.ps1" },
-        { "type": "powershell", "script": "win2012r2updatesdownloading.ps1" },
-        { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
             "type": "powershell",
@@ -134,7 +110,7 @@
         }
     ],
     "variables": {
-        "box_name": "sp-win2012r2-soe",
+        "box_name": "sp-win2016-primitive",
         "client_id": "{{env `ARM_CLIENT_ID`}}",
         "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
         "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",

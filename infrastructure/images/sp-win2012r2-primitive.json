@@ -83,43 +83,6 @@
             "script": "rdpenable.ps1",
             "only": ["virtualbox-iso", "hyperv-iso"]
         },
-        {
-            "type": "powershell",
-            "script": "wmf5.ps1",
-            "elevated_user": "administrator", "elevated_password": "Fractalsol365",
-            "only": ["virtualbox-iso", "hyperv-iso"]
-        },
-        {
-            "type": "powershell",
-            "script": "wmf5_azure.ps1",
-            "elevated_user": "packer", "elevated_password": "{{.WinRMPassword}}",
-            "only": ["azure-arm"]
-        },
-        {
-            "type": "powershell",
-            "inline": "Write-Host 'Fake script just for pause after wmf5 installation'",
-            "pause_before": "10m"
-        },
-        {
-            "type": "windows-restart",
-            "only": ["azure-arm"]
-        },
-        {
-            "type": "powershell",
-            "inline": "Write-Host 'Fake script just for pause after restart'",
-            "pause_before": "1m",
-            "only": ["azure-arm"]
-        },
-        {
-            "type": "powershell",
-            "script": "winrm.ps1",
-            "only": ["azure-arm"]
-        },
-        { "type": "powershell", "script": "PackageManagementProviderResource.ps1" },
-        { "type": "powershell", "script": "basepsmodules.ps1" },
-        { "type": "powershell", "script": "domainclientpsmodules.ps1" },
-        { "type": "powershell", "script": "win2012r2updatesdownloading.ps1" },
-        { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
             "type": "powershell",
@@ -134,7 +97,7 @@
         }
     ],
     "variables": {
-        "box_name": "sp-win2012r2-soe",
+        "box_name": "sp-win2012r2-primitive",
         "client_id": "{{env `ARM_CLIENT_ID`}}",
         "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
         "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
