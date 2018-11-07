@@ -88,7 +88,7 @@ pipeline {
                 powershell '''cd infrastructure/images;
                     ./preparevmimages.ps1 sp-win10-code,sp-win10-user,sp-win2012r2-ad,sp-win2012r2-ca,sp-win2012r2-code,sp-win2012r2-db-web-code,sp-win2012r2-db-web,sp-win2012r2-primitive,sp-win2012r2-soe,sp-win2012r2-web,sp-win2016-ad-db-sp2019-code,sp-win2016-ad,sp-win2016-ca,sp-win2016-code,sp-win2016-db-sp2019-code,sp-win2016-db-web-code,sp-win2016-db-web,sp-win2016-db,sp-win2016-primitive,sp-win2016-soe,sp-win2016-sp2019,sp-win2016-web
                     if ( !( vagrant box list | ? { $_ -like "sp-win10-code *" } ) ) { exit 1 }
-                    #if ( !( vagrant box list | ? { $_ -like "sp-win10-user *" } ) ) { exit 1 }
+                    if ( !( vagrant box list | ? { $_ -like "sp-win10-user *" } ) ) { exit 1 }
                     if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ad *" } ) ) { exit 1 }
                     if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-ca *" } ) ) { exit 1 }
                     if ( !( vagrant box list | ? { $_ -like "sp-win2012r2-code *" } ) ) { exit 1 }
