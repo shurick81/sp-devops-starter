@@ -80,7 +80,7 @@ Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-All
 
 ### Azure RM
 
-1. `vagrant plugin install vagrant-azure`
+1. `choco install azure-cli` - Needed?
 2. Make sure you have storage account for saving images
 3. Create application and assign proper roles for managing Azure resources
 4. Set values for following variables:
@@ -88,6 +88,8 @@ Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-All
 * ARM_CLIENT_SECRET
 * ARM_SUBSCRIPTION_ID
 * ARM_TENANT_ID
+
+sign out and sig in again before running packer or vagrant to make variables available in console.
 
 Use this instruction as a baseline: https://www.packer.io/docs/builders/azure-setup.html
 
@@ -99,9 +101,10 @@ choco install -y packer
 choco install -y git
 choco install -y vagrant
 Install-Module -Name AzureRM.Compute -RequiredVersion 5.2.0 -Force
-Install-Module -Name AzureRm.Network -RequiredVersion 6.4.0 -Force # - Needed?
+Install-Module -Name AzureRm.Network -RequiredVersion 6.4.0 -Force
 ```
 If Vagrant package needs a reboot, do it before proceeding further.
+Git package requires signing out and in via RDP.
 
 ```PowerShell
 vagrant plugin install vagrant-azure;

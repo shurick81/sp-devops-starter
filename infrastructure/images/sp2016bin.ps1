@@ -20,6 +20,15 @@ try
                 ProductKey  = "NQGJR-63HC8-XCRQH-MYVCH-3J3QR"
             }
     
+            Registry LoopBackRegistry
+            {
+                Ensure      = "Present"
+                Key         = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"
+                ValueName   = "DisableLoopbackCheck"
+                ValueType   = "DWORD"
+                ValueData   = "1"
+            }
+
         }
     }
 }

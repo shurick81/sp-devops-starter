@@ -36,13 +36,12 @@ try
                 Write-Host "$(Get-Date) Access is properly set";
             } else {
                 Write-Host "$(Get-Date) Access is not properly set";
-                return $false;
+                Exit 1;
             }
         } else {
             Write-Host "$(Get-Date) Certificate template is not found";
-            return $false;
+            Exit 1;
         }
-        return $true;
     }
     if ( !$result ) {
         Write-Host "$(Get-Date) Test returned False";

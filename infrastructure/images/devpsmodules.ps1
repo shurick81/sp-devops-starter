@@ -58,6 +58,15 @@ try
                 RequiredVersion     = "2.1.0.0"
             }
 
+            PSModule "PSModule_SharePointPnPPowerShell2013"
+            {
+                Ensure              = "Present"
+                Name                = "SharePointPnPPowerShell2013"
+                Repository          = "PSGallery"
+                InstallationPolicy  = "Trusted"
+                RequiredVersion     = "3.1.1809.0"
+            }
+
         }
     }
 }

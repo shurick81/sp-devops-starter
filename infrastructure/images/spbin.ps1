@@ -13,11 +13,20 @@ try
         Node $AllNodes.NodeName
         {
 
-            SPInstall SharePointBinariesInstalled 
+            SPInstall SharePointBinariesInstalled
             { 
                 Ensure      = "Present"
                 BinaryDir   = "C:\Install\SPInstall\2013\SharePoint"
                 ProductKey  = "NQTMW-K63MQ-39G6H-B2CH9-FRDWJ"
+            }
+
+            Registry LoopBackRegistry
+            {
+                Ensure      = "Present"
+                Key         = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"
+                ValueName   = "DisableLoopbackCheck"
+                ValueType   = "DWORD"
+                ValueData   = "1"
             }
 
         }

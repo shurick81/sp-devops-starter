@@ -56,7 +56,7 @@
             "tenant_id": "{{user `tenant_id`}}",
         
             "managed_image_resource_group_name": "CommonRG",
-            "managed_image_name": "sp-win2016-oos",
+            "managed_image_name": "{{user `box_name`}}",
         
             "os_type": "Windows",
             "image_publisher": "MicrosoftWindowsServer",

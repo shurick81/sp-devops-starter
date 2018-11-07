@@ -225,6 +225,7 @@
         { "type": "windows-restart" },
         { "type": "powershell", "script": "devmediaclean.ps1" },
         { "type": "powershell", "script": "devbin-2.ps1" },
+        { "type": "powershell", "script": "devbin-spclient.ps1" },
         { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {

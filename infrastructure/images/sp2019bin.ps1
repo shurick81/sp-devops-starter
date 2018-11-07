@@ -20,6 +20,15 @@ try
                 ProductKey  = "M692G-8N2JP-GG8B2-2W2P7-YY7J6"
             }
     
+            Registry LoopBackRegistry
+            {
+                Ensure      = "Present"
+                Key         = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"
+                ValueName   = "DisableLoopbackCheck"
+                ValueType   = "DWORD"
+                ValueData   = "1"
+            }
+
         }
     }
 }
