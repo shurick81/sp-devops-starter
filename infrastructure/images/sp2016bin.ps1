@@ -13,13 +13,6 @@ try
         Node $AllNodes.NodeName
         {
 
-            SPInstall SharePointBinariesInstalled 
-            { 
-                Ensure      = "Present"
-                BinaryDir   = "G:"
-                ProductKey  = "NQGJR-63HC8-XCRQH-MYVCH-3J3QR"
-            }
-    
             Registry LoopBackRegistry
             {
                 Ensure      = "Present"
@@ -29,6 +22,13 @@ try
                 ValueData   = "1"
             }
 
+            SPInstall SharePointBinariesInstalled 
+            { 
+                Ensure      = "Present"
+                BinaryDir   = "G:"
+                ProductKey  = "NQGJR-63HC8-XCRQH-MYVCH-3J3QR"
+            }
+    
         }
     }
 }
