@@ -59,7 +59,7 @@ pipeline {
                     vagrant destroy --force;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
                     $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "fresh-sp2013";
-                    vagrant up --provider virtualbox;
+                    ../localdeploy.ps1;
                 '''
             }
         }
