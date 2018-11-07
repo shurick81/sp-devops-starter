@@ -50,15 +50,15 @@ try
                 MatchSource     = $false
             }
 
-            Package SP2016CLientSDK
-            {
-                Ensure      = "Present"
-                Name        = "SharePoint Client Components"
-                Path        = "C:\Install\SQLClientSDK\sharepointclientcomponents_16-4351-1000_x64_en-us.msi"
-                Arguments   = "/i /norestart"
-                ProductId   = "95160003-1163-0409-1000-0000000FF1CE"
-                DependsOn   = "[xRemoteFile]SP2016CLientSDK"
-            }
+            #Package SP2016CLientSDK
+            #{
+            #    Ensure      = "Present"
+            #    Name        = "SharePoint Client Components"
+            #    Path        = "C:\Install\SQLClientSDK\sharepointclientcomponents_16-4351-1000_x64_en-us.msi"
+            #    Arguments   = "/i /qn /norestart"
+            #    ProductId   = "95160003-1163-0409-1000-0000000FF1CE"
+            #    DependsOn   = "[xRemoteFile]SP2016CLientSDK"
+            #}
 
         }
     }
