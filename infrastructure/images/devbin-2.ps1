@@ -43,6 +43,13 @@ try
                 Ensure                  = 'Present'
             }
 
+            xRemoteFile SP2013CLientSDK
+            {
+                Uri             = "https://download.microsoft.com/download/E/1/9/E1987F6C-4D0A-4918-AEFE-12105B59FF6A/sharepointclientcomponents_15-4711-1001_x64_en-us.msi"
+                DestinationPath = "C:\Install\SQLClientSDK\sharepointclientcomponents_15-4711-1001_x64_en-us.msi"
+                MatchSource     = $false
+            }
+
             xRemoteFile SP2016CLientSDK
             {
                 Uri             = "https://download.microsoft.com/download/F/A/3/FA3B7088-624A-49A6-826E-5EF2CE9095DA/sharepointclientcomponents_16-4351-1000_x64_en-us.msi"
