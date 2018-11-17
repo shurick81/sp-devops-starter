@@ -29,13 +29,13 @@ try
             MountImage SQLServerImageMounted
             {
                 ImagePath   = $SQLImageDestinationPath
-                DriveLetter = 'S'
+                DriveLetter = 'F'
                 DependsOn   = "[xRemoteFile]SQLServerImageFilePresent"
             }
     
             WaitForVolume SQLServerImageMounted
             {
-                DriveLetter         = 'S'
+                DriveLetter         = 'F'
                 RetryIntervalSec    = 5
                 RetryCount          = 10
                 DependsOn           = "[MountImage]SQLServerImageMounted"

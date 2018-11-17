@@ -41,7 +41,7 @@ try
             SQLSetup SQLSetup
             {
                 InstanceName            = "SPIntra01"
-                SourcePath              = "S:\"
+                SourcePath              = "F:\"
                 Features                = "SQLENGINE,FULLTEXT"
                 InstallSharedDir        = "C:\Program Files\Microsoft SQL Server\SPIntra01"
                 SQLSysAdminAccounts     = "BUILTIN\Administrators"
