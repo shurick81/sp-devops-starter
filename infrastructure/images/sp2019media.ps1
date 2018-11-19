@@ -17,7 +17,7 @@ try
             $spImageUrl = "https://download.microsoft.com/download/C/B/A/CBA01793-1C8A-4671-BE0D-38C9E5BBD0E9/officeserver.img";
             $SPImageUrl -match '[^/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))' | Out-Null
             $SPImageFileName = $matches[0]
-            $SPImageDestinationPath = "C:\Install\SP2019PreviewImage\$SPImageFileName"
+            $SPImageDestinationPath = "C:\Install\SP2019RTMImage\$SPImageFileName"
     
             xRemoteFile SPServerImageFilePresent
             {

@@ -8,7 +8,7 @@ try
         )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.4.0.0
+        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 3.0.0.0
 
         Node $AllNodes.NodeName
         {
@@ -24,9 +24,10 @@ try
 
             SPInstall SharePointBinariesInstalled 
             { 
-                Ensure      = "Present"
-                BinaryDir   = "G:"
-                ProductKey  = "M692G-8N2JP-GG8B2-2W2P7-YY7J6"
+                IsSingleInstance    = "Yes"
+                Ensure              = "Present"
+                BinaryDir           = "G:"
+                ProductKey          = "M692G-8N2JP-GG8B2-2W2P7-YY7J6"
             }
     
         }

@@ -20,7 +20,7 @@ try
         )
         Import-DscResource -ModuleName PSDesiredStateConfiguration
         Import-DscResource -ModuleName SqlServerDsc -ModuleVersion 11.1.0.0
-        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.4.0.0
+        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 3.0.0.0
 
         Node $AllNodes.NodeName
         {
@@ -35,17 +35,18 @@ try
 
             SPFarm Farm
             {
-                Ensure                    = "Present"
-                DatabaseServer            = "SPDB"
-                FarmConfigDatabaseName    = "SP_Intra01_Config"
-                AdminContentDatabaseName  = "SP_Intra01_Content_CA"
-                Passphrase                = $SPPassphraseCredential
-                FarmAccount               = $SPFarmAccountCredential
-                RunCentralAdmin           = $true
-                CentralAdministrationPort = 15555
-                ServerRole                = "SingleServerFarm"
-                PsDscRunAsCredential      = $SPInstallAccountCredential
-                DependsOn                 = "[SqlAlias]SPDBAlias"
+                IsSingleInstance            = "Yes"
+                Ensure                      = "Present"
+                DatabaseServer              = "SPDB"
+                FarmConfigDatabaseName      = "SP_Intra01_Config"
+                AdminContentDatabaseName    = "SP_Intra01_Content_CA"
+                Passphrase                  = $SPPassphraseCredential
+                FarmAccount                 = $SPFarmAccountCredential
+                RunCentralAdmin             = $true
+                CentralAdministrationPort   = 15555
+                ServerRole                  = "SingleServerFarm"
+                PsDscRunAsCredential        = $SPInstallAccountCredential
+                DependsOn                   = "[SqlAlias]SPDBAlias"
             }
 
         }
@@ -81,21 +82,41 @@ catch
     $_.Exception.Message
     Exit 1;
 }
+$provider = $null
+$computerSystem = Get-WmiObject -Class Win32_ComputerSystem;
+$computerSystem;
+if ( $computerSystem.Model -eq "VirtualBox" ) {
+    Write-Host "Model is VirtualBox";
+    $provider = "virtualbox";
+}
+if ( ( $computerSystem.Manufacturer -eq "Microsoft" ) -or ( $computerSystem.Manufacturer -eq "Microsoft Corporation" ) ) {
+    Write-Host "Manufacturer is Microsoft";
+    $provider = "hyperv";
+    Get-DnsClient | % { if ( ( $_.ConnectionSpecificSuffix -like "*.cloudapp.net" ) -or ( $_.ConnectionSpecificSuffix -like "*.microsoft.com" ) ) {
+        Write-Host "Found azure interface";
+        $provider = "azure";
+    } }
+}
 Write-Host "$(Get-Date) Starting DSC"
 try
 {
-    Start-DscConfiguration $configName -Verbose -Force;
-    Sleep 20;
-    0..360 | % {
-        $res = Get-DscLocalConfigurationManager;
-        Write-Host $res.LCMState;
-        if ( ( $res.LCMState -ne "Idle" ) -and ( $res.LCMState -ne "PendingConfiguration" ) ) {
-            Sleep 10;
+    if ( $provider -eq "azure" )
+    {
+        Start-DscConfiguration $configName -Verbose -Force;
+        Sleep 20;
+        0..720 | % {
+            $res = Get-DscLocalConfigurationManager;
+            Write-Host $res.LCMState;
+            if ( ( $res.LCMState -ne "Idle" ) -and ( $res.LCMState -ne "PendingConfiguration" ) ) {
+                Sleep 10;
+            }
         }
-    }
-    if ( ( $res.LCMState -ne "Idle" ) -and ( $res.LCMState -ne "PendingConfiguration" ) ) {
-        Write-Host "Timouted waiting for LCMState"
-        Exit 1;
+        if ( ( $res.LCMState -ne "Idle" ) -and ( $res.LCMState -ne "PendingConfiguration" ) ) {
+            Write-Host "Timouted waiting for LCMState"
+            Exit 1;
+        }
+    } else {
+        Start-DscConfiguration $configName -Verbose -Wait -Force;
     }
 }
 catch

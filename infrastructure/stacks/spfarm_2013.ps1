@@ -20,7 +20,7 @@ try
         )
         Import-DscResource -ModuleName PSDesiredStateConfiguration
         Import-DscResource -ModuleName SqlServerDsc -ModuleVersion 11.1.0.0
-        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.4.0.0
+        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 3.0.0.0
 
         Node $AllNodes.NodeName
         {
@@ -35,16 +35,17 @@ try
 
             SPFarm Farm
             {
-                Ensure                    = "Present"
-                DatabaseServer            = "SPDB"
-                FarmConfigDatabaseName    = "SP_Intra01_Config"
-                AdminContentDatabaseName  = "SP_Intra01_Content_CA"
-                Passphrase                = $SPPassphraseCredential
-                FarmAccount               = $SPFarmAccountCredential
-                RunCentralAdmin           = $true
-                CentralAdministrationPort = 15555
-                PsDscRunAsCredential      = $SPInstallAccountCredential
-                DependsOn                 = "[SqlAlias]SPDBAlias"
+                IsSingleInstance            = "Yes"
+                Ensure                      = "Present"
+                DatabaseServer              = "SPDB"
+                FarmConfigDatabaseName      = "SP_Intra01_Config"
+                AdminContentDatabaseName    = "SP_Intra01_Content_CA"
+                Passphrase                  = $SPPassphraseCredential
+                FarmAccount                 = $SPFarmAccountCredential
+                RunCentralAdmin             = $true
+                CentralAdministrationPort   = 15555
+                PsDscRunAsCredential        = $SPInstallAccountCredential
+                DependsOn                   = "[SqlAlias]SPDBAlias"
             }
 
         }

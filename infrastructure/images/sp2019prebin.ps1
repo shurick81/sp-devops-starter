@@ -8,12 +8,13 @@ try
         )
 
         Import-DscResource -ModuleName PSDesiredStateConfiguration
-        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 2.4.0.0
+        Import-DSCResource -ModuleName SharePointDSC -ModuleVersion 3.0.0.0
 
         SPInstallPrereqs SPPrereqsInstalled
         {
-            InstallerPath   = "G:\Prerequisiteinstaller.exe"
-            OnlineMode      = $true
+            IsSingleInstance    = "Yes"
+            InstallerPath       = "G:\Prerequisiteinstaller.exe"
+            OnlineMode          = $true
         }
 
     }

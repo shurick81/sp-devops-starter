@@ -8,11 +8,11 @@ try
         Write-Host "Model is VirtualBox";
         $provider = "virtualbox";
     }
-    if ( $computerSystem.Manufacturer -eq "Microsoft" ) {
+    if ( ( $computerSystem.Manufacturer -eq "Microsoft" ) -or ( $computerSystem.Manufacturer -eq "Microsoft Corporation" ) ) {
         Write-Host "Manufacturer is Microsoft";
         $provider = "hyperv";
-        Get-DnsClient | % { if ( $_.ConnectionSpecificSuffix -like "*.cloudapp.net" ) {
-            Write-Host "Found cloudapp.net interface";
+        Get-DnsClient | % { if ( ( $_.ConnectionSpecificSuffix -like "*.cloudapp.net" ) -or ( $_.ConnectionSpecificSuffix -like "*.microsoft.com" ) ) {
+            Write-Host "Found azure interface";
             $provider = "azure";
         } }
     }
