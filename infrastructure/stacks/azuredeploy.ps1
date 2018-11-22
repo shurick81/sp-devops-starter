@@ -6,6 +6,11 @@ Param(
 
 $stackPath = Join-Path (Resolve-Path ./).Path $stackName;
 Start-Process Vagrant -WorkingDirectory $stackPath -ArgumentList "up AD01 --provider azure" -Wait -NoNewWindow;
+if ( $LASTEXITCODE -ne 0 )
+{
+    Write-Host "$(Get-Date) Failed to provision AD01, exiting immediately";
+    Exit 1;
+}
 $idContent = Get-Content ".\$stackName\.vagrant\machines\AD01\azure\id";
 $idValues = $idContent.Split(":");
 $resourceGroupName = $idValues[0];

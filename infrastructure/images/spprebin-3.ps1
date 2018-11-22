@@ -15,8 +15,9 @@ try
 
             SPInstallPrereqs SPPrereqsInstalled
             {
-                InstallerPath   = "C:\Install\SPInstall\2013\SharePoint\Prerequisiteinstaller.exe"
-                OnlineMode      = $true
+                IsSingleInstance    = "Yes"
+                InstallerPath       = "C:\Install\SPInstall\2013\SharePoint\Prerequisiteinstaller.exe"
+                OnlineMode          = $true
             }
 
         }

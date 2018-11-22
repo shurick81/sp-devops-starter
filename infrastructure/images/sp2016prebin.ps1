@@ -12,8 +12,9 @@ try
 
         SPInstallPrereqs SPPrereqsInstalled
         {
-            InstallerPath   = "G:\Prerequisiteinstaller.exe"
-            OnlineMode      = $true
+            IsSingleInstance    = "Yes"
+            InstallerPath       = "G:\Prerequisiteinstaller.exe"
+            OnlineMode          = $true
         }
 
     }

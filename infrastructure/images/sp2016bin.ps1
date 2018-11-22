@@ -24,9 +24,10 @@ try
 
             SPInstall SharePointBinariesInstalled 
             { 
-                Ensure      = "Present"
-                BinaryDir   = "G:"
-                ProductKey  = "NQGJR-63HC8-XCRQH-MYVCH-3J3QR"
+                IsSingleInstance    = "Yes"
+                Ensure              = "Present"
+                BinaryDir           = "G:"
+                ProductKey          = "NQGJR-63HC8-XCRQH-MYVCH-3J3QR"
             }
     
         }
