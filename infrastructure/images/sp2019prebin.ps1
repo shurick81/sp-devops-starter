@@ -1,4 +1,4 @@
-$configName = "SPPreBin"
+$configName = "SP2019PreBin"
 Write-Host "$(Get-Date) Defining DSC"
 try
 {
