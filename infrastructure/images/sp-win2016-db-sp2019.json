@@ -2,17 +2,17 @@
     "builders": [
         {
             "type": "virtualbox-iso",
-            "iso_checksum": "5b5e08c490ad16b59b1d9fab0def883a",
+            "iso_checksum": "18a4f00a675b0338f3c7c93c4f131beb",
             "iso_checksum_type": "md5",
-            "iso_url": "https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
+            "iso_url": "https://download.microsoft.com/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
             "floppy_files": [
-                "win2012r2/Autounattend.xml",
+                "win2016/Autounattend.xml",
                 "winrm.ps1",
                 "sysprep.bat",
                 "autounattend_sysprep.xml"
             ],
             "guest_additions_mode": "attach",
-            "guest_os_type": "Windows2012_64",
+            "guest_os_type": "Windows2016_64",
             "headless": true,
             "http_directory": "http",
             "shutdown_command": "a:/sysprep.bat",
@@ -22,17 +22,17 @@
                 [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
             ],
             "communicator": "winrm",
-            "winrm_username": "administrator",
+            "winrm_username": "packer",
             "winrm_password": "Fractalsol365",
             "winrm_timeout": "2h"
         },
         {
             "type": "hyperv-iso",
-            "iso_checksum": "5b5e08c490ad16b59b1d9fab0def883a",
+            "iso_checksum": "18a4f00a675b0338f3c7c93c4f131beb",
             "iso_checksum_type": "md5",
-            "iso_url": "https://download.microsoft.com/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
+            "iso_url": "https://download.microsoft.com/download/1/6/F/16FA20E6-4662-482A-920B-1A45CF5AAE3C/14393.0.160715-1616.RS1_RELEASE_SERVER_EVAL_X64FRE_EN-US.ISO",
             "floppy_files": [
-                "win2012r2/Autounattend.xml",
+                "win2016/Autounattend.xml",
                 "winrm.ps1",
                 "sysprep.bat",
                 "autounattend_sysprep.xml"
@@ -45,7 +45,7 @@
             "disk_size": 102400,
             "switch_name": "Default Switch",
             "communicator": "winrm",
-            "winrm_username": "administrator",
+            "winrm_username": "packer",
             "winrm_password": "Fractalsol365",
             "winrm_timeout": "2h"
         },
@@ -63,7 +63,8 @@
             "os_type": "Windows",
             "image_publisher": "MicrosoftWindowsServer",
             "image_offer": "WindowsServer",
-            "image_sku": "2012-R2-Datacenter",
+            "image_sku": "2016-Datacenter",
+            "image_version": "latest",
         
             "communicator": "winrm",
             "winrm_use_ssl": "true",
@@ -85,34 +86,7 @@
         {
             "type": "powershell",
             "script": "rdpenable.ps1",
-            "only": ["virtualbox-iso", "hyperv-iso"]
-        },
-        {
-            "type": "powershell",
-            "script": "wmf5.ps1",
-            "elevated_user": "administrator", "elevated_password": "Fractalsol365",
-            "only": ["virtualbox-iso", "hyperv-iso"]
-        },
-        {
-            "type": "powershell",
-            "script": "wmf5_azure.ps1",
-            "elevated_user": "packer", "elevated_password": "{{.WinRMPassword}}",
-            "only": ["azure-arm"]
-        },
-        {
-            "type": "powershell",
-            "inline": "Write-Host 'Fake script just for pause after wmf5 installation'",
-            "pause_before": "10m"
-        },
-        {
-            "type": "windows-restart",
-            "only": ["azure-arm"]
-        },
-        {
-            "type": "powershell",
-            "inline": "Write-Host 'Fake script just for pause after restart'",
-            "pause_before": "1m",
-            "only": ["azure-arm"]
+            "only": ["virtualbox-iso","hyperv-iso"]
         },
         {
             "type": "powershell",
@@ -125,17 +99,73 @@
         { "type": "powershell", "script": "sppsmodules.ps1" },
         { "type": "powershell", "script": "devpsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
-        { "type": "powershell", "script": "win2012r2updatesdownloading.ps1" },
-        { "type": "powershell", "script": "sqlmedia.ps1" },
+        { "type": "powershell", "script": "nodefender.ps1" },
+        { "type": "windows-restart" },
+        { "type": "powershell", "script": "sql2016media.ps1" },
         {
             "type": "powershell",
-            "script": "sqlprebin-local.ps1",
-            "only": ["virtualbox-iso", "hyperv-iso"]
+            "script": "sql2016bin.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
+            ],
+            "only": ["azure-arm"]
         },
-        { "type": "windows-restart" },
-        { "type": "powershell", "script": "sqlbin.ps1" },
-        { "type": "powershell", "script": "sqlmediaclean.ps1" },
-        { "type": "powershell", "script": "spprebin-1.ps1" },
+        {
+            "type": "windows-restart",
+            "only": ["azure-arm"]
+        },
+        {
+            "type": "powershell",
+            "script": "sql2016media.ps1",
+            "only": ["azure-arm"]
+        },
+        { "type": "powershell", "script": "sql2016bin.ps1" },
+        {
+            "type": "powershell",
+            "script": "sql2016mediaclean.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
+            ]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-1.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_LOCALSOURCE=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-1.ps1",
+            "only": ["azure-arm"]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-2.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_LOCALSOURCE=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-2.ps1",
+            "only": ["azure-arm"]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-3.ps1",
+            "environment_vars": [
+                "SPDEVOPSSTARTER_LOCALSOURCE=1"
+            ],
+            "only": ["virtualbox-iso","hyperv-iso"]
+        },
+        {
+            "type": "powershell",
+            "script": "sp2019prebin-3.ps1",
+            "only": ["azure-arm"]
+        },
         { "type": "windows-restart" },
         {
             "type": "powershell",
@@ -150,43 +180,18 @@
             "script": "spprebin-2.ps1",
             "only": ["azure-arm"]
         },
-        { "type": "powershell", "script": "spmedia.ps1" },
-        { "type": "powershell", "script": "spprebin-3.ps1" },
-        { "type": "powershell", "script": "KB3092423.ps1" },
+        { "type": "powershell", "script": "sp2019media.ps1" },
+        { "type": "powershell", "script": "sp2019prebin.ps1" },
         { "type": "windows-restart" },
-        { "type": "powershell", "script": "spbin.ps1" },
-        { "type": "powershell", "script": "spmediaclean.ps1" },
-        { "type": "windows-restart" },
+        { "type": "powershell", "script": "sp2019media.ps1" },
+        { "type": "powershell", "script": "sp2019bin.ps1" },
         {
             "type": "powershell",
-            "script": "devmedia.ps1",
+            "script": "sp2019mediaclean.ps1",
             "environment_vars": [
-                "SPDEVOPSSTARTER_LOCALVS=1",
-                "SPDEVOPSSTARTER_LOCALSSMS=1"
-            ],
-            "only": ["virtualbox-iso","hyperv-iso"]
+                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
+            ]
         },
-        {
-            "type": "powershell",
-            "script": "devmedia.ps1",
-            "only": ["azure-arm"]
-        },
-        {
-            "type": "powershell",
-            "script": "devbin-1.ps1",
-            "environment_vars": [
-                "SPDEVOPSSTARTER_LOCALVS=1"
-            ],
-            "only": ["virtualbox-iso","hyperv-iso"]
-        },
-        {
-            "type": "powershell",
-            "script": "devbin-1.ps1",
-            "only": ["azure-arm"]
-        },
-        { "type": "windows-restart" },
-        { "type": "powershell", "script": "devmediaclean.ps1" },
-        { "type": "powershell", "script": "devbin-2.ps1" },
         { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
@@ -202,7 +207,7 @@
         }
     ],
     "variables": {
-        "box_name": "sp-win2012r2-db-web-code",
+        "box_name": "sp-win2016-db-sp2019",
         "client_id": "{{env `ARM_CLIENT_ID`}}",
         "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
         "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",

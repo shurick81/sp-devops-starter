@@ -101,6 +101,8 @@
         { "type": "powershell", "script": "sqlpsmodules.ps1" },
         { "type": "powershell", "script": "sppsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
+        { "type": "powershell", "script": "nodefender.ps1" },
+        { "type": "windows-restart" },
         { "type": "powershell", "script": "sql2016media.ps1" },
         { "type": "powershell", "script": "sql2016bin.ps1" },
         {

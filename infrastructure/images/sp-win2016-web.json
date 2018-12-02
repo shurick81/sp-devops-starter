@@ -100,6 +100,7 @@
         { "type": "powershell", "script": "basepsmodules.ps1" },
         { "type": "powershell", "script": "sppsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
+        { "type": "powershell", "script": "nodefender.ps1" },
         { "type": "powershell", "script": "sp2016media.ps1" },
         { "type": "powershell", "script": "sp2016prebin.ps1" },
         { "type": "windows-restart" },

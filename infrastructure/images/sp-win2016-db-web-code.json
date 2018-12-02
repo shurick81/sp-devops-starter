@@ -102,6 +102,8 @@
         { "type": "powershell", "script": "sppsmodules.ps1" },
         { "type": "powershell", "script": "devpsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
+        { "type": "powershell", "script": "nodefender.ps1" },
+        { "type": "windows-restart" },
         { "type": "powershell", "script": "sql2016media.ps1" },
         { "type": "powershell", "script": "sql2016bin.ps1" },
         {
@@ -153,7 +155,6 @@
         { "type": "windows-restart" },
         { "type": "powershell", "script": "devmediaclean.ps1" },
         { "type": "powershell", "script": "devbin-2.ps1" },
-        { "type": "powershell", "script": "devbin-spclient.ps1" },
         { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {

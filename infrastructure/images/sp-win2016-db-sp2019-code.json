@@ -16,6 +16,7 @@
             "headless": true,
             "http_directory": "http",
             "shutdown_command": "a:/sysprep.bat",
+            "disk_size": 102400,
             "vboxmanage": [
                 [ "modifyvm", "{{.Name}}", "--memory", "4096" ],
                 [ "modifyvm", "{{.Name}}", "--cpus", "4" ]
@@ -41,6 +42,7 @@
             "shutdown_command": "a:/sysprep.bat",
             "ram_size": 4096,
             "cpu": 4,
+            "disk_size": 102400,
             "switch_name": "Default Switch",
             "communicator": "winrm",
             "winrm_username": "packer",
@@ -97,6 +99,8 @@
         { "type": "powershell", "script": "sppsmodules.ps1" },
         { "type": "powershell", "script": "devpsmodules.ps1" },
         { "type": "powershell", "script": "domainclientpsmodules.ps1" },
+        { "type": "powershell", "script": "nodefender.ps1" },
+        { "type": "windows-restart" },
         { "type": "powershell", "script": "sql2016media.ps1" },
         {
             "type": "powershell",
@@ -177,22 +181,10 @@
             "only": ["azure-arm"]
         },
         { "type": "powershell", "script": "sp2019media.ps1" },
-        {
-            "type": "powershell",
-            "script": "sp2019prebin.ps1",
-            "environment_vars": [
-                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
-            ]
-        },
+        { "type": "powershell", "script": "sp2019prebin.ps1" },
         { "type": "windows-restart" },
         { "type": "powershell", "script": "sp2019media.ps1" },
-        {
-            "type": "powershell",
-            "script": "sp2019bin.ps1",
-            "environment_vars": [
-                "SPDEVOPSSTARTER_NODSCTEST=TRUE"
-            ]
-        },
+        { "type": "powershell", "script": "sp2019bin.ps1" },
         {
             "type": "powershell",
             "script": "sp2019mediaclean.ps1",
@@ -230,7 +222,6 @@
         { "type": "windows-restart" },
         { "type": "powershell", "script": "devmediaclean.ps1" },
         { "type": "powershell", "script": "devbin-2.ps1" },
-        { "type": "powershell", "script": "devbin-spclient.ps1" },
         { "type": "powershell", "script": "xcredserver.ps1" },
         { "type": "powershell", "script": "waitforcpucalm.ps1" },
         {
