@@ -16,11 +16,11 @@ in admin PowerShell run:
 Set-ExecutionPolicy Bypass -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install -y packer
-choco install -y vagrant
+choco install -y vagrant --version 2.2.0
 choco install -y git
 ```
 
-For VirtualBox, run `choco install -y virtualbox --version 5.2.14`
+For VirtualBox, run `choco install -y virtualbox --version 5.2.22`
 For Hyper-V, run:
 ```
 Enable-WindowsOptionalFeature -Online -FeatureName:Microsoft-Hyper-V -All
@@ -42,7 +42,7 @@ powershell
 Set-ExecutionPolicy Bypass -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install -y packer
-choco install -y vagrant
+choco install -y vagrant --version 2.2.0
 choco install -y git
 New-NetFirewallRule -DisplayName 'HTTP(S) Inbound' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort @('80', '443', '16080') | Out-Null
 New-NetFirewallRule -DisplayName 'Packer HTTP ports' -Profile @('Domain', 'Private') -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8000-9000 | Out-Null
@@ -71,7 +71,7 @@ in admin PowerShell run:
 Set-ExecutionPolicy Bypass -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install -y packer
-choco install -y vagrant
+choco install -y vagrant -vagrant 2.2.0
 choco install -y git
 ```
 if Vagrant requires reboot, do it before proceeding further.

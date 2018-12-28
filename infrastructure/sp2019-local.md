@@ -11,7 +11,7 @@ Set-ExecutionPolicy Bypass -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install -y git
 choco install -y packer
-choco install -y vagrant
+choco install -y vagrant -vagrant 2.2.0
 ```
 
 If one of installed components was Vagrant, you now need to reboot your machine.

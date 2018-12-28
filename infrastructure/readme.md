@@ -21,7 +21,7 @@ Run in PowerShell:
 Set-ExecutionPolicy Bypass -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install -y packer
-choco install -y vagrant
+choco install -y vagrant -vagrant 2.2.0
 ```
 If Vagrant package requires reboot, you need to do it before proceeding further
 Then reboot for finishing insalling Vagrant and continue with `vagrant plugin install vagrant-reload`
@@ -56,7 +56,7 @@ Stop-Process -Name Explorer
 ### Installing VirtualBox on Windows
 
 ```
-choco install -y virtualbox --version 5.2.14
+choco install -y virtualbox --version 5.2.22
 ```
 
 For uninstalling VirtualBox, run `choco uninstall -y virtualbox`
@@ -99,7 +99,7 @@ Set-ExecutionPolicy Bypass -Force;
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install -y packer
 choco install -y git
-choco install -y vagrant
+choco install -y vagrant -vagrant 2.2.0
 Install-Module -Name AzureRM.Compute -RequiredVersion 5.2.0 -Force
 Install-Module -Name AzureRm.Network -RequiredVersion 6.4.0 -Force
 ```
