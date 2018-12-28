@@ -96,7 +96,7 @@ Vagrant.configure(2) do |config|
         vm_config.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
         vm_config.vm.provision "reload"
         vm_config.vm.provision :shell, path: "../domainclient.ps1"
-        vm_config.vm.provision :shell, path: "../domainclientgroups.ps1"
+        vm_config.vm.provision :shell, path: "../spdomainclientgroups.ps1"
         vm_config.vm.boot_timeout = 1800
     end
     config.vm.define "OOS02" do |vm_config|
@@ -143,7 +143,7 @@ Vagrant.configure(2) do |config|
         vm_config.vm.provision :shell, path: "../domainclient.ps1", env: {"SPDEVOPSSTARTER_NODSCTEST" => "TRUE"}
         vm_config.vm.provision "reload"
         vm_config.vm.provision :shell, path: "../domainclient.ps1"
-        vm_config.vm.provision :shell, path: "../domainclientgroups.ps1"
+        vm_config.vm.provision :shell, path: "../spdomainclientgroups.ps1"
         vm_config.vm.boot_timeout = 1800
     end
     config.vm.define "CODE01" do |vm_config|
@@ -191,7 +191,7 @@ Vagrant.configure(2) do |config|
         vm_config.vm.provision :shell, path: "../xcredclient.ps1"
         vm_config.vm.provision "reload"
         vm_config.vm.provision :shell, path: "../domainclient.ps1"
-        vm_config.vm.provision :shell, path: "../domainclientgroups.ps1"
+        vm_config.vm.provision :shell, path: "../spdomainclientgroups.ps1"
         vm_config.vm.provision :shell, path: "../fakesmbshare.ps1"
         # vm_config.vm.provision :file, source: "../oos.contoso.local.pfx", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/oos.contoso.local.pfx"
         # vm_config.vm.provision :file, source: "../customizations/certtemplate.ps1", destination: "c:/tmp/sp-devops-starter/infrastructure/stacks/customizations/certtemplate.ps1"
