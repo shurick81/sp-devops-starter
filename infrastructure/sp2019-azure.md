@@ -107,11 +107,11 @@ Build 'azure-arm' errored: 1 error(s) occurred:
 ```
 If the end of the transcript does not contain `==> azure-arm: Capturing image ...`, perhaps it failed and you want to run it once again or figure out the reason of a failure.
 
-4. Open `/infrastructure/stacks/dev-adsql2016sp2019code-spfarm` directory in console.
+4. Open `/infrastructure/stacks/dev-adsql2016sp2019code-spfarm-customizations` directory in console.
 For example, in Windows:
 
 ```
-cd c:\projects\sp-devops-starter\infrastructure\stacks\dev-adsql2016sp2019code-spfarm
+cd c:\projects\sp-devops-starter\infrastructure\stacks\dev-adsql2016sp2019code-spfarm-customizations
 ```
 
 5. Run following commands

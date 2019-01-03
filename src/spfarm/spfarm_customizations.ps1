@@ -71,7 +71,7 @@ try
                 Name                    = "Default App"
                 ApplicationPool         = "All Web Applications"
                 ApplicationPoolAccount  = $SPWebAppPoolAccountCredential.UserName
-                Url                     = "http://$NodeName"
+                WebAppUrl               = "http://$NodeName"
                 Port                    = 80
                 DatabaseName            = "SP_Intra_Content_WA00"
                 PsDscRunAsCredential    = $SPInstallAccountCredential

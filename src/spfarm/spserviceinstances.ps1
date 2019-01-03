@@ -117,15 +117,6 @@ try
                 PsDscRunAsCredential    = $SPInstallAccountCredential
             }
 
-            SPDistributedCacheService EnableDistributedCache
-            {
-                Name                    = "AppFabricCachingService"
-                CacheSizeInMB           = 2048
-                ServiceAccount          = $SPServicesAccountCredential.UserName
-                CreateFirewallRules     = $true
-                PsDscRunAsCredential    = $SPInstallAccountCredential
-            }
-
             SPServiceInstance WordAutomationServiceInstance
             {
                 Name                    = "Word Automation Services"
@@ -153,6 +144,15 @@ try
             SPServiceInstance SharePointServerSearch
             {
                 Name                    = "SharePoint Server Search"
+                PsDscRunAsCredential    = $SPInstallAccountCredential
+            }
+
+            SPDistributedCacheService EnableDistributedCache
+            {
+                Name                    = "AppFabricCachingService"
+                CacheSizeInMB           = 2048
+                ServiceAccount          = $SPServicesAccountCredential.UserName
+                CreateFirewallRules     = $true
                 PsDscRunAsCredential    = $SPInstallAccountCredential
             }
 

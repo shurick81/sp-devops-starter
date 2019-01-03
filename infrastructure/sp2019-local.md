@@ -51,11 +51,11 @@ cd c:\projects\sp-devops-starter\infrastructure\images
 
 This operation may take about 3 hours and will require about 70GB of free disk space. Make sure that the end of output contains `box: Successfully added box 'sp-win2016-ad-db-sp2019-code'`. If the end of the transcript does not contain this, perhaps it failed and you want to run it once again or figure out the reason of a failure.
 
-4. Open `/infrastructure/stacks/dev-adsql2016sp2019code-spfarm` directory in console.
+4. Open `/infrastructure/stacks/dev-adsql2016sp2019code-spfarm-customizations` directory in console.
 For example, in Windows:
 
 ```
-cd c:\projects\sp-devops-starter\infrastructure\stacks\dev-adsql2016sp2019code-spfarm
+cd c:\projects\sp-devops-starter\infrastructure\stacks\dev-adsql2016sp2019code-spfarm-customizations
 ```
 
 5. Run
