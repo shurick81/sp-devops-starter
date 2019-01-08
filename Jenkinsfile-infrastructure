@@ -129,36 +129,36 @@ pipeline {
                 powershell '''cd ci
                     vagrant destroy --force
                 '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
-                    vagrant destroy --force;
-                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    ../localdeploy.ps1;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
-                    vagrant destroy --force;
-                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    ../localdeploy.ps1;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
-                    vagrant destroy --force;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
-                    vagrant destroy --force;
-                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    ../localdeploy.ps1;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
-                    vagrant destroy --force;
-                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    ../localdeploy.ps1;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
-                    vagrant destroy --force;
-                '''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
+                //    vagrant destroy --force;
+                //    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
+                //    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                //    ../localdeploy.ps1;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
+                //    vagrant destroy --force;
+                //    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
+                //    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                //    ../localdeploy.ps1;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code;
+                //    vagrant destroy --force;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
+                //    vagrant destroy --force;
+                //    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
+                //    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                //    ../localdeploy.ps1;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
+                //    vagrant destroy --force;
+                //    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
+                //    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                //    ../localdeploy.ps1;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm;
+                //    vagrant destroy --force;
+                //'''
                 powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm-customizations;
                     vagrant destroy --force;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
@@ -174,36 +174,36 @@ pipeline {
                 powershell '''cd infrastructure/stacks/dev-ad-sql2014sp2013code-spfarm-customizations;
                     vagrant destroy --force;
                 '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code;
-                    vagrant destroy --force;
-                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    ../localdeploy.ps1;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code;
-                    vagrant destroy --force;
-                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    ../localdeploy.ps1;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code;
-                    vagrant destroy --force;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code-spfarm;
-                    vagrant destroy --force;
-                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    ../localdeploy.ps1;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code-spfarm;
-                    vagrant destroy --force;
-                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    ../localdeploy.ps1;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code-spfarm;
-                    vagrant destroy --force;
-                '''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code;
+                //    vagrant destroy --force;
+                //    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
+                //    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                //    ../localdeploy.ps1;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code;
+                //    vagrant destroy --force;
+                //    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
+                //    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                //    ../localdeploy.ps1;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code;
+                //    vagrant destroy --force;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code-spfarm;
+                //    vagrant destroy --force;
+                //    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
+                //    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                //    ../localdeploy.ps1;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code-spfarm;
+                //    vagrant destroy --force;
+                //    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
+                //    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                //    ../localdeploy.ps1;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code-spfarm;
+                //    vagrant destroy --force;
+                //'''
                 powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code-spfarm-customizations;
                     vagrant destroy --force;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
@@ -219,21 +219,21 @@ pipeline {
                 powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2016code-spfarm-customizations;
                     vagrant destroy --force;
                 '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2019code-spfarm;
-                    vagrant destroy --force;
-                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    ../localdeploy.ps1;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2019code-spfarm;
-                    vagrant destroy --force;
-                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    ../localdeploy.ps1;
-                '''
-                powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2019code-spfarm;
-                    vagrant destroy --force;
-                '''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2019code-spfarm;
+                //    vagrant destroy --force;
+                //    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
+                //    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                //    ../localdeploy.ps1;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2019code-spfarm;
+                //    vagrant destroy --force;
+                //    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
+                //    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                //    ../localdeploy.ps1;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2019code-spfarm;
+                //    vagrant destroy --force;
+                //'''
                 powershell '''cd infrastructure/stacks/dev-ad-sql2016sp2019code-spfarm-customizations;
                     vagrant destroy --force;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "FALSE";
@@ -257,15 +257,15 @@ pipeline {
                 powershell '''cd infrastructure/stacks/dev-ad-ca-ops;
                     vagrant destroy --force;
                 '''
-                powershell '''cd infrastructure/stacks/dev-adsql2016sp2019code-spfarm;
-                    vagrant destroy --force;
-                    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
-                    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
-                    ../localdeploy.ps1;
-                '''
-                powershell '''cd infrastructure/stacks/dev-adsql2016sp2019code-spfarm;
-                    vagrant destroy --force;
-                '''
+                //powershell '''cd infrastructure/stacks/dev-adsql2016sp2019code-spfarm;
+                //    vagrant destroy --force;
+                //    $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";
+                //    $env:SPDEVOPSSTARTER_VAGRANT_JENKINSLABEL = "";
+                //    ../localdeploy.ps1;
+                //'''
+                //powershell '''cd infrastructure/stacks/dev-adsql2016sp2019code-spfarm;
+                //    vagrant destroy --force;
+                //'''
                 powershell '''cd infrastructure/stacks/dev-adsql2016sp2019code-spfarm-customizations;
                     vagrant destroy --force;
                     $env:SPDEVOPSSTARTER_VAGRANT_RUNJENKINS = "TRUE";

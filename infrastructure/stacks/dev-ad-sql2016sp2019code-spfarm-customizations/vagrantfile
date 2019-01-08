@@ -23,7 +23,7 @@ Vagrant.configure(2) do |config|
             azure.client_id = ENV['ARM_CLIENT_ID']
             azure.client_secret = ENV['ARM_CLIENT_SECRET']
             azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
-            azure.resource_group_name = 'sp-devops-starter-dev-ad-sql2016sp2016code-spfarm-customizations'
+            azure.resource_group_name = 'sp-devops-starter-dev-ad-sql2016sp2019code-spfarm-customizations'
             azure.vm_managed_image_id = "/subscriptions/#{ENV['ARM_SUBSCRIPTION_ID']}/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-ad"
             azure.instance_ready_timeout = 3600
             azure.vm_name = 'ad01'
@@ -33,8 +33,8 @@ Vagrant.configure(2) do |config|
             azure.admin_username = "vagrant"
             azure.admin_password = "Fractalsol365"
             azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
-            # azure.virtual_network_name = 'sp-devops-starter-dev-ad-sql2016sp2016code-spfarm-customizations'
-            azure.nsg_name = 'sp-devops-starter-dev-ad-sql2016sp2016code-spfarm-customizations'
+            # azure.virtual_network_name = 'sp-devops-starter-dev-ad-sql2016sp2019code-spfarm-customizations'
+            azure.nsg_name = 'sp-devops-starter-dev-ad-sql2016sp2019code-spfarm-customizations'
             azure.wait_for_destroy = true
             override.vm.guest = :windows
             override.vm.box = "azure"
@@ -56,20 +56,20 @@ Vagrant.configure(2) do |config|
     config.vm.define "DBWEB01" do |vm_config|
         vm_config.vm.hostname = "DBWEB01"
         if ENV['SPDEVOPSSTARTER_VAGRANT_RUNJENKINS'] === 'TRUE'
-            vm_config.vm.box = "sp-win2016-db-web"
+            vm_config.vm.box = "sp-win2016-db-sp2019"
         else
-            vm_config.vm.box = "sp-win2016-db-web-code"
+            vm_config.vm.box = "sp-win2016-db-sp2019-code"
         end
         vm_config.vm.network "forwarded_port", guest: 3389, host: 13391, auto_correct: true
         vm_config.vm.provider "virtualbox" do |vb, override|
             override.vm.network :private_network, ip: "192.168.51.129", gateway: "192.168.51.1"
             #vb.vm.gui = true
-            vb.memory = "8192"
+            vb.memory = "16384"
             vb.cpus = 4
         end
         vm_config.vm.provider "hyperv" do |hv, override|
-            hv.memory = "4096"
-            hv.maxmemory = "8192"
+            hv.memory = "6144"
+            hv.maxmemory = "16384"
             hv.cpus = 4
             hv.ip_address_timeout = 1800
         end
@@ -78,11 +78,11 @@ Vagrant.configure(2) do |config|
             azure.client_id = ENV['ARM_CLIENT_ID']
             azure.client_secret = ENV['ARM_CLIENT_SECRET']
             azure.subscription_id = ENV['ARM_SUBSCRIPTION_ID']
-            azure.resource_group_name = 'sp-devops-starter-dev-ad-sql2016sp2016code-spfarm-customizations'
+            azure.resource_group_name = 'sp-devops-starter-dev-ad-sql2016sp2019code-spfarm-customizations'
             if ENV['SPDEVOPSSTARTER_VAGRANT_RUNJENKINS'] === 'TRUE'
-                azure.vm_managed_image_id = "/subscriptions/#{ENV['ARM_SUBSCRIPTION_ID']}/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-db-web"
+                azure.vm_managed_image_id = "/subscriptions/#{ENV['ARM_SUBSCRIPTION_ID']}/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-db-sp2019"
             else
-                azure.vm_managed_image_id = "/subscriptions/#{ENV['ARM_SUBSCRIPTION_ID']}/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-db-web-code"
+                azure.vm_managed_image_id = "/subscriptions/#{ENV['ARM_SUBSCRIPTION_ID']}/resourceGroups/CommonRG/providers/Microsoft.Compute/images/sp-win2016-db-sp2019-code"
             end
             azure.instance_ready_timeout = 3600
             azure.vm_name = 'dbweb01'
@@ -91,8 +91,8 @@ Vagrant.configure(2) do |config|
             azure.admin_username = "vagrant"
             azure.admin_password = "Fractalsol365"
             azure.dns_name = (0...15).map { (97 + rand(26)).chr }.join
-            # azure.virtual_network_name = 'sp-devops-starter-dev-ad-sql2016sp2016code-spfarm-customizations'
-            azure.nsg_name = 'sp-devops-starter-dev-ad-sql2016sp2016code-spfarm-customizations'
+            # azure.virtual_network_name = 'sp-devops-starter-dev-ad-sql2016sp2019code-spfarm-customizations'
+            azure.nsg_name = 'sp-devops-starter-dev-ad-sql2016sp2019code-spfarm-customizations'
             azure.wait_for_destroy = true
             override.vm.guest = :windows
             override.vm.box = "azure"
@@ -111,7 +111,7 @@ Vagrant.configure(2) do |config|
         vm_config.vm.provision "reload"
         vm_config.vm.provision :shell, path: "../spdomainclientgroups.ps1", env: { "SPDEVOPSSTARTER_TRIALS" => 100 }
         vm_config.vm.provision :shell, path: "../sqlconfig.ps1"
-        vm_config.vm.provision :shell, path: "../spfarm_2016.ps1"
+        vm_config.vm.provision :shell, path: "../spfarm_2019.ps1"
         vm_config.vm.provision :shell, path: "../../../src/spfarm/spfarm_customizations.ps1"
         if ENV['SPDEVOPSSTARTER_VAGRANT_RUNJENKINS'] === 'TRUE'
             vm_config.vm.provision :shell, path: "../slavepreprovisioning.ps1"
