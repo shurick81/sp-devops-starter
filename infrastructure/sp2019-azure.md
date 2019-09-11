@@ -33,8 +33,8 @@ In order to install this plugin with the necessary fixes, run
 
 ```
 vagrant plugin install vagrant-azure
-Rename-Item -Path C:\Users\<windowslogin>\.vagrant.d\gems\2.4.4\gems\vagrant-azure-2.0.0 -NewName "vagrant-azure-2.0.0 - Copy";
-git clone https://github.com/shurick81/vagrant-azure C:\Users\<windowslogin>\.vagrant.d\gems\2.4.4\gems\vagrant-azure-2.0.0;
+Rename-Item -Path $env:USERPROFILE\.vagrant.d\gems\2.4.4\gems\vagrant-azure-2.0.0 -NewName "vagrant-azure-2.0.0 - Copy";
+git clone https://github.com/shurick81/vagrant-azure $env:USERPROFILE\.vagrant.d\gems\2.4.4\gems\vagrant-azure-2.0.0;
 ```
 
 #### Environmental variables
